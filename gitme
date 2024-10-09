@@ -1,1 +1,3 @@
-test
+git checkout dev
+git remote add upstream https://github.com/UCLL-Full-stack/project2425-group6-15.git
+git pull upstream main
