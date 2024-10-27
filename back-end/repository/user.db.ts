@@ -9,6 +9,7 @@ const newUser = new User({
     phoneNumber: { countryCode: '+1', number: '123456789' },
     email: 'jane.doe@example.com',
     gender: 'female',
+    password: 'securepassword',
     interests: []
 });
 
@@ -23,7 +24,12 @@ const getUserById = (id:number): User | null =>{
     const user = users.find(user => user.getId() === id);
     return user || null;
 }
+const getUserByEmail = (email: string): User | null => {
+    const user = users.find(user => user.getEmail() === email);
+    return user || null;
+}
 export default {
     getAllUsers,
     createUser,
-    getUserById};
+    getUserById,
+    getUserByEmail};

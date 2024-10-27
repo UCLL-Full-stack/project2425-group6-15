@@ -8,6 +8,7 @@ export class User {
     private lastName: string;
     private phoneNumber: PhoneNumber;
     private email: string;
+    private password: string;
     private interests: Interest[];
     private gender: Gender;
 
@@ -20,6 +21,7 @@ export class User {
     phoneNumber: PhoneNumber;
     email: string;
     gender:Gender;
+    password: string;
     interests: Interest[];
     })
 
@@ -30,6 +32,7 @@ export class User {
         this.lastName = user.lastName;
         this.phoneNumber = user.phoneNumber;
         this.email = user.email;
+        this.password = user.password;
         this.gender = user.gender;
         this.interests = user.interests || [];
     }
@@ -54,9 +57,14 @@ export class User {
     getEmail(): string {
         return this.email;
     }
+    getPassword(): string {
+        return this.password;
+    }
     getGender(): Gender {
         return this.gender;
     }
+
+    
 
     getInterests(): Interest[] {
         return this.interests;

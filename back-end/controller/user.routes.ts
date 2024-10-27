@@ -35,17 +35,19 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service'; 
+import authService from '../authentication/auth.service';
 
 const userRouter = express.Router();
-
-
-
 
 /**
  * @swagger
  * /users:
  *   get:
  *     summary: Retrieve a list of users
+ *     tags: [Users]
+ *     security:                    
+ *       - ApiKeyAuth: []           
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: A list of users
@@ -67,32 +69,44 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-
 /**
  * @swagger
- * /users:
- *   post:
- *     summary: Create a new user
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UserInput'
+ * /users/{email}:
+ *   get:
+ *     summary: Retrieve users information by email
+ *     description: Gives sertain user information by email based on the token
+ *     tags: [Users]
+ *     security:                    
+ *       - ApiKeyAuth: []           
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: email
+ *         in: path
+ *         required: true
+ *         description: The email address of the user to retrieve.
+ *         schema:
+ *           type: string
+ *           example: "user@example.com"
  *     responses:
  *       200:
- *         description: The created user.
+ *         description: A user object containing user details.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found.
+ * 
  *       500:
- *         description: Some server error
+ *         description: Internal server error
  */
-userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const newUser = await userService.createUser(req.body);
-        res.status(200).json(newUser);
+        authService.authenticateToken(req.headers);
+        const email = req.params.email;
+        
+        const user = await userService.findUserByEmail(email);
+        res.status(200).json(user);
     } catch (error) {
         next(error);
     }
@@ -104,6 +118,7 @@ userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  * /users/{id}/interests:
  *   post:
  *     summary: Add an interest to a user
+ *     tags: [Users]
  *     parameters:
  *       - in: path
  *         name: id

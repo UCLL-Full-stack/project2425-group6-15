@@ -17,7 +17,7 @@
  *         id:
  *           type: number
  *           format: int64
- *           example: 1  // Voorbeeld ID
+ *           example: 1  
  *         firstName:
  *           type: string
  *           example: "John" 
@@ -62,8 +62,9 @@
 
 
 import express, { NextFunction, Request, Response } from 'express';
-import authService from '../service/auth.service';
+import authService from './auth.service';
 import userService from '../service/user.service';
+import userDB from '../repository/user.db';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
@@ -77,6 +78,9 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
  * /auth/register:
  *   post:
  *     summary: Create a new user
+ *     tags: [authentication]
+ *     security:                    
+ *       - ApiKeyAuth: []           
  *     requestBody:
  *       required: true
  *       content:
@@ -95,20 +99,21 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
  *                   $ref: '#/components/schemas/User'
  *                 token:
  *                   type: string
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ * 
  *       500:
  *         description: Some server error
  */
-authRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {    
-    console.log(req.body);
-    
+authRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {      
     try {
         const { email, password, firstName, lastName, phoneNumber, gender } = req.body;
-        const token = authService.generateToken(req.body.email);
 
         const hashedPassword = await bcrypt.hash(req.body.password, 10); 
 
         const newUser = await userService.createUser({ ...req.body, password: hashedPassword });
 
+        const token = authService.generateToken(newUser.getEmail());
 
         res.status(200).json({ token });
     } catch (error) {        
@@ -116,52 +121,60 @@ authRouter.post('/register', async (req: Request, res: Response, next: NextFunct
     }
 });
 
-// /**
-//  * @swagger
-//  * /login:
-//  *   post:
-//  *     summary: Login a user
-//  *     requestBody:
-//  *       required: true
-//  *       content:
-//  *         application/json:
-//  *           schema:
-//  *             type: object
-//  *             properties:
-//  *               email:
-//  *                 type: string
-//  *               password:
-//  *                 type: string
-//  *     responses:
-//  *       200:
-//  *         description: JWT token.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               properties:
-//  *                 token:
-//  *                   type: string
-//  *       401:
-//  *         description: Unauthorized
-//  */
-// authRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         // Zoek gebruiker op basis van e-mail
-//         const user = await userService.findUserByEmail(req.body.email); // Je moet deze functie implementeren
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [authentication]
+ *     security:                    
+ *       - ApiKeyAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "john.doe@example.com"  
+ *               password:
+ *                 type: string
+ *                 example: "goodpassword.Example"
+ *     responses:
+ *       200:
+ *         description: JWT token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       500:
+ *         description: Some server error
+ */
+authRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await userDB.getUserByEmail(req.body.email);
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
 
-//         // Controleer of de gebruiker bestaat en of het wachtwoord klopt
-//         if (user && (await bcrypt.compare(req.body.password, user.password))) {
-//             // Maak een JWT token aan
-//             const token = jwt.sign({ email: user.email }, JWT_SECRET, { expiresIn: '30m' });
-//             return res.status(200).json({ token });
-//         }
-
-//         // Als de login mislukt
-//         res.status(401).json({ message: 'Invalid email or password' });
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+        if (user && (await bcrypt.compare(req.body.password, user.getPassword()))) {
+            const token = jwt.sign({ email: user.getEmail() }, JWT_SECRET, { expiresIn: '30m' });
+            return res.status(200).json({ token });
+        }
+        
+        // Als de login mislukt
+        res.status(401).json({ message: 'Invalid email or password' });
+    } catch (error) {
+        next(error);
+    }
+});
 
 export { authRouter };
+

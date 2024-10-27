@@ -5,29 +5,12 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
-import { authRouter } from './controller/auth.routes';
+import { authRouter } from './authentication/auth.routes';
 
 const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
-
-app.use((req: express.Request, res: express.Response, next) => {
-    console.log(`Request Method: ${req.method}`); 
-    console.log(`Request URL: ${req.url}`);
-    console.log(`Request Body:`, req.body); 
-    next(); 
-});
-
-
-app.use(cors({ origin: 'http://localhost:8080' }));
-app.use(bodyParser.json());
-
-app.get('/status', (req, res) => {
-    res.json({ message: 'Back-end is running...' });
-});
-
-app.use('/users', userRouter);
-app.use('/auth', authRouter);
+const API_KEY = process.env.API_KEY || 'default_api_key_here';
 
 const swaggerOpts = {
     definition: {
@@ -36,18 +19,89 @@ const swaggerOpts = {
             title: 'Courses API',
             version: '1.0.0',
         },
-    },
-    apis: ['./controller/*.routes.ts'],
-};
-const swaggerSpec = swaggerJSDoc(swaggerOpts);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+        components: {
+            securitySchemes: {
+                ApiKeyAuth: {
+                    type: 'apiKey',
+                    in: 'header',
+                    name: 'x-api-key',
+                    description: 'Voer hier je API-sleutel in',
+                },
+                BearerAuth: {
+                    type: 'http',
+                    name: 'bearer',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                }
 
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.error(err.stack); 
+            },
+            responses: {
+                Unauthorized: { 
+                    description: "Unauthorized, invalid or missing authentication JWT token/API-KEY."
+                }
+            }
+        },
+        security: [
+            {
+                BearerAuth: []
+            }
+        ]
+    },
+    apis: ['./authentication/*.routes.ts','./controller/*.routes.ts'],
+};
+
+const swaggerSpec = swaggerJSDoc(swaggerOpts);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: {
+        authAction: {
+            ApiKeyAuth: {
+                name: 'x-api-key',
+                schema: {
+                    type: 'apiKey',
+                    in: 'header',
+                    name: 'x-api-key',
+                },
+                value: API_KEY 
+            }
+        }
+    }
+}));
+
+// app.use((req: express.Request, res: express.Response, next) => {
+//     console.log(`Request Method: ${req.method}`); 
+//     console.log(`Request URL: ${req.url}`);
+//     console.log(`Request Body:`, req.body); 
+//     next(); 
+// });
+
+app.use((req: express.Request, res: express.Response, next) => {
+    const apiKey = req.headers['x-api-key'];    
+    if (req.url.startsWith('/api-docs')) {
+        next();
+    }
+    if (apiKey === API_KEY) {
+        next();
+    } else {
+        res.status(403).json({ message: 'Invalid API Key' });
+    }
+});
+
+app.use(cors({ origin: 'http://localhost:8080' }));
+app.use(bodyParser.json());
+
+app.get('/status', (_req, res) => {
+    res.json({ message: 'Back-end is running...' });
+});
+
+app.use('/auth', authRouter);
+app.use('/users', userRouter);
+
+
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+    // console.error(err.stack); 
     res.status(err.status || 500).json({
         success: false,
         message: err.message || 'Internal Server Error',
-        Body: req.body,
     });
 });
 
