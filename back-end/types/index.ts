@@ -2,11 +2,12 @@ type UserInput = {
     id?: number;
     firstName: string;
     lastName: string;
-    phoneNumber: string;
+    phoneNumber: PhoneNumber;
     email: string;
-    sex: Sex;
+    gender: Gender;
 };
-type Sex = 'male' | 'female';
 
+type Gender = 'male' | 'female';
+type PhoneNumber = { countryCode: string, number: string };
 
-export { UserInput,Sex };
+export { UserInput, Gender , PhoneNumber};

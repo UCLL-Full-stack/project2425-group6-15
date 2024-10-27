@@ -20,7 +20,8 @@ const createUser = async (userInput: UserInput): Promise<User> => {
     if (!userInput.email) {
         throw new Error('Email is required');
     }
-  
+    
+
 
 
     const user = new User({
@@ -28,7 +29,7 @@ const createUser = async (userInput: UserInput): Promise<User> => {
         lastName: userInput.lastName,
         phoneNumber: userInput.phoneNumber,
         email: userInput.email,
-        sex: userInput.sex,
+        gender: userInput.gender,
         interests: []});
     return userDB.createUser(user);
 }

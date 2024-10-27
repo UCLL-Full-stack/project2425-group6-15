@@ -1,14 +1,15 @@
 
-import { Sex } from "../types";
+import { Gender, PhoneNumber } from "../types";
 import { Interest } from "./interest";
+
 export class User {
     private id?: number;
     private firstName: string;
     private lastName: string;
-    private phoneNumber: string;
+    private phoneNumber: PhoneNumber;
     private email: string;
     private interests: Interest[];
-    private sex: Sex;
+    private gender: Gender;
 
 
 
@@ -16,9 +17,9 @@ export class User {
     id?: number;
     firstName: string;
     lastName: string;
-    phoneNumber: string;
+    phoneNumber: PhoneNumber;
     email: string;
-    sex:Sex;
+    gender:Gender;
     interests: Interest[];
     })
 
@@ -29,7 +30,7 @@ export class User {
         this.lastName = user.lastName;
         this.phoneNumber = user.phoneNumber;
         this.email = user.email;
-        this.sex = user.sex;
+        this.gender = user.gender;
         this.interests = user.interests || [];
     }
 
@@ -46,15 +47,15 @@ export class User {
         return this.lastName;
     }
 
-    getPhoneNumber(): string {
+    getPhoneNumber(): PhoneNumber {
         return this.phoneNumber;
     }
 
     getEmail(): string {
         return this.email;
     }
-    getSex(): Sex {
-        return this.sex;
+    getGender(): Gender {
+        return this.gender;
     }
 
     getInterests(): Interest[] {
@@ -66,9 +67,9 @@ export class User {
         id?: number;
         firstName: string;
         lastName: string;
-        phoneNumber: string;
+        phoneNumber: PhoneNumber;
         email: string;
-        sex: Sex;
+        gender: Gender;
         interests: Interest[];
     }) {
         if (!user.firstName?.trim()) {
@@ -80,11 +81,11 @@ export class User {
         if (!user.email?.trim()) {
             throw new Error('Email is required');
         }
-        if (!user.phoneNumber?.trim()) {
+        if (!user.phoneNumber) {
             throw new Error('Phone number is required');
         }
-        if (!user.sex) {
-            throw new Error('Sex is required');
+        if (!user.gender) {
+            throw new Error('Gender is required');
         }
     }
 
@@ -103,6 +104,6 @@ export class User {
                        this.lastName === user.getLastName() &&
                        this.phoneNumber === user.getPhoneNumber() &&
                        this.email === user.getEmail() &&
-                       this.sex === user.getSex()
+                       this.gender === user.getGender()
             )}
 }

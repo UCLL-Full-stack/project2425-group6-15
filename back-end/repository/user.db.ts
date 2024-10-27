@@ -6,9 +6,9 @@ const newUser = new User({
     id: 2,
     firstName: 'Jane',
     lastName: 'Doe',
-    phoneNumber: '0123456789',
+    phoneNumber: { countryCode: '+1', number: '123456789' },
     email: 'jane.doe@example.com',
-    sex: 'female',
+    gender: 'female',
     interests: []
 });
 

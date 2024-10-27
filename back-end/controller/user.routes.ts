@@ -13,10 +13,9 @@
  *            lastName:
  *              type: string
  *            phoneNumber:
- *              type: string
+ *              type: integer
+ *              format: int64
  *            email:
- *              type: string
- *            rijkregisternummer:
  *              type: string
  *      UserInput:
  *          type: object
@@ -26,10 +25,11 @@
  *            lastName:
  *              type: string
  *            phoneNumber:
- *              type: string
+ *              type: integer
+ *              format: int64
  *            email:
  *              type: string
- *            sex:
+ *            gender:
  *              type: string
  */
 
@@ -89,7 +89,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *       500:
  *         description: Some server error
  */
-userRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const newUser = await userService.createUser(req.body);
         res.status(200).json(newUser);
