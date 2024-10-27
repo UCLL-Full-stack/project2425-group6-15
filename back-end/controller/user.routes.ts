@@ -44,7 +44,6 @@ const userRouter = express.Router();
 /**
  * @swagger
  * /users:
- * /users:
  *   get:
  *     summary: Retrieve a list of users
  *     responses:

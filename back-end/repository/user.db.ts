@@ -2,6 +2,17 @@ import { User } from "../model/user";
 
 
 const users: User[] = [];
+const newUser = new User({
+    id: 2,
+    firstName: 'Jane',
+    lastName: 'Doe',
+    phoneNumber: '0123456789',
+    email: 'jane.doe@example.com',
+    sex: 'female',
+    interests: []
+});
+
+users.push(newUser);
 const getAllUsers = (): User[] => users;
 
 const createUser = (userData: User): User => {
