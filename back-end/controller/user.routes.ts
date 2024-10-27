@@ -99,6 +99,7 @@ userRouter.post('/register', async (req: Request, res: Response, next: NextFunct
     }
 });
 
+
 /**
  * @swagger
  * /users/{id}/interests:
