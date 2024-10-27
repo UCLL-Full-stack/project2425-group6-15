@@ -44,6 +44,7 @@ const userRouter = express.Router();
 /**
  * @swagger
  * /users:
+ * /users:
  *   get:
  *     summary: Retrieve a list of users
  *     responses:
@@ -89,7 +90,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *       500:
  *         description: Some server error
  */
-userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const newUser = await userService.createUser(req.body);
         res.status(200).json(newUser);
