@@ -29,7 +29,7 @@
  *              type: string
  *            email:
  *              type: string
- *            rijkregisternummer:
+ *            sex:
  *              type: string
  */
 
@@ -43,7 +43,7 @@ const userRouter = express.Router();
 
 /**
  * @swagger
- * /:
+ * /users:
  *   get:
  *     summary: Retrieve a list of users
  *     responses:
@@ -70,7 +70,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 /**
  * @swagger
- * /:
+ * /users:
  *   post:
  *     summary: Create a new user
  *     requestBody:
@@ -97,4 +97,45 @@ userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
         next(error);
     }
 });
+
+/**
+ * @swagger
+ * /users/{id}/interests:
+ *   post:
+ *     summary: Add an interest to a user
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The user ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Interest added to user.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Some server error
+ */
+userRouter.post('/:id/interests', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = parseInt(req.params.id, 10);
+        const interestData = req.body;
+        await userService.addInterestToUser(userId, interestData);
+        res.status(200).json({ message: 'Interest added to user.' });
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { userRouter };

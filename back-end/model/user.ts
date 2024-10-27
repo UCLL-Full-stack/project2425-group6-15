@@ -1,12 +1,15 @@
 
-
+import { Sex } from "../types";
+import { Interest } from "./interest";
 export class User {
     private id?: number;
     private firstName: string;
     private lastName: string;
     private phoneNumber: string;
     private email: string;
-    private rijkregisternummer: string;
+    private interests: Interest[];
+    private sex: Sex;
+
 
 
     constructor(user: {
@@ -15,8 +18,10 @@ export class User {
     lastName: string;
     phoneNumber: string;
     email: string;
-    rijkregisternummer: string;
+    sex:Sex;
+    interests: Interest[];
     })
+
      {
         this.validate(user);
         this.id = user.id;
@@ -24,7 +29,8 @@ export class User {
         this.lastName = user.lastName;
         this.phoneNumber = user.phoneNumber;
         this.email = user.email;
-        this.rijkregisternummer = user.rijkregisternummer;
+        this.sex = user.sex;
+        this.interests = user.interests || [];
     }
 
 
@@ -47,19 +53,23 @@ export class User {
     getEmail(): string {
         return this.email;
     }
+    getSex(): Sex {
+        return this.sex;
+    }
 
-    getRijkregisternummer(): string {
-        return this.rijkregisternummer;
+    getInterests(): Interest[] {
+        return this.interests;
     }
 
 
     validate(user: {
-    id?: number;
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    email: string;
-    rijkregisternummer: string;
+        id?: number;
+        firstName: string;
+        lastName: string;
+        phoneNumber: string;
+        email: string;
+        sex: Sex;
+        interests: Interest[];
     }) {
         if (!user.firstName?.trim()) {
             throw new Error('First name is required');
@@ -71,18 +81,28 @@ export class User {
             throw new Error('Email is required');
         }
         if (!user.phoneNumber?.trim()) {
-            throw new Error('phone number is required');
+            throw new Error('Phone number is required');
         }
-        if (!user.rijkregisternummer?.trim()) {
-            throw new Error('rijksregisternummer is required');
+        if (!user.sex) {
+            throw new Error('Sex is required');
         }
     }
+
+
+
+
+    addInterestToUser(interest: Interest) {
+        if (!interest) throw new Error('Interest is required'); 
+        if (this.interests.includes(interest))
+            throw new Error('Interest already exists');
+        this.interests.push(interest);
+    }   
     
     equals(user: User): boolean {
         return (this.firstName === user.getFirstName() &&
                        this.lastName === user.getLastName() &&
                        this.phoneNumber === user.getPhoneNumber() &&
                        this.email === user.getEmail() &&
-                       this.rijkregisternummer === user.getRijkregisternummer()
+                       this.sex === user.getSex()
             )}
 }

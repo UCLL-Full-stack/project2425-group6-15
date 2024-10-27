@@ -1,6 +1,7 @@
 import { User} from '../model/user'; 
 import { UserInput } from '../types';
 import userDB from '../repository/user.db';
+import { Interest } from '../model/interest';
 
 const getAllUsers = (): User[] => {
     return userDB.getAllUsers();
@@ -19,9 +20,7 @@ const createUser = async (userInput: UserInput): Promise<User> => {
     if (!userInput.email) {
         throw new Error('Email is required');
     }
-    if (!userInput.rijkregisternummer) {
-        throw new Error('Rijkregisternummer is required');
-    }
+  
 
 
     const user = new User({
@@ -29,11 +28,19 @@ const createUser = async (userInput: UserInput): Promise<User> => {
         lastName: userInput.lastName,
         phoneNumber: userInput.phoneNumber,
         email: userInput.email,
-        rijkregisternummer: userInput.rijkregisternummer
-    });
+        sex: userInput.sex,
+        interests: []});
     return userDB.createUser(user);
 }
+const addInterestToUser =  (userId: number, interestData: { name: string }) => {
+    const user = userDB.getUserById(userId);
+    if (!user) {
+        throw new Error('User not found');
+    }
+    const interest = new Interest(interestData);
+    user.addInterestToUser(interest);
+};
 
 export default {getAllUsers,
-    createUser
+    createUser, addInterestToUser
 };

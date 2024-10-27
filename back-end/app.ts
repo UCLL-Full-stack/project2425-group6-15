@@ -10,7 +10,7 @@ const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
 app.get('/status', (req, res) => {
@@ -21,7 +21,8 @@ app.listen(port || 3000, () => {
     console.log(`Back-end is running on port ${port}.`);
 });
 
-app.use('users',userRouter);
+app.use('/users',userRouter);
+
 const swaggerOpts = {
     definition: {
         openapi: '3.0.0',

@@ -4,7 +4,9 @@ type UserInput = {
     lastName: string;
     phoneNumber: string;
     email: string;
-    rijkregisternummer: string;
+    sex: Sex;
 };
+type Sex = 'male' | 'female';
 
-export { UserInput };
+
+export { UserInput,Sex };
