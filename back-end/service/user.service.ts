@@ -11,8 +11,10 @@ const createUser = async (userInput: UserInput): Promise<User> => {
     if (!userInput.lastName) {
         throw new Error('Last name is required');
     }
-    if (!userInput.phoneNumber) {
+    if (!userInput.phoneNumber || !userInput.phoneNumber.countryCode || !userInput.phoneNumber.number) {
+
         throw new Error('Phone number is required');
+
     }
     if (!userInput.email) {
         throw new Error('Email is required');
