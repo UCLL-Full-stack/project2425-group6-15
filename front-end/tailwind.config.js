@@ -9,7 +9,11 @@ module.exports = {
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Poppins', 'Segoe UI', 'sans-serif'],  // Vervang Tailwind's standaard sans-serif met Poppins
+      },
+    },
   },
   plugins: [],
 }

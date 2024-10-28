@@ -10,15 +10,9 @@ const Dashboard: React.FC = () => {
         <meta charSet="utf-8" />
       </Head>
       <Header />
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800">
-        <div className="flex flex-row w-full h-full max-w-7xl p-4 space-x-4">
-          <div className="w-3/4 bg-white shadow-lg rounded-lg p-6">
-            {/* Kaart sectie */}
-            <h2 className="text-2xl font-bold mb-4">Kaart</h2>
-            <div className="w-full h-64 bg-blue-200 rounded-lg">Kaartinhoud</div>
-          </div>
-          <div className="w-1/4 bg-white shadow-lg rounded-lg p-6">
-            {/* Sidebar sectie */}
+      <div className="grid grid-cols-[1fr_max-content] min-h-screen min-w-full  text-gray-800">
+        <div className="w-full h-64 bg-blue-200 rounded-lg">Kaartinhoud</div>
+        <div className="w-1/4 bg-white shadow-lg rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Sidebar</h2>
             <ul className="space-y-2">
               <li>
@@ -39,7 +33,7 @@ const Dashboard: React.FC = () => {
             </ul>
           </div>
         </div>
-      </div>
+          
     </>
   );
 };

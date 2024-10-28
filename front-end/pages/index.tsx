@@ -5,10 +5,6 @@ import Link from "next/link";
 const Home: React.FC = () => {
   return (
     <>
-      <Head>
-        <title>JoinMe</title>
-        <meta charSet="utf-8" />
-      </Head>
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-gray-800">
         {/* Logo */}
         <div className="mb-8">
