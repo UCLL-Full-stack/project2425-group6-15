@@ -1,5 +1,5 @@
 import { User} from '../model/user'; 
-import { UserInput } from '../types';
+import { UserInput, UserSummary } from '../types';
 import userDB from '../repository/user.db';
 import { Interest } from '../model/interest';
 import { JWTGivenToken } from '../authentication/auth.model';
@@ -41,14 +41,26 @@ const getAllUsers = (): User[] => {
     }
 
 
-const findUserByEmail = (email: string,): User | null => {
-    const user =  userDB.getUserByEmail(email);
-    if (!user ) {
+const findUserByEmail = (email: string, currentUserEmail: string): User | UserSummary | null => {
+    const user = userDB.getUserByEmail(email);
+    if (!user) {
         throw new ServiceError('User not found', 404);
     }
-    return user;
-}
 
+    if (currentUserEmail === email) {
+        return user; 
+    }
+    
+    const userSummary: UserSummary = {
+        firstName: user.getFirstName(),
+        lastName: user.getLastName(),
+        email: user.getEmail(),
+        interests: user.getInterests(),
+        gender: user.getGender()
+      };
+    
+      return userSummary;
+};
 const addInterestToUser =  (userId: number, interestData: { name: string }) => {
     const user = userDB.getUserById(userId);
     if (!user) {

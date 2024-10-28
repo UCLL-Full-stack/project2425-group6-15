@@ -31,7 +31,29 @@
  *              type: string
  *            gender:
  *              type: string
+ *      UserSummary:
+ *          type: object
+ *          properties:
+ *            firstName:
+ *              type: string
+ *              example: "Jane"
+ *            lastName:
+ *              type: string
+ *              example: "Doe"
+ *            email:
+ *              type: string
+ *              example: "jane.doe@example.com"
+ *            interests:
+ *              type: array
+ *              items:
+ *                type: string
+ *                example: []
+ *            gender:
+ *              type: string
+ *              enum: [male, female, other]
+ *              example: "female"
  */
+
 
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service'; 
@@ -93,7 +115,10 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               oneOf:
+ *                 - $ref: '#/components/schemas/User' 
+ *                 - $ref: '#/components/schemas/UserSummary'
+ *          
  *       404:
  *         description: User not found.
  * 
@@ -102,10 +127,10 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  */
 userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        authService.authenticateToken(req.headers);
+        let currnentemail = authService.authenticateToken(req.headers);
         const email = req.params.email;
         
-        const user = await userService.findUserByEmail(email);
+        const user = await userService.findUserByEmail(email,currnentemail);
         res.status(200).json(user);
     } catch (error) {
         next(error);

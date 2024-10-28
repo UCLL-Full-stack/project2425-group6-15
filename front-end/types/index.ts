@@ -8,6 +8,7 @@ export type User = {
     phone?: number; 
     password?: string;
     gender: Gender; 
+    Interests: Interests[];
 };
 
 export type RegisterUser = {
@@ -25,4 +26,10 @@ export type PhoneNumber = {
     number: string;
 };
 
+
+
+export type Interests = {
+    id?: number;
+    name: string;
+}
 

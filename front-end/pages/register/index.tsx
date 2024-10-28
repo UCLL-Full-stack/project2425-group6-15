@@ -1,4 +1,4 @@
-import UserLoginForm from "@/components/user/userLoginForm";
+import UserRegisterForm from "@/components/user/userRegisterForm";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -15,7 +15,7 @@ const Register: React.FC = () => {
 
         <h1 className="text-5xl font-bold text-gray-900">Registreren</h1>
 
-        <UserLoginForm />
+        <UserRegisterForm />
         
         <div className="mt-4">
           <Link href="/login">
