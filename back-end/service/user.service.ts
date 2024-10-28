@@ -2,11 +2,7 @@ import { User} from '../model/user';
 import { UserInput, UserSummary } from '../types';
 import userDB from '../repository/user.db';
 import { Interest } from '../model/interest';
-import { JWTGivenToken } from '../authentication/auth.model';
-import authService from '../authentication/auth.service';
-import { error } from 'console';
 import { ServiceError } from './service.error';
-import { th } from 'date-fns/locale';
 
 const createUser = async (userInput: UserInput): Promise<User> => {
     if (!userInput.firstName) {
@@ -61,13 +57,15 @@ const findUserByEmail = (email: string, currentUserEmail: string): User | UserSu
     
       return userSummary;
 };
-const addInterestToUser =  (userId: number, interestData: { name: string }) => {
-    const user = userDB.getUserById(userId);
+const addInterestToUser = async (userId: number, interestData: { name: string }) => {
+    const user = await userDB.getUserById(userId);
     if (!user) {
         throw new ServiceError('User not found');
     }
     const interest = new Interest(interestData);
     user.addInterestToUser(interest);
+    return user;
 };
+
 
 export default {createUser, getAllUsers, addInterestToUser, findUserByEmail};

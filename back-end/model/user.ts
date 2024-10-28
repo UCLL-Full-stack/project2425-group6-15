@@ -105,6 +105,7 @@ export class User {
         if (this.interests.includes(interest))
             throw new Error('Interest already exists');
         this.interests.push(interest);
+        
     }   
     
     equals(user: User): boolean {
