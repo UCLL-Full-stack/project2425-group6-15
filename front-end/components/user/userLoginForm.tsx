@@ -66,7 +66,7 @@ const UserLoginForm: React.FC = () => {
 
     // Validate gender type before registration
     if (gender !== "male" && gender !== "female") {
-      setGenderError("Gender must be either male or female.");
+      setGenderError("Sex must be either male or female.");
       return;
     }
 
@@ -74,13 +74,15 @@ const UserLoginForm: React.FC = () => {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      phone: Number(`${countryCode}${phone ?? 0}`), // Combine country code with phone
-      gender: gender, // Only 'male' or 'female' should be passed here
+      phoneNumber: {countryCode: countryCode, number: (phone ?? 0).toString()},
+      gender: gender, 
       password: password,
     };
 
     const response = await userService.register(userLogin);
     const data = await response.json();
+    
+    sessionStorage.setItem("token", data.token)
 
     console.log({
       firstName,

@@ -12,6 +12,12 @@ dotenv.config();
 const port = process.env.APP_PORT || 3000;
 const API_KEY = process.env.API_KEY || 'default_api_key_here';
 
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'OPTIONS'], 
+    allowedHeaders: ['Content-Type', 'x-api-key', 'Authorization'], 
+}));
+
 const swaggerOpts = {
     definition: {
         openapi: '3.0.0',
@@ -67,12 +73,15 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
     }
 }));
 
-// app.use((req: express.Request, res: express.Response, next) => {
-//     console.log(`Request Method: ${req.method}`); 
-//     console.log(`Request URL: ${req.url}`);
-//     console.log(`Request Body:`, req.body); 
-//     next(); 
-// });
+app.use((req: express.Request, res: express.Response, next) => {
+    console.log(`Request Method: ${req.method}`); 
+    console.log(`Request URL: ${req.url}`);
+    console.log(`Request Body:`, req.body); 
+    res.on('finish', () => {
+        console.log(`Response Status Code: ${res.statusCode}`);
+    });
+    next(); 
+});
 
 app.use((req: express.Request, res: express.Response, next) => {
     const apiKey = req.headers['x-api-key'];    
@@ -86,7 +95,6 @@ app.use((req: express.Request, res: express.Response, next) => {
     }
 });
 
-app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
 app.get('/status', (_req, res) => {

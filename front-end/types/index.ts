@@ -11,10 +11,18 @@ export type User = {
 };
 
 export type RegisterUser = {
+    id?: number;
     firstName: string;
     lastName: string;
+    phoneNumber: PhoneNumber;
     email: string;
-    phone: number; 
     password: string;
-    gender: Gender; 
+    gender: Gender;
 };
+
+export type PhoneNumber = {
+    countryCode: string;
+    number: string;
+};
+
+
