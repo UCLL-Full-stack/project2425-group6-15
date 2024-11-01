@@ -7,7 +7,8 @@ export class Interest {
         id?: number;
         name: string;
         
-    }) {
+    }) 
+    {
         this.validate(interest);
         this.id = interest.id;
         this.name = interest.name;

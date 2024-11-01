@@ -78,6 +78,7 @@ export class User {
         phoneNumber: PhoneNumber;
         email: string;
         gender: Gender;
+        password: string;
         interests: Interest[];
     }) {
         if (!user.firstName?.trim()) {
@@ -89,15 +90,21 @@ export class User {
         if (!user.email?.trim()) {
             throw new Error('Email is required');
         }
-        if (!user.phoneNumber) {
-            throw new Error('Phone number is required');
+        if (!user.phoneNumber.countryCode.trim()) {
+            throw new Error('country code is required');
         }
+        if (!user.phoneNumber.number.trim()) {
+            throw new Error('phone number is required');
+        }
+        if (!user.password?.trim()) {
+            throw new Error('Password is required');}
+
         if (!user.gender) {
             throw new Error('Gender is required');
         }
+    
+
     }
-
-
 
 
     addInterestToUser(interest: Interest) {
