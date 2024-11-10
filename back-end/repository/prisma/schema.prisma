@@ -14,16 +14,25 @@ model User {
   phoneNumber   String
   email         String    @unique
   password      String
-  interests     Interest?
   gender        String
+  interests     UserInterest[]
 }
-
 
 model Interest { 
   id          Int        @id @default(autoincrement()) 
   name        String 
   description String 
-} 
- 
+  users       UserInterest[]
+}
 
-  
+model UserInterest {
+  userId     Int
+  interestId Int
+  user       User      @relation(fields: [userId], references: [id])
+  interest   Interest  @relation(fields: [interestId], references: [id])
+
+  @@id([userId, interestId])
+}
+
+
+

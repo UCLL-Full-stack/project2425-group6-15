@@ -2,6 +2,7 @@
 import { Gender, PhoneNumber } from "../types";
 import { Interest } from "./interest";
 
+
 export class User {
     private id?: number;
     private firstName: string;
