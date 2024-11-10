@@ -64,11 +64,58 @@ export class User {
         return this.gender;
     }
 
-
-    
-
     getInterests(): Interest[] {
         return this.interests;
+    }
+
+
+    setFirstName(firstName: string): void {
+        if (!firstName.trim()) {
+            throw new Error('First name is required');
+        }
+        this.firstName = firstName;
+    }
+
+    setLastName(lastName: string): void {
+        if (!lastName.trim()) {
+            throw new Error('Last name is required');
+        }
+        this.lastName = lastName;
+    }
+
+    setPhoneNumber(phoneNumber: PhoneNumber): void {
+        if (!phoneNumber.countryCode.trim()) {
+            throw new Error('Country code is required');
+        }
+        if (!phoneNumber.number.trim()) {
+            throw new Error('Phone number is required');
+        }
+        this.phoneNumber = phoneNumber;
+    }
+
+    setEmail(email: string): void {
+        if (!email.trim()) {
+            throw new Error('Email is required');
+        }
+        this.email = email;
+    }
+
+    setPassword(password: string): void {
+        if (!password.trim()) {
+            throw new Error('Password is required');
+        }
+        this.password = password;
+    }
+
+    setGender(gender: Gender): void {
+        if (!gender) {
+            throw new Error('Gender is required');
+        }
+        this.gender = gender;
+    }
+
+    setInterests(interests: Interest[]): void {
+        this.interests = interests;
     }
 
 

@@ -1,4 +1,3 @@
-
 import { Interest } from '../../model/interest';
 import { User } from '../../model/user';
 import userDB from '../../repository/user.db';
@@ -8,7 +7,6 @@ import bcrypt from 'bcrypt';
 import { anyString } from 'jest-mock-extended';
 
 jest.mock('../../repository/user.db');
-
 
 const validUserInput: UserInput = {
     firstName: 'Jane',
@@ -41,7 +39,6 @@ afterEach(() => {
 test('given a valid user, when user is created, then user is created with those values', async () => {
     const createdUser = await userService.createUser(validUserInput);
     
-
     expect(userDB.createUser).toHaveBeenCalledTimes(1);
     expect(userDB.createUser).toHaveBeenCalledWith(expect.objectContaining({
         firstName: 'Jane',
@@ -95,30 +92,27 @@ test('given a user without password, when user is created, then an error is thro
 
 test('given a user ID and interest, when interest is added, then user has that interest', async () => {
     const userId = 1;
-    const interest = { name: 'Cycling' };
+    const interest = { name: 'Cycling', description: 'Outdoor activity' }; 
     const UserWithInterest = {
         ...mockUser,
         interests: [...mockUser.getInterests(), interest]
     };
-        mockUser.addInterestToUser = jest.fn(interest => {
+    mockUser.addInterestToUser = jest.fn(interest => {
         mockUser.getInterests().push(interest);
-        });
+    });
     (userDB.getUserById as jest.Mock).mockResolvedValue(mockUser);
     const updatedUser = await userService.addInterestToUser(userId, interest);
     
-
     expect(userDB.getUserById).toHaveBeenCalledTimes(1);
     expect(userDB.getUserById).toHaveBeenCalledWith(userId);
     expect(mockUser.addInterestToUser).toHaveBeenCalledTimes(1);
     expect(mockUser.addInterestToUser).toHaveBeenCalledWith(interest);
     expect(updatedUser.getInterests()).toContainEqual(interest);
-
 }); 
-
 
 test('given an invalid user ID, when interest is added, then an error is thrown', async () => {
     const userId = 999;
-    const interest = { name: 'Cycling' };
+    const interest = { name: 'Cycling', description: 'Outdoor activity' };
     (userDB.getUserById as jest.Mock).mockResolvedValue(null);
     
     await expect(userService.addInterestToUser(userId, interest)).rejects.toThrow('User not found');

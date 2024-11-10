@@ -66,14 +66,14 @@ test('should throw an error if gender is missing', () => {
 
 test('should add an interest to the validUser', () => {
     const user = new User(validUser);
-    const interest = new Interest({ name: "Reading" });
+    const interest = new Interest({ name: "Reading", description: "Reading books" });
     user.addInterestToUser(interest);
     expect(user.getInterests()).toContain(interest);
 });
 
 test('should throw an error if interest already exists', () => {
     const user = new User(validUser);
-    const interest = new Interest({ name: "Reading" });
+    const interest = new Interest({ name: "Reading", description: "Reading books" });
     user.addInterestToUser(interest);
     expect(() => {
         user.addInterestToUser(interest);

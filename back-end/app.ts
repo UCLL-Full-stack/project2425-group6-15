@@ -103,7 +103,7 @@ app.get('/status', (_req, res) => {
 });
 
 app.use('/auth', authRouter);
-app.use('/users', userRouter);
+app.use('/user', userRouter);
 
 
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

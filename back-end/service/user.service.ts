@@ -63,15 +63,15 @@ const findUserByEmail = (email: string, currentUserEmail: string): User | UserSu
     
       return userSummary;
 };
-const addInterestToUser = async (userId: number, interestData: { name: string }) => {
+async function addInterestToUser(userId: number, interestData: { name: string; description: string }) {
     const user = await userDB.getUserById(userId);
     if (!user) {
-        throw new ServiceError('User not found');
+        throw new Error('User not found');
     }
     const interest = new Interest(interestData);
     user.addInterestToUser(interest);
+    await userDB.updatedUser(user);
     return user;
-};
-
+}
 
 export default {createUser, getAllUsers, addInterestToUser, findUserByEmail};

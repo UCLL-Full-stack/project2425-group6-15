@@ -63,7 +63,7 @@ const userRouter = express.Router();
 
 /**
  * @swagger
- * /users:
+ * /user:
  *   get:
  *     summary: Retrieve a list of users
  *     tags: [Users]
@@ -93,9 +93,9 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 /**
  * @swagger
- * /users/{email}:
+ * /user/{email}:
  *   get:
- *     summary: Retrieve users information by email
+ *     summary: Retrieve user information by email
  *     description: Gives sertain user information by email based on the token
  *     tags: [Users]
  *     security:                    
