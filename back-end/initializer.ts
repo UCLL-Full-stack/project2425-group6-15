@@ -15,7 +15,6 @@ const initializeData = async () => {
         gender: 'male',
         password: hashedPassword,
         interests: [],
-        buddys: []
     });
 
     const user2 = new User({
@@ -27,7 +26,6 @@ const initializeData = async () => {
         gender: 'female',
         password: hashedPassword,
         interests: [],
-        buddys: []
     });
 
     const interest1 = new Interest({ name: 'Reading' });

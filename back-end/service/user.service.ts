@@ -34,7 +34,6 @@ const createUser = async (userInput: UserInput): Promise<User> => {
         gender: userInput.gender,
         password: hashedPassword,
         interests: [],
-        buddys: []
     });
     return userDB.createUser(user);
 }

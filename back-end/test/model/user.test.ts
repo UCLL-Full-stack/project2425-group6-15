@@ -12,7 +12,6 @@ const validUser = {
     gender: 'female' as Gender,
     password: 'securepassword',
     interests: [],
-    buddys: []
 };
 
 

@@ -27,7 +27,6 @@ const mockUser = new User({
     password: 'password123',
     gender: 'male',
     interests: [],
-    buddys: []
 });
 
 beforeEach(() => {
@@ -51,8 +50,7 @@ test('given a valid user, when user is created, then user is created with those 
         email: 'jane.toe@example.com',
         password: anyString(),
         gender: 'female',
-        interests: [],
-        buddys: []
+        interests: []
     }));
     expect(createdUser).toBeInstanceOf(User);
     expect(createdUser.getFirstName()).toEqual('John');

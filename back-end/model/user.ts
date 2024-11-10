@@ -11,7 +11,6 @@ export class User {
     private password: string;
     private interests: Interest[];
     private gender: Gender;
-    private buddys: User[] = [];
 
 
 
@@ -24,7 +23,6 @@ export class User {
     gender:Gender;
     password: string;
     interests: Interest[];
-    buddys: User[];
     })
 
      {
@@ -37,7 +35,6 @@ export class User {
         this.password = user.password;
         this.gender = user.gender;
         this.interests = user.interests || [];
-        this.buddys = user.buddys || [];
     }
 
 
@@ -66,9 +63,7 @@ export class User {
     getGender(): Gender {
         return this.gender;
     }
-    getBuddys(): User[] {
-        return this.buddys;
-    }
+
 
     
 
