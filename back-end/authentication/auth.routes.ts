@@ -109,9 +109,7 @@ authRouter.post('/register', async (req: Request, res: Response, next: NextFunct
     try {
         const { email, password, firstName, lastName, phoneNumber, gender } = req.body;
 
-        const hashedPassword = await bcrypt.hash(req.body.password, 10); 
-
-        const newUser = await userService.createUser({ ...req.body, password: hashedPassword });
+        const newUser = await userService.createUser(req.body);
 
         const token = authService.generateToken(newUser.getEmail());
 

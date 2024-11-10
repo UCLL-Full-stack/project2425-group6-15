@@ -6,6 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
 import { authRouter } from './authentication/auth.routes';
+import initializeData from './initializer'; // Import the initializer
 
 const app = express();
 dotenv.config();
@@ -113,7 +114,8 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
     });
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
     console.log(`Back-end is running on port ${port}.`);
     console.log(`Swagger is running on http://localhost:${port}/api-docs`);
+    await initializeData();
 });

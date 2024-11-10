@@ -3,6 +3,7 @@ import { UserInput, UserSummary } from '../types';
 import userDB from '../repository/user.db';
 import { Interest } from '../model/interest';
 import { ServiceError } from './service.error';
+import bcrypt from 'bcryptjs';
 
 const createUser = async (userInput: UserInput): Promise<User> => {
     if (!userInput.firstName) {
@@ -23,14 +24,18 @@ const createUser = async (userInput: UserInput): Promise<User> => {
         throw new Error('Password is required');
     }
     
+    const hashedPassword = await bcrypt.hash(userInput.password, 10);
+
     const user = new User({
         firstName: userInput.firstName,
         lastName: userInput.lastName,
         phoneNumber: userInput.phoneNumber,
         email: userInput.email,
         gender: userInput.gender,
-        password: userInput.password,
-        interests: []});
+        password: hashedPassword,
+        interests: [],
+        buddys: []
+    });
     return userDB.createUser(user);
 }
 

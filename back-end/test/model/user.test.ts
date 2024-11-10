@@ -11,7 +11,8 @@ const validUser = {
     email: 'jane.doe@example.com',
     gender: 'female' as Gender,
     password: 'securepassword',
-    interests: []
+    interests: [],
+    buddys: []
 };
 
 

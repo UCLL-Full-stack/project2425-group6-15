@@ -4,17 +4,19 @@ import { User } from '../../model/user';
 import userDB from '../../repository/user.db';
 import userService from '../../service/user.service';
 import { UserInput } from '../../types';
+import bcrypt from 'bcrypt';
+import { anyString } from 'jest-mock-extended';
 
 jest.mock('../../repository/user.db');
 
 
 const validUserInput: UserInput = {
-    firstName: 'John',
-    lastName: 'Doe',
-    phoneNumber: { countryCode: '32', number: '1234567890' },
-    email: 'john.doe@example.com',
-    password: 'password123',
-    gender: 'male'
+    firstName: 'Jane',
+    lastName: 'Toe',
+    phoneNumber: { countryCode: '32', number: '1244567890' },
+    email: 'jane.toe@example.com',
+    password: "password123",
+    gender: 'female',
 };
 
 const mockUser = new User({
@@ -24,7 +26,8 @@ const mockUser = new User({
     email: 'john.doe@example.com',
     password: 'password123',
     gender: 'male',
-    interests: []
+    interests: [],
+    buddys: []
 });
 
 beforeEach(() => {
@@ -38,16 +41,18 @@ afterEach(() => {
 
 test('given a valid user, when user is created, then user is created with those values', async () => {
     const createdUser = await userService.createUser(validUserInput);
+    
 
     expect(userDB.createUser).toHaveBeenCalledTimes(1);
     expect(userDB.createUser).toHaveBeenCalledWith(expect.objectContaining({
-        firstName: 'John',
-        lastName: 'Doe',
-        phoneNumber: { countryCode: '32', number: '1234567890' },
-        email: 'john.doe@example.com',
-        password: 'password123',
-        gender: 'male',
-        interests: []
+        firstName: 'Jane',
+        lastName: 'Toe',
+        phoneNumber: { countryCode: '32', number: '1244567890' },
+        email: 'jane.toe@example.com',
+        password: anyString(),
+        gender: 'female',
+        interests: [],
+        buddys: []
     }));
     expect(createdUser).toBeInstanceOf(User);
     expect(createdUser.getFirstName()).toEqual('John');
