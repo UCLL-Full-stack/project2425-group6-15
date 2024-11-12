@@ -38,13 +38,11 @@ const createUser = async (userInput: UserInput): Promise<User> => {
     return userDB.createUser(user);
 }
 
-const getAllUsers = (): User[] => {
-    return userDB.getAllUsers();
-    }
+const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers();
 
 
-const findUserByEmail = (email: string, currentUserEmail: string): User | UserSummary | null => {
-    const user = userDB.getUserByEmail(email);
+const findUserByEmail = async (email: string, currentUserEmail: string): Promise<User | UserSummary | null> => {
+    const user = await userDB.getUserByEmail(email);
     if (!user) {
         throw new ServiceError('User not found', 404);
     }
@@ -74,4 +72,9 @@ async function addInterestToUser(userId: number, interestData: { name: string; d
     return user;
 }
 
-export default {createUser, getAllUsers, addInterestToUser, findUserByEmail};
+export default {
+    createUser,
+    getAllUsers,
+    addInterestToUser,
+    findUserByEmail
+};

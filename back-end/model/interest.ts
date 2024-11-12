@@ -1,3 +1,4 @@
+import { Interest as InterestPrisma } from '@prisma/client';
 export class Interest {
     private id?: number;
     private name: string;
@@ -50,5 +51,19 @@ export class Interest {
         return this.name === interest.getName(), this.description === interest.getDescription();
     }
 
+    toPrisma(): InterestPrisma {
+        return {
+            id: this.id ?? 0,
+            name: this.name,
+            description: this.description,
+        };
+    }
 
+    static from(interest: InterestPrisma): Interest {
+        return new Interest({
+            id: interest.id,
+            name: interest.name,
+            description: interest.description,
+        });
+    }
 }

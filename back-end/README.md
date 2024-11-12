@@ -30,6 +30,12 @@ First, install all required node dependencies using npm (node package manager):
 > npm install
 ```
 
+Then, to seed the data, run:
+
+```console
+> npx ts-node util/seed.ts
+```
+
 Then, to start the backend server execute:
 
 ```console

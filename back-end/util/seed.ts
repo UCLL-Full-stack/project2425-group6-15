@@ -1,28 +1,14 @@
-// Execute: npx ts-node util/seed.ts
-
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import { set } from 'date-fns';
 
 const prisma = new PrismaClient();
 
 const main = async () => {
-    await prisma.userInterest.deleteMany();
     await prisma.user.deleteMany();
     await prisma.interest.deleteMany();
 
     const hashedPassword = bcrypt.hashSync('user123', 10);
 
-    const user = await prisma.user.create({
-        data: {
-            firstName: 'user',
-            lastName: 'test',
-            phoneNumber: '+321234567890',
-            password: hashedPassword,
-            email: 'user@test.com',
-            gender: 'male',
-        },
-    });
 
     const interest1 = await prisma.interest.create({
         data: {
@@ -38,19 +24,20 @@ const main = async () => {
         },
     });
 
-    await prisma.userInterest.create({
+    const user = await prisma.user.create({
         data: {
-            userId: user.id,
-            interestId: interest1.id,
+            firstName: 'user',
+            lastName: 'test',
+            phoneNumber: '+32 1234567890',
+            password: hashedPassword,
+            email: 'user@test.com',
+            gender: 'male',
+            interests: {
+                connect: [{ id: interest1.id }, { id: interest2.id }],
+            },
         },
     });
 
-    await prisma.userInterest.create({
-        data: {
-            userId: user.id,
-            interestId: interest2.id,
-        },
-    });
 };
 
 (async () => {

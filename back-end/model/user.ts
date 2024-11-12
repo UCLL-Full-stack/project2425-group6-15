@@ -1,7 +1,10 @@
-
 import { Gender, PhoneNumber } from "../types";
 import { Interest } from "./interest";
 
+import {
+    User as UserPrisma,
+    Interest as InterestPrisma,
+} from '@prisma/client';
 
 export class User {
     private id?: number;
@@ -13,20 +16,16 @@ export class User {
     private interests: Interest[];
     private gender: Gender;
 
-
-
     constructor(user: {
-    id?: number;
-    firstName: string;
-    lastName: string;
-    phoneNumber: PhoneNumber;
-    email: string;
-    gender:Gender;
-    password: string;
-    interests: Interest[];
-    })
-
-     {
+        id?: number;
+        firstName: string;
+        lastName: string;
+        phoneNumber: PhoneNumber;
+        email: string;
+        gender: Gender;
+        password: string;
+        interests: Interest[];
+    }) {
         this.validate(user);
         this.id = user.id;
         this.firstName = user.firstName;
@@ -37,7 +36,6 @@ export class User {
         this.gender = user.gender;
         this.interests = user.interests || [];
     }
-
 
     getId(): number | undefined {
         return this.id;
@@ -58,9 +56,11 @@ export class User {
     getEmail(): string {
         return this.email;
     }
+
     getPassword(): string {
         return this.password;
     }
+
     getGender(): Gender {
         return this.gender;
     }
@@ -68,7 +68,6 @@ export class User {
     getInterests(): Interest[] {
         return this.interests;
     }
-
 
     setFirstName(firstName: string): void {
         if (!firstName.trim()) {
@@ -119,7 +118,6 @@ export class User {
         this.interests = interests;
     }
 
-
     validate(user: {
         id?: number;
         firstName: string;
@@ -146,29 +144,62 @@ export class User {
             throw new Error('phone number is required');
         }
         if (!user.password?.trim()) {
-            throw new Error('Password is required');}
-
+            throw new Error('Password is required');
+        }
         if (!user.gender) {
             throw new Error('Gender is required');
         }
-    
-
     }
 
-
     addInterestToUser(interest: Interest) {
-        if (!interest) throw new Error('Interest is required'); 
+        if (!interest) throw new Error('Interest is required');
         if (this.interests.includes(interest))
             throw new Error('Interest already exists');
         this.interests.push(interest);
-        
-    }   
-    
+    }
+
     equals(user: User): boolean {
-        return (this.firstName === user.getFirstName() &&
-                       this.lastName === user.getLastName() &&
-                       this.phoneNumber === user.getPhoneNumber() &&
-                       this.email === user.getEmail() &&
-                       this.gender === user.getGender()
-            )}
+        return (
+            this.firstName === user.getFirstName() &&
+            this.lastName === user.getLastName() &&
+            this.phoneNumber === user.getPhoneNumber() &&
+            this.email === user.getEmail() &&
+            this.gender === user.getGender()
+        );
+    }
+
+    toPrisma(): UserPrisma & { interests: InterestPrisma[] } {
+        return {
+            id: this.id ?? 0,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            phoneNumber: `${this.phoneNumber.countryCode} ${this.phoneNumber.number}`,
+            email: this.email,
+            gender: this.gender,
+            password: this.password,
+            interests: this.interests.map((interest) => interest.toPrisma()),
+        };
+    }
+
+    static from({
+        id,
+        firstName,
+        lastName,
+        phoneNumber,
+        email,
+        gender,
+        password,
+        interests
+    }: UserPrisma & { interests: InterestPrisma[] }) {
+        return new User({
+            id,
+            firstName,
+            lastName,
+            phoneNumber: { countryCode: phoneNumber.split(' ')[0], number: phoneNumber.split(' ')[1] } as PhoneNumber,
+            email,
+            gender: gender as Gender,
+            password,
+            interests: interests.map(interest => Interest.from(interest)),
+        });
+    }
 }
