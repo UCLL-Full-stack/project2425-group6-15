@@ -17,6 +17,20 @@ const getAllUsers = async (): Promise<User[]> => {
 
 const createUser = async (userData: User): Promise<User> => {
     try {
+        const existingUserByEmail = await database.user.findUnique({
+            where: { email: userData.getEmail() },
+        });
+        if (existingUserByEmail) {
+            throw new Error('User with this email already exists');
+        }
+
+        const existingUserByPhoneNumber = await database.user.findUnique({
+            where: { phoneNumber: userData.getPhoneNumber().countryCode + ' ' + userData.getPhoneNumber().number },
+        });
+        if (existingUserByPhoneNumber) {
+            throw new Error('User with this phone number already exists');
+        }
+
         const createdUser = await database.user.create({
             data: {
                 ...userData.toPrisma(),
@@ -66,6 +80,20 @@ const getUserByEmail = async (email: string): Promise<User | null> => {
 
 const updatedUser = async (userdata: User): Promise<User | null> => {
     try {
+        const existingUser = await database.user.findUnique({
+            where: { id: userdata.getId() },
+        });
+        if (!existingUser) {
+            throw new Error('User not found');
+        }
+
+        const existingUserByPhoneNumber = await database.user.findUnique({
+            where: { phoneNumber: userdata.getPhoneNumber().countryCode + ' ' + userdata.getPhoneNumber().number },
+        });
+        if (existingUserByPhoneNumber && existingUserByPhoneNumber.id !== userdata.getId()) {
+            throw new Error('User with this phone number already exists');
+        }
+
         const user = await database.user.update({
             where: { id: userdata.getId() },
             data: {

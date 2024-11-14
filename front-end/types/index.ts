@@ -33,3 +33,15 @@ export type Interests = {
     name: string;
 }
 
+export type Activity = {
+    id?: number;
+    name: string;
+    description: string;
+    date: Date;
+    time: string;
+    locationlatitude: string;
+    locationlongitude: string;
+    maxParticipants: number;
+    participants: User[];
+    creator: User;
+};

@@ -11,7 +11,8 @@ const register = (user: RegisterUser) => {
       body: JSON.stringify(user),
     });
   };
-  const login = (user: { email: string; password: string }) => {
+  
+const login = (user: { email: string; password: string }) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/login", {
       method: "POST",
       headers: {
