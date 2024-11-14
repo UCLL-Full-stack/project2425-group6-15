@@ -91,6 +91,16 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+userRouter.get('/current', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        let currentUserEmail = authService.authenticateToken(req.headers);
+        const user = await userService.findUserByEmail(currentUserEmail, currentUserEmail);
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
 /**
  * @swagger
  * /user/{email}:
@@ -140,7 +150,7 @@ userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction
 
 /**
  * @swagger
- * /users/{id}/interests:
+ * /user/interests:
  *   post:
  *     summary: Add an interest to a user
  *     tags: [Users]
@@ -168,11 +178,11 @@ userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction
  *       500:
  *         description: Some server error
  */
-userRouter.post('/:id/interests', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/interests', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = parseInt(req.params.id, 10);
+        let currnentemail = authService.authenticateToken(req.headers);
         const interestData = req.body;
-        await userService.addInterestToUser(userId, interestData);
+        await userService.addInterestToUser(currnentemail, interestData);
         res.status(200).json({ message: 'Interest added to user.' });
     } catch (error) {
         next(error);

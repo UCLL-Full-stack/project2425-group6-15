@@ -1,5 +1,5 @@
 import userService from "@/services/userService";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { response } from "express";
 import { get } from "http";
@@ -12,10 +12,23 @@ interface Interest {
   const UserProfile: React.FC = () => {
     const [interests, setInterests] = useState<Interest[]>([]);
     const [newInterest, setNewInterest] = useState<Interest>({ name: '', description: '' });
-
-  const email =  getEmailByToken();
-   
+    const [User, setUser] = useState<UserSummary>(null);
+    
+    useEffect(() => {
+      const fetchUser = async () => {
+        const response = await userService.findCurrentUser();
+        if (response.ok) {
+            const data = await response.json();
+            setUser(data);
+        }
+        else{
+            console.log('Error');
+        
+      }
+    };
   
+      fetchUser();
+    }
     useEffect(() => {
       const fetchInterests = async () => {
         const response = await userService.findUserByEmail(await email);

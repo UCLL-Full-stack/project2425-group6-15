@@ -7,21 +7,21 @@ import bcrypt from 'bcryptjs';
 
 const createUser = async (userInput: UserInput): Promise<User> => {
     if (!userInput.firstName) {
-        throw new Error('First name is required');
+        throw new ServiceError('First name is required');
     }
     if (!userInput.lastName) {
-        throw new Error('Last name is required');
+        throw new ServiceError('Last name is required');
     }
     if (!userInput.phoneNumber || !userInput.phoneNumber.countryCode || !userInput.phoneNumber.number) {
 
-        throw new Error('Phone number is required');
+        throw new ServiceError('Phone number is required');
 
     }
     if (!userInput.email) {
-        throw new Error('Email is required');
+        throw new ServiceError('Email is required');
     }
     if (!userInput.password) {
-        throw new Error('Password is required');
+        throw new ServiceError('Password is required');
     }
     
     const hashedPassword = await bcrypt.hash(userInput.password, 10);
@@ -61,10 +61,10 @@ const findUserByEmail = async (email: string, currentUserEmail: string): Promise
     
       return userSummary;
 };
-async function addInterestToUser(userId: number, interestData: { name: string; description: string }) {
-    const user = await userDB.getUserById(userId);
+async function addInterestToUser(userEmail: string, interestData: { name: string; description: string }) {
+    const user = await userDB.getUserByEmail(userEmail);
     if (!user) {
-        throw new Error('User not found');
+        throw new ServiceError('User not found.');
     }
     const interest = new Interest(interestData);
     user.addInterestToUser(interest);
