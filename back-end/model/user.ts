@@ -158,6 +158,7 @@ export class User {
         this.interests.push(interest);
     }
 
+
     equals(user: User): boolean {
         return (
             this.firstName === user.getFirstName() &&

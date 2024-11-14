@@ -27,10 +27,19 @@ export type PhoneNumber = {
 };
 
 
+export type UserSummary = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    interests: Interests[];
+    gender: Gender;
+  };
+
 
 export type Interests = {
     id?: number;
     name: string;
+    description: string;
 }
 
 export type Activity = {
