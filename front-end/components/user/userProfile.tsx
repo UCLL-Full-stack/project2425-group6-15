@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { response } from "express";
 import { get } from "http";
 import { getEmailByToken } from "@/util/user";
+import { UserSummary } from "@/types";
 interface Interest {
     name: string;
     description: string;
@@ -28,7 +29,7 @@ interface Interest {
     };
   
       fetchUser();
-    }
+    });
     useEffect(() => {
       const fetchInterests = async () => {
         const response = await userService.findUserByEmail(await email);
@@ -67,7 +68,7 @@ interface Interest {
             ))}
           </ul>
         </div>
-  
+            
         <div className="mb-4">
           <h2 className="text-2xl font-bold">Add New Interest</h2>
           <input
