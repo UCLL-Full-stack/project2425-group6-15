@@ -33,13 +33,13 @@ interface Interest {
   
     const addInterest = async () => {
       if (newInterest.name && newInterest.description) {
-        const response = await userService.addInterestToUser(, newInterest);
-        if (response.ok) {
-          setInterests([...interests, newInterest]);
-          setNewInterest({ name: '', description: '' });
-        }
+        const userResponse = await userService.findUserByEmail(await email);
+        if (userResponse.ok) {
+            const userId = userResponse.data.id;
+            userService.addInterestToUser(userId, newInterest);
+           
       }
-    };
+      }}
   
     return (
       <div className="container mx-auto p-4">
