@@ -33,7 +33,9 @@ const login = (user: { email: string; password: string }) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        ...(process.env.NEXT_PUBLIC_API_KEY && { "x-api-key": process.env.NEXT_PUBLIC_API_KEY }),
+      
       },
 
       body: JSON.stringify(interest),
@@ -72,6 +74,7 @@ const findCurrentUser = async () => {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Cache-Control": "no-cache",
       ...(process.env.NEXT_PUBLIC_API_KEY && { "x-api-key": process.env.NEXT_PUBLIC_API_KEY }),
     },
   });

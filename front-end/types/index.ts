@@ -28,6 +28,7 @@ export type PhoneNumber = {
 
 
 export type UserSummary = {
+    id?: number;
     firstName: string;
     lastName: string;
     email: string;
@@ -38,8 +39,8 @@ export type UserSummary = {
 
 export type Interests = {
     id?: number;
-    name: string;
     description: string;
+    name: string;
 }
 
 export type Activity = {

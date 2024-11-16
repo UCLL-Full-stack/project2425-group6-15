@@ -57,9 +57,9 @@ const findUserByEmail = async (email: string, currentUserEmail: string): Promise
         email: user.getEmail(),
         interests: user.getInterests(),
         gender: user.getGender()
-      };
+};
     
-      return userSummary;
+    return userSummary;
 };
 async function addInterestToUser(userEmail: string, interestData: { name: string; description: string }) {
     const user = await userDB.getUserByEmail(userEmail);

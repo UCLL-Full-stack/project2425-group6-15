@@ -24,12 +24,12 @@ const createUser = async (userData: User): Promise<User> => {
             throw new Error('User with this email already exists');
         }
 
-        const existingUserByPhoneNumber = await database.user.findUnique({
-            where: { phoneNumber: userData.getPhoneNumber().countryCode + ' ' + userData.getPhoneNumber().number },
-        });
-        if (existingUserByPhoneNumber) {
-            throw new Error('User with this phone number already exists');
-        }
+        // const existingUserByPhoneNumber = await database.user.findUnique({
+        //     where: { phoneNumber: userData.getPhoneNumber().countryCode + ' ' + userData.getPhoneNumber().number },
+        // });
+        // if (existingUserByPhoneNumber) {
+        //     throw new Error('User with this phone number already exists');
+        // }
 
         const createdUser = await database.user.create({
             data: {
@@ -87,7 +87,7 @@ const updatedUser = async (userdata: User): Promise<User | null> => {
             throw new Error('User not found');
         }
 
-        const existingUserByPhoneNumber = await database.user.findUnique({
+        const existingUserByPhoneNumber = await database.user.findFirst({
             where: { phoneNumber: userdata.getPhoneNumber().countryCode + ' ' + userdata.getPhoneNumber().number },
         });
         if (existingUserByPhoneNumber && existingUserByPhoneNumber.id !== userdata.getId()) {
