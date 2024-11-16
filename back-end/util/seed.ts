@@ -30,7 +30,7 @@ const main = async () => {
             lastName: 'test',
             phoneNumber: '+32 1234567890',
             password: hashedPassword,
-            email: 'user@test.com',
+            email: 'user@gmail.com',
             gender: 'male',
             interests: {
                 connect: [{ id: interest1.id }, { id: interest2.id }],
