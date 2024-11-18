@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { response } from "express";
 import { get } from "http";
 import { getEmailByToken } from "@/util/user";
+import { User } from "@/types";
 interface Interest {
     name: string;
     description: string;
@@ -12,7 +13,7 @@ interface Interest {
   const UserProfile: React.FC = () => {
     const [interests, setInterests] = useState<Interest[]>([]);
     const [newInterest, setNewInterest] = useState<Interest>({ name: '', description: '' });
-    const [User, setUser] = useState<UserSummary>(null);
+    const [User, setUser] = useState<User>({} as User);
     
     useEffect(() => {
       const fetchUser = async () => {
@@ -25,25 +26,10 @@ interface Interest {
             console.log('Error');
         
       }
-    };
-  
-      fetchUser();
     }
-    useEffect(() => {
-      const fetchInterests = async () => {
-        const response = await userService.findUserByEmail(await email);
-        if (response.ok) {
-            setInterests(response.data.interests);
-        }
-        else{
-            console.log('Error');
-        
-      }
-    };
-  
-      fetchInterests();
-    }, []);
-  
+    fetchUser();
+  });
+ 
     const addInterest = async () => {
       if (newInterest.name && newInterest.description) {
         const response = await userService.addInterestToUser(, newInterest);

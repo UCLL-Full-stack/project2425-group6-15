@@ -16,6 +16,8 @@ model User {
   password      String
   gender        String
   interests     Interest[]
+  posts         Post[]    
+  joinedPosts   Post[]    
 }
 
 model Interest { 
@@ -23,6 +25,29 @@ model Interest {
   name        String 
   description String
   users       User[] 
+}
+
+model Post {
+  id              Int        @id @default(autoincrement())
+  title           String
+  description     String
+  startDate       DateTime
+  endDate         DateTime
+  time            String
+  activityId      Int
+  activity        Activity
+  creatorId       Int
+  creator         User      
+  interestedUsers User[]     
+  acceptedUsers   User[]     
+  peopleNeeded    Int
+  preferredGender String
+}
+
+model Activity {
+  id   Int    @id @default(autoincrement())
+  name String
+  type String
 }
 
 
