@@ -18,7 +18,7 @@ const Register: React.FC = () => {
         <UserLoginForm />
         
         <div className="mt-4">
-          <Link href="/login">
+          <Link href="/register">
             <span className="text-blue-500 hover:underline cursor-pointer">
               Nog geen account? Maak hier een aan.
             </span>
