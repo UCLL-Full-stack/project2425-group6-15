@@ -4,6 +4,7 @@ import userDB from '../repository/user.db';
 import { Interest } from '../model/interest';
 import { ServiceError } from './service.error';
 import bcrypt from 'bcryptjs';
+import { add } from 'date-fns';
 
 const createUser = async (userInput: UserInput): Promise<User> => {
     if (!userInput.firstName) {
@@ -64,9 +65,23 @@ const findUserByEmail = async (email: string, currentUser: User): Promise<User |
     return userSummary;
 };
 
+const addInterestToUser = async (currentUser: User, interestData: { name: string; description: string }): Promise<User> => {
+    const user = await userDB.getByEmail(currentUser.getEmail());
+    if (!user) {
+        throw new ServiceError('User not found', 404);
+    }
+
+    const interest = new Interest(interestData);
+    user.addInterestToUser(interest);
+
+    await userDB.update(user);
+    return user;
+};
+
 
 export default {
     createUser,
     getAllUsers,
-    findUserByEmail
+    findUserByEmail,
+    addInterestToUser,
 };

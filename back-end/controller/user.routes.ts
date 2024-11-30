@@ -255,45 +255,45 @@ userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction
 });
 
 
-// /**
-//  * @swagger
-//  * /user/interests:
-//  *   post:
-//  *     summary: Add an interest to a user
-//  *     tags: [User]
-//  *     parameters:
-//  *       - in: path
-//  *         name: id
-//  *         required: true
-//  *         schema:
-//  *           type: integer
-//  *         description: The user ID
-//  *     requestBody:
-//  *       required: true
-//  *       content:
-//  *         application/json:
-//  *           schema:
-//  *             type: object
-//  *             properties:
-//  *               name:
-//  *                 type: string
-//  *     responses:
-//  *       200:
-//  *         description: Interest added to user.
-//  *       404:
-//  *         description: User not found.
-//  *       500:
-//  *         description: Some server error
-//  */
-// userRouter.post('/interests', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         let currnentemail = authService.authenticateToken(req.headers);
-//         const interestData = req.body;
-//         await userService.addInterestToUser(currnentemail, interestData);
-//         res.status(200).json({ message: 'Interest added to user.' });
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+/**
+ * @swagger
+ * /user/interests:
+ *   post:
+ *     summary: Add an interest to a user
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The user ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Interest added to user.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Some server error
+ */
+userRouter.post('/interests', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const currentUser = await authService.authenticateToken(req.headers);
+        const interestData = req.body;
+        const updatedUser = await userService.addInterestToUser(currentUser, interestData);
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export { userRouter };

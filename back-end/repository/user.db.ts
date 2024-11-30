@@ -89,10 +89,52 @@ const getByEmail = async (email: string): Promise<User | null> => {
     }
 }
 
-
+const update = async (userData: User): Promise<User> => {
+    try {
+        const updatedUser = await database.user.update({
+            where: { id: userData.getId() },
+            data: {
+                ...userData.toPrisma(),
+                interests: {
+                    upsert: userData.getInterests().map(interest => ({
+                        where: { id: interest.getId() },
+                        update: {
+                            name: interest.getName(),
+                            description: interest.getDescription(),
+                        },
+                        create: {
+                            name: interest.getName(),
+                            description: interest.getDescription(),
+                        },
+                    })),
+                },
+                posts: {
+                    set: userData.getPosts().map(post => ({
+                        id: post.getId(),
+                    })),
+                },
+                joinedPosts: {
+                    set: userData.getJoinedPosts().map(joinedPost => ({
+                        id: joinedPost.getId(),
+                    })),
+                },
+            },
+            include: {
+                interests: true,
+                posts: true,
+                joinedPosts: true,
+            },
+        });
+        return User.from(updatedUser);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details');
+    }
+};
 export default {
     getAll,
     create,
     getById,
     getByEmail,
+    update
 };
