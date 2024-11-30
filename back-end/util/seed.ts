@@ -341,8 +341,8 @@ const main = async () => {
         data: {
             title: 'Photography Walk',
             description: 'Join us for a walk and capture beautiful moments.',
-            startDate: new Date('2023-11-03T10:00:00Z'),
-            endDate: new Date('2023-11-03T12:00:00Z'),
+            startDate: new Date('2024-12-15T10:00:00Z'),
+            endDate: new Date('2024-12-15T12:00:00Z'),
             time: '10:00 AM - 12:00 PM',
             activityId: activity9.id,
             creatorId: user5.id,
@@ -356,8 +356,8 @@ const main = async () => {
         data: {
             title: 'Cooking Class',
             description: 'Learn to cook delicious meals.',
-            startDate: new Date('2023-11-04T14:00:00Z'),
-            endDate: new Date('2023-11-04T16:00:00Z'),
+            startDate: new Date('2024-12-04T14:00:00Z'),
+            endDate: new Date('2024-12-04T16:00:00Z'),
             time: '02:00 PM - 04:00 PM',
             activityId: activity11.id,
             creatorId: user6.id,
@@ -371,8 +371,8 @@ const main = async () => {
         data: {
             title: 'Board Games Night',
             description: 'Enjoy a night of fun board games.',
-            startDate: new Date('2023-11-05T19:00:00Z'),
-            endDate: new Date('2023-11-05T22:00:00Z'),
+            startDate: new Date('2024-12-05T19:00:00Z'),
+            endDate: new Date('2024-12-05T22:00:00Z'),
             time: '07:00 PM - 10:00 PM',
             activityId: activity12.id,
             creatorId: user7.id,
