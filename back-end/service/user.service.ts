@@ -34,20 +34,22 @@ const createUser = async (userInput: UserInput): Promise<User> => {
         gender: userInput.gender,
         password: hashedPassword,
         interests: [],
+        posts: [],
+        joinedPosts: [],
     });
-    return userDB.createUser(user);
+    return userDB.create(user);
 }
 
-const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers();
+const getAllUsers = async (): Promise<User[]> => userDB.getAll();
 
 
-const findUserByEmail = async (email: string, currentUserEmail: string): Promise<User | UserSummary | null> => {
-    const user = await userDB.getUserByEmail(email);
+const findUserByEmail = async (email: string, currentUser: User): Promise<User | UserSummary | null> => {
+    const user = await userDB.getByEmail(email);
     if (!user) {
         throw new ServiceError('User not found', 404);
     }
 
-    if (currentUserEmail === email) {
+    if (currentUser.getEmail() === email) {
         return user; 
     }
     
@@ -61,20 +63,10 @@ const findUserByEmail = async (email: string, currentUserEmail: string): Promise
     
     return userSummary;
 };
-async function addInterestToUser(userEmail: string, interestData: { name: string; description: string }) {
-    const user = await userDB.getUserByEmail(userEmail);
-    if (!user) {
-        throw new ServiceError('User not found.');
-    }
-    const interest = new Interest(interestData);
-    user.addInterestToUser(interest);
-    await userDB.updatedUser(user);
-    return user;
-}
+
 
 export default {
     createUser,
     getAllUsers,
-    addInterestToUser,
     findUserByEmail
 };

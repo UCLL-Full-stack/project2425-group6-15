@@ -1,9 +1,14 @@
-import { Gender, PhoneNumber } from "../types";
+import { Gender, PhoneNumber, UserSummary } from "../types";
+import { Activity } from "./activity";
 import { Interest } from "./interest";
+import { Participant } from "./participant";
+import { Post } from "./post";
 
 import {
     User as UserPrisma,
     Interest as InterestPrisma,
+    Post as PostPrisma,
+    Participant as ParticipantPrisma,
 } from '@prisma/client';
 
 export class User {
@@ -15,6 +20,8 @@ export class User {
     private password: string;
     private interests: Interest[];
     private gender: Gender;
+    private posts: Post[];
+    private joinedPosts: Participant[];
 
     constructor(user: {
         id?: number;
@@ -25,6 +32,8 @@ export class User {
         gender: Gender;
         password: string;
         interests: Interest[];
+        posts: Post[];
+        joinedPosts: Participant[];
     }) {
         this.validate(user);
         this.id = user.id;
@@ -35,6 +44,8 @@ export class User {
         this.password = user.password;
         this.gender = user.gender;
         this.interests = user.interests || [];
+        this.posts = user.posts || [];
+        this.joinedPosts = user.joinedPosts || [];
     }
 
     getId(): number | undefined {
@@ -68,6 +79,16 @@ export class User {
     getInterests(): Interest[] {
         return this.interests;
     }
+
+    getPosts(): Post[] {
+        return this.posts;
+    }
+
+    getJoinedPosts(): Participant[] {
+        return this.joinedPosts;
+    }
+
+
 
     setFirstName(firstName: string): void {
         if (!firstName.trim()) {
@@ -118,6 +139,15 @@ export class User {
         this.interests = interests;
     }
 
+    setPosts(posts: Post[]): void {
+        this.posts = posts;
+    }
+
+    setJoinedPosts(joinedPosts: Participant[]): void {
+        this.joinedPosts = joinedPosts;
+    }
+
+
     validate(user: {
         id?: number;
         firstName: string;
@@ -158,7 +188,6 @@ export class User {
         this.interests.push(interest);
     }
 
-
     equals(user: User): boolean {
         return (
             this.firstName === user.getFirstName() &&
@@ -169,7 +198,7 @@ export class User {
         );
     }
 
-    toPrisma(): UserPrisma & { interests: InterestPrisma[] } {
+    toPrisma(): UserPrisma & { interests: InterestPrisma[], posts: PostPrisma[], joinedPosts: ParticipantPrisma[]} {
         return {
             id: this.id ?? 0,
             firstName: this.firstName,
@@ -179,6 +208,8 @@ export class User {
             gender: this.gender,
             password: this.password,
             interests: this.interests.map((interest) => interest.toPrisma()),
+            posts: this.posts.map((post) => post.toPrisma()),
+            joinedPosts: this.joinedPosts.map(post => post.toPrisma()),
         };
     }
 
@@ -190,8 +221,10 @@ export class User {
         email,
         gender,
         password,
-        interests
-    }: UserPrisma & { interests: InterestPrisma[] }) {
+        interests,
+        posts,
+        joinedPosts,
+    }: UserPrisma & { interests: InterestPrisma[], posts: PostPrisma[], joinedPosts: ParticipantPrisma[]}) {
         return new User({
             id,
             firstName,
@@ -201,6 +234,22 @@ export class User {
             gender: gender as Gender,
             password,
             interests: interests.map(interest => Interest.from(interest)),
+            posts: posts.map(post => Post.from({
+                ...post,
+                activity: { id: 0, name: '', type: '' },
+                creator: { id: 0, firstName: '', lastName: '', phoneNumber: '', email: '', password: '', gender: '' },
+                participants: [],
+            })),
+            joinedPosts: joinedPosts.map(post => Participant.from(post)),
         });
+    }
+    static toSummary(user: User): UserSummary {
+        return {
+            firstName: user.getFirstName(),
+            lastName: user.getLastName(),
+            email: user.getEmail(),
+            gender: user.getGender(),
+            interests: user.getInterests(),
+        };
     }
 }

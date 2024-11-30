@@ -9,10 +9,10 @@ Represents a user in the system.
 -   **id**: `number`
 -   **firstName**: `string`
 -   **lastName**: `string`
--   **phoneNumber**: `string`
+-   **phoneNumber**: `string:Phonenumber`
 -   **email**: `string`
--   **password**: `string`
--   **gender**: `string`
+-   **password**: `string:Hashed`
+-   **gender**: `string:Gender`
 -   **interests**: `Interest[]`
 -   **posts**: `Post[]`
 -   **joinedPosts**: `Post[]`
@@ -35,10 +35,10 @@ Represents a post for an activity.
 -   **startDate**: `DateTime`
 -   **endDate**: `DateTime`
 -   **time**: `string`
+-   **location**: `string:Location`
 -   **activity**: `Activity`
--   **creator**: `User`
--   **interestedUsers**: `User[]`
--   **acceptedUsers**: `User[]`
+-   **creator**: `User` (relation: "UserPosts")
+-   **users**: `User[]`
 -   **peopleNeeded**: `number`
 -   **preferredGender**: `Creator-Gender|Both-genders`
 
@@ -87,3 +87,32 @@ Represents a phone number.
 
 -   **countryCode**: `string`
 -   **number**: `string`
+
+### Location
+
+Represents a geographical location.
+
+-   **longitude**: `string`
+-   **latitude**: `string`
+
+## DB Relations
+
+### User
+
+-   **posts**: One-to-Many with `Post` (relation: "UserPosts")
+-   **joinedPosts**: Many-to-Many with `Post` (relation: "UserJoinedPosts")
+-   **interests**: Many-to-Many with `Interest` (relation: "UserInterests")
+
+### Post
+
+-   **creator**: Many-to-One with `User` (relation: "UserPosts")
+-   **users**: Many-to-Many with `User` (relation: "UserJoinedPosts")
+-   **activity**: Many-to-One with `Activity` (relation: "ActivityPosts")
+
+### Interest
+
+-   **users**: Many-to-Many with `User` (relation: "UserInterests")
+
+### Activity
+
+-   **posts**: One-to-Many with `Post` (relation: "ActivityPosts")

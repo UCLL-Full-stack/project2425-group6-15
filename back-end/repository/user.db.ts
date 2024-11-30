@@ -1,12 +1,10 @@
 import { User } from "../model/user";
 import database from "./database";
 
-const users: User[] = [];
-
-const getAllUsers = async (): Promise<User[]> => {
+const getAll = async (): Promise<User[]> => {
     try {
         const UserPrisma = await database.user.findMany({
-            include:  { interests: true},
+            include:  { interests: true, posts: true, joinedPosts: true },
         });
         return UserPrisma.map((userPrisma) => User.from(userPrisma));
     } catch (error) {
@@ -15,7 +13,7 @@ const getAllUsers = async (): Promise<User[]> => {
     }
 };
 
-const createUser = async (userData: User): Promise<User> => {
+const create = async (userData: User): Promise<User> => {
     try {
         const existingUserByEmail = await database.user.findUnique({
             where: { email: userData.getEmail() },
@@ -40,9 +38,17 @@ const createUser = async (userData: User): Promise<User> => {
                         description: interest.getDescription(),
                     })),
                 },
+                posts: {
+                    create: [],
+                },
+                joinedPosts: {
+                    create: [],
+                },
             },
             include: {
                 interests: true,
+                posts: true,
+                joinedPosts: true,
             },
         });
         return User.from(createdUser);
@@ -52,24 +58,29 @@ const createUser = async (userData: User): Promise<User> => {
     }
 }
 
-const getUserById = async (id: number): Promise<User | null> => {
+const getById = async (id: number): Promise<User | null> => {
     try {
         const user = await database.user.findUnique({
             where: { id },
-            include: { interests: true },
+            include: { interests: true, posts: true, joinedPosts: true },
         });
-        return user ? User.from(user) : null;
+        return user ? User.from({
+            ...user,
+            interests: user.interests || [],
+            posts: user.posts || [],
+            joinedPosts: user.joinedPosts || []
+        }) : null;
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details');
     }
 }
 
-const getUserByEmail = async (email: string): Promise<User | null> => {
+const getByEmail = async (email: string): Promise<User | null> => {
     try {
         const user = await database.user.findUnique({
             where: { email },
-            include: { interests: true },
+            include: { interests: true, posts: true, joinedPosts: true },
         });
         return user ? User.from(user) : null;
     } catch (error) {
@@ -78,48 +89,10 @@ const getUserByEmail = async (email: string): Promise<User | null> => {
     }
 }
 
-const updatedUser = async (userdata: User): Promise<User | null> => {
-    try {
-        const existingUser = await database.user.findUnique({
-            where: { id: userdata.getId() },
-        });
-        if (!existingUser) {
-            throw new Error('User not found');
-        }
-
-        const existingUserByPhoneNumber = await database.user.findFirst({
-            where: { phoneNumber: userdata.getPhoneNumber().countryCode + ' ' + userdata.getPhoneNumber().number },
-        });
-        if (existingUserByPhoneNumber && existingUserByPhoneNumber.id !== userdata.getId()) {
-            throw new Error('User with this phone number already exists');
-        }
-
-        const user = await database.user.update({
-            where: { id: userdata.getId() },
-            data: {
-                ...userdata.toPrisma(),
-                interests: {
-                    set: userdata.getInterests().map(interest => ({
-                        id: interest.getId(),
-                        name: interest.getName(),
-                        description: interest.getDescription(),
-                    })),
-                },
-            },
-            include: { interests: true },
-        });
-        return user ? User.from(user) : null;
-    } catch (error) {
-        console.error(error);
-        throw new Error('Database error. See server log for details');
-    }
-
-}
 
 export default {
-    getAllUsers,
-    createUser,
-    getUserById,
-    getUserByEmail,
-    updatedUser
+    getAll,
+    create,
+    getById,
+    getByEmail,
 };

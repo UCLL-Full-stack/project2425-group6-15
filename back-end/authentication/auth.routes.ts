@@ -70,8 +70,6 @@ import bcrypt from 'bcryptjs';
 
 const authRouter = express.Router();
 
-// Secret key for JWT
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'; 
 
 /**
  * @swagger
@@ -157,18 +155,9 @@ authRouter.post('/register', async (req: Request, res: Response, next: NextFunct
  */
 authRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = await userDB.getUserByEmail(req.body.email);
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid email or password' });
-        }
-
-        if (user && (await bcrypt.compare(req.body.password, user.getPassword()))) {
-            const token = jwt.sign({ email: user.getEmail() }, JWT_SECRET, { expiresIn: '30m' });
-            return res.status(200).json({ token });
-        }
-        
-        // Als de login mislukt
-        res.status(401).json({ message: 'Invalid email or password' });
+        const user = req.body;
+        let token = await authService.login(user);
+        return res.status(200).json({ token });
     } catch (error) {
         next(error);
     }

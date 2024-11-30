@@ -1,17 +1,14 @@
-export type Gender = "male" | "female";
+export type Gender = 'male' | 'female';
+export type PhoneNumber = { countryCode: string, number: string };
+export type JWTTOKEN = string;
+export type JWTGivenToken = String | Array<String> | undefined ;
 
-export type User = {
-    id?: number;
-    firstName: string;
-    lastName: string;
+export type UserLogin = {
     email: string;
-    phone?: number; 
-    password?: string;
-    gender: Gender; 
-    Interests: Interests[];
+    password: string;
 };
 
-export type RegisterUser = {
+export type UserRegistraion = {
     id?: number;
     firstName: string;
     lastName: string;
@@ -21,37 +18,78 @@ export type RegisterUser = {
     gender: Gender;
 };
 
-export type PhoneNumber = {
-    countryCode: string;
-    number: string;
-};
-
-
 export type UserSummary = {
-    id?: number;
     firstName: string;
     lastName: string;
     email: string;
-    interests: Interests[];
+    interests: Interest[];
     gender: Gender;
-  };
+};
 
-
-export type Interests = {
-    id?: number;
-    description: string;
-    name: string;
+export type Location = {
+    longitude: String;
+    latitude: String;
+};
+export type User = {
+    id?: number,
+    firstName: string,
+    lastName: string,
+    phoneNumber: PhoneNumber,
+    email: string,
+    password: string,
+    interests: Interest[],
+    gender: Gender,
+    posts: Post[],
+    joinedPosts: Participant[],
 }
+export type PostSummary = {
+    id?: number,
+    title: string,
+    description: string,
+    startDate: Date,
+    endDate: Date,
+    time: string,
+    location: Location,
+    activity: Activity,
+    creator: UserSummary,
+    participants: UserSummary[],
+    peopleNeeded: number,
+    preferredGender: Gender | 'both';
+};
+export type Post = {
+    id?: number,
+    title: string,
+    description: string,
+    startDate: Date,
+    endDate: Date,
+    time: string,
+    location: Location,
+    activity: Activity,
+    creator: User,
+    participants: Participant[],
+    peopleNeeded: number,
+    preferredGender: Gender | 'both',
+};
+
+export type Participant = {
+    id?: number,
+    userId?: number,
+    postId?: number,
+    user?: User,
+    post?: Post,
+    status: 'accepted' | 'pending' | 'rejected',
+};
 
 export type Activity = {
     id?: number;
     name: string;
-    description: string;
-    date: Date;
-    time: string;
-    locationlatitude: string;
-    locationlongitude: string;
-    maxParticipants: number;
-    participants: User[];
-    creator: User;
+    type: string;
 };
+
+export type Interest = {
+    id?: number;
+    name: string;
+    description: string;
+};
+
+

@@ -6,6 +6,8 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
 import { authRouter } from './authentication/auth.routes';
+import { activityRouter } from './controller/activity.routes';
+import { postRouter } from './controller/post.routes';
 
 const app = express();
 dotenv.config();
@@ -103,7 +105,8 @@ app.get('/status', (_req, res) => {
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
-
+app.use('/activity', activityRouter);
+app.use('/post', postRouter);
 
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     // console.error(err.stack); 

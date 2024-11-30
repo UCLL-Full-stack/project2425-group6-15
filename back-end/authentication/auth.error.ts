@@ -1,8 +1,9 @@
 export class AuthError extends Error {
-    status: number;
-    constructor(message: string) {
+    public status: number; 
+
+    constructor(message: string, status: number = 401) { 
         super(message);
-        this.name = 'TokenError';
-        this.status = 401;
+        this.name = 'AuthError';
+        this.status = status; 
     }
 }

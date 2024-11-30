@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { JWTGivenToken, JWTTOKEN } from './auth.model';
+import { JWTGivenToken, JWTTOKEN, UserLogin } from './auth.model';
 import { AuthError } from './auth.error';
+import userdb from '../repository/user.db';
+import { User } from '../model/user';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secretkey'; 
 
@@ -9,7 +11,7 @@ const generateToken = (email: string) => {
         return jwt.sign({ email }, JWT_SECRET, { expiresIn: '30m' });
 }
 
-const authenticateToken = (headers: { [key: string]: string | string[] | undefined }): string => {
+const authenticateToken = async (headers: { [key: string]: string | string[] | undefined }): Promise<User> => {
     const authHeader = headers['authorization'];
     
     if (!authHeader || Array.isArray(authHeader) || !authHeader.startsWith('Bearer ')) {
@@ -18,7 +20,12 @@ const authenticateToken = (headers: { [key: string]: string | string[] | undefin
 
     const token = authHeader.split(' ')[1];
 
-    return verifyToken(token);
+    const email =  verifyToken(token);
+    const user = await userdb.getByEmail(email);
+    if (!user) {
+        throw new AuthError('User not found', 404);
+    }
+    return user;
 };
 
 const verifyToken = (token: JWTGivenToken): string => {
@@ -44,5 +51,16 @@ const verifyToken = (token: JWTGivenToken): string => {
         throw new AuthError('Token verification failed');
     }
 };
-
-export default {generateToken, verifyToken, authenticateToken};
+const login = async (data : UserLogin): Promise<JWTTOKEN> => {
+    const user = await userdb.getByEmail(data.email);
+    if (!user) {
+        throw new AuthError('User not found', 404);
+    }
+    const isValid = await bcrypt.compare(data.password, user.getPassword());
+    if (!isValid) {
+        throw new AuthError('Invalid password', 401);
+    }
+    const token = generateToken(user.getEmail());
+    return token;
+}
+export default {generateToken, verifyToken, authenticateToken, login};
