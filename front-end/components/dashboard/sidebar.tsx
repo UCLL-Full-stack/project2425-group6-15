@@ -12,7 +12,7 @@ const ActivityTopOverview: React.FC<ActivityTopOverviewProps> = ({ posts }) => {
 
   return (
     <>
-      <div className="h-full bg-white shadow-lg rounded-lg p-6">
+      <div className="h-full overflow-y-auto bg-white shadow-lg rounded-lg p-6">
           <h2 className="text-2xl font-bold text-slate-700 mb-4">Posts</h2>
           <div className="w-full h-full flex flex-col">
             { posts.length === 0 && <p className="text-slate-500">No posts available</p> }

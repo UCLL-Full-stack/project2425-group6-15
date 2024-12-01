@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
         <meta charSet="utf-8" />
       </Head>
       <Header />
-      <div className="container grid grid-cols-[1fr_370px] gap-4 min-h-screen min-w-full text-gray-800 box-border pt-24 pb-5 px-3">
+      <div className="container grid grid-cols-[1fr_370px] gap-4 h-screen min-w-full text-gray-800 box-border pt-24 pb-5 px-3">
         <div className="w-full h-full bg-blue-200 rounded-lg">
           {position && (
             <MapContainerNoSSR center={position} zoom={13} style={{ height: "100%", width: "100%" }}>
