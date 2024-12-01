@@ -183,11 +183,11 @@ const main = async () => {
 
     const user2 = await prisma.user.create({
         data: {
-            firstName: 'user2',
-            lastName: 'test2',
+            firstName: 'Maria',
+            lastName: 'Garcia',
             phoneNumber: '+32 0987654321',
             password: hashedPassword,
-            email: 'user2@gmail.com',
+            email: 'maria.garcia@gmail.com',
             gender: 'female',
             interests: {
                 connect: [{ id: interest3.id }],
@@ -197,11 +197,11 @@ const main = async () => {
 
     const user3 = await prisma.user.create({
         data: {
-            firstName: 'user3',
-            lastName: 'test3',
+            firstName: 'Liam',
+            lastName: 'Smith',
             phoneNumber: '+32 1122334455',
             password: hashedPassword,
-            email: 'user3@gmail.com',
+            email: 'liam.smith@gmail.com',
             gender: 'non-binary',
             interests: {
                 connect: [{ id: interest1.id }, { id: interest3.id }],
@@ -211,11 +211,11 @@ const main = async () => {
 
     const user4 = await prisma.user.create({
         data: {
-            firstName: 'user4',
-            lastName: 'test4',
+            firstName: 'Chen',
+            lastName: 'Wang',
             phoneNumber: '+32 2233445566',
             password: hashedPassword,
-            email: 'user4@gmail.com',
+            email: 'chen.wang@gmail.com',
             gender: 'male',
             interests: {
                 connect: [{ id: interest4.id }, { id: interest5.id }],
@@ -225,11 +225,11 @@ const main = async () => {
 
     const user5 = await prisma.user.create({
         data: {
-            firstName: 'user5',
-            lastName: 'test5',
+            firstName: 'Aisha',
+            lastName: 'Khan',
             phoneNumber: '+32 3344556677',
             password: hashedPassword,
-            email: 'user5@gmail.com',
+            email: 'aisha.khan@gmail.com',
             gender: 'female',
             interests: {
                 connect: [{ id: interest6.id }, { id: interest7.id }],
@@ -239,11 +239,11 @@ const main = async () => {
 
     const user6 = await prisma.user.create({
         data: {
-            firstName: 'user6',
-            lastName: 'test6',
+            firstName: 'Alex',
+            lastName: 'Johnson',
             phoneNumber: '+32 4455667788',
             password: hashedPassword,
-            email: 'user6@gmail.com',
+            email: 'alex.johnson@gmail.com',
             gender: 'non-binary',
             interests: {
                 connect: [{ id: interest8.id }, { id: interest9.id }],
@@ -253,11 +253,11 @@ const main = async () => {
 
     const user7 = await prisma.user.create({
         data: {
-            firstName: 'user7',
-            lastName: 'test7',
+            firstName: 'Carlos',
+            lastName: 'Martinez',
             phoneNumber: '+32 5566778899',
             password: hashedPassword,
-            email: 'user7@gmail.com',
+            email: 'carlos.martinez@gmail.com',
             gender: 'male',
             interests: {
                 connect: [{ id: interest10.id }, { id: interest1.id }],
@@ -267,11 +267,11 @@ const main = async () => {
 
     const user8 = await prisma.user.create({
         data: {
-            firstName: 'user8',
-            lastName: 'test8',
+            firstName: 'Sofia',
+            lastName: 'Lopez',
             phoneNumber: '+32 6677889900',
             password: hashedPassword,
-            email: 'user8@gmail.com',
+            email: 'sofia.lopez@gmail.com',
             gender: 'female',
             interests: {
                 connect: [{ id: interest2.id }, { id: interest3.id }],
@@ -281,11 +281,11 @@ const main = async () => {
 
     const user9 = await prisma.user.create({
         data: {
-            firstName: 'user9',
-            lastName: 'test9',
+            firstName: 'Ravi',
+            lastName: 'Patel',
             phoneNumber: '+32 7788990011',
             password: hashedPassword,
-            email: 'user9@gmail.com',
+            email: 'ravi.patel@gmail.com',
             gender: 'non-binary',
             interests: {
                 connect: [{ id: interest4.id }, { id: interest5.id }],
@@ -295,11 +295,11 @@ const main = async () => {
 
     const user10 = await prisma.user.create({
         data: {
-            firstName: 'user10',
-            lastName: 'test10',
+            firstName: 'Oliver',
+            lastName: 'Brown',
             phoneNumber: '+32 8899001122',
             password: hashedPassword,
-            email: 'user10@gmail.com',
+            email: 'oliver.brown@gmail.com',
             gender: 'male',
             interests: {
                 connect: [{ id: interest6.id }, { id: interest7.id }],
@@ -341,8 +341,8 @@ const main = async () => {
         data: {
             title: 'Photography Walk',
             description: 'Join us for a walk and capture beautiful moments.',
-            startDate: new Date('2023-11-03T10:00:00Z'),
-            endDate: new Date('2023-11-03T12:00:00Z'),
+            startDate: new Date('2024-12-15T10:00:00Z'),
+            endDate: new Date('2024-12-15T12:00:00Z'),
             time: '10:00 AM - 12:00 PM',
             activityId: activity9.id,
             creatorId: user5.id,
@@ -356,8 +356,8 @@ const main = async () => {
         data: {
             title: 'Cooking Class',
             description: 'Learn to cook delicious meals.',
-            startDate: new Date('2023-11-04T14:00:00Z'),
-            endDate: new Date('2023-11-04T16:00:00Z'),
+            startDate: new Date('2024-12-04T14:00:00Z'),
+            endDate: new Date('2024-12-04T16:00:00Z'),
             time: '02:00 PM - 04:00 PM',
             activityId: activity11.id,
             creatorId: user6.id,
@@ -371,8 +371,8 @@ const main = async () => {
         data: {
             title: 'Board Games Night',
             description: 'Enjoy a night of fun board games.',
-            startDate: new Date('2023-11-05T19:00:00Z'),
-            endDate: new Date('2023-11-05T22:00:00Z'),
+            startDate: new Date('2024-12-05T19:00:00Z'),
+            endDate: new Date('2024-12-05T22:00:00Z'),
             time: '07:00 PM - 10:00 PM',
             activityId: activity12.id,
             creatorId: user7.id,
@@ -382,45 +382,420 @@ const main = async () => {
         },
     });
 
-    await prisma.participant.create({
+    const post6 = await prisma.post.create({
         data: {
-            postId: post1.id,
-            userId: user3.id,
-            status: "accepted",
+            title: 'Swimming Session',
+            description: 'Join us for a fun swimming session.',
+            startDate: new Date('2023-11-03T10:00:00Z'),
+            endDate: new Date('2023-11-03T12:00:00Z'),
+            time: '10:00 AM - 12:00 PM',
+            activityId: activity2.id,
+            creatorId: user3.id,
+            peopleNeeded: 6,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
         },
     });
 
-    await prisma.participant.create({
+    const post7 = await prisma.post.create({
         data: {
-            postId: post2.id,
-            userId: user8.id,
-            status: "accepted",
+            title: 'Evening Run',
+            description: 'Join us for an evening run.',
+            startDate: new Date('2023-11-04T18:00:00Z'),
+            endDate: new Date('2023-11-04T19:00:00Z'),
+            time: '06:00 PM - 07:00 PM',
+            activityId: activity6.id,
+            creatorId: user4.id,
+            peopleNeeded: 8,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
         },
     });
 
-    await prisma.participant.create({
+    const post8 = await prisma.post.create({
         data: {
-            postId: post3.id,
-            userId: user9.id,
-            status: "accepted",
+            title: 'Gardening Workshop',
+            description: 'Learn the basics of gardening.',
+            startDate: new Date('2023-11-05T09:00:00Z'),
+            endDate: new Date('2023-11-05T11:00:00Z'),
+            time: '09:00 AM - 11:00 AM',
+            activityId: activity5.id,
+            creatorId: user5.id,
+            peopleNeeded: 5,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
         },
     });
 
-    await prisma.participant.create({
+    const post9 = await prisma.post.create({
         data: {
-            postId: post4.id,
-            userId: user10.id,
-            status: "accepted",
+            title: 'Cycling Tour',
+            description: 'Join us for a cycling tour around the city.',
+            startDate: new Date('2023-11-06T08:00:00Z'),
+            endDate: new Date('2023-11-06T10:00:00Z'),
+            time: '08:00 AM - 10:00 AM',
+            activityId: activity4.id,
+            creatorId: user6.id,
+            peopleNeeded: 10,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
         },
     });
 
-    await prisma.participant.create({
+    const post10 = await prisma.post.create({
         data: {
-            postId: post5.id,
-            userId: user1.id,
-            status: "accepted",
+            title: 'Painting Class',
+            description: 'Learn to paint beautiful landscapes.',
+            startDate: new Date('2023-11-07T14:00:00Z'),
+            endDate: new Date('2023-11-07T16:00:00Z'),
+            time: '02:00 PM - 04:00 PM',
+            activityId: activity3.id,
+            creatorId: user7.id,
+            peopleNeeded: 6,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
         },
     });
+
+    const post11 = await prisma.post.create({
+        data: {
+            title: 'Yoga Retreat',
+            description: 'Join us for a weekend yoga retreat.',
+            startDate: new Date('2023-11-08T08:00:00Z'),
+            endDate: new Date('2023-11-08T18:00:00Z'),
+            time: '08:00 AM - 06:00 PM',
+            activityId: activity7.id,
+            creatorId: user8.id,
+            peopleNeeded: 15,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post12 = await prisma.post.create({
+        data: {
+            title: 'Dance Workshop',
+            description: 'Learn new dance moves.',
+            startDate: new Date('2023-11-09T10:00:00Z'),
+            endDate: new Date('2023-11-09T12:00:00Z'),
+            time: '10:00 AM - 12:00 PM',
+            activityId: activity8.id,
+            creatorId: user9.id,
+            peopleNeeded: 10,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post13 = await prisma.post.create({
+        data: {
+            title: 'Fishing Trip',
+            description: 'Join us for a relaxing fishing trip.',
+            startDate: new Date('2023-11-10T06:00:00Z'),
+            endDate: new Date('2023-11-10T12:00:00Z'),
+            time: '06:00 AM - 12:00 PM',
+            activityId: activity10.id,
+            creatorId: user10.id,
+            peopleNeeded: 4,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post14 = await prisma.post.create({
+        data: {
+            title: 'Board Games Marathon',
+            description: 'Enjoy a marathon of board games.',
+            startDate: new Date('2023-11-11T10:00:00Z'),
+            endDate: new Date('2023-11-11T22:00:00Z'),
+            time: '10:00 AM - 10:00 PM',
+            activityId: activity12.id,
+            creatorId: user1.id,
+            peopleNeeded: 8,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post15 = await prisma.post.create({
+        data: {
+            title: 'Morning Meditation',
+            description: 'Start your day with a peaceful meditation session.',
+            startDate: new Date('2023-11-12T07:00:00Z'),
+            endDate: new Date('2023-11-12T08:00:00Z'),
+            time: '07:00 AM - 08:00 AM',
+            activityId: activity7.id,
+            creatorId: user2.id,
+            peopleNeeded: 10,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post16 = await prisma.post.create({
+        data: {
+            title: 'Evening Photography',
+            description: 'Capture the beauty of the evening.',
+            startDate: new Date('2023-11-13T17:00:00Z'),
+            endDate: new Date('2023-11-13T19:00:00Z'),
+            time: '05:00 PM - 07:00 PM',
+            activityId: activity9.id,
+            creatorId: user3.id,
+            peopleNeeded: 6,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post17 = await prisma.post.create({
+        data: {
+            title: 'Cooking Competition',
+            description: 'Show off your cooking skills in a friendly competition.',
+            startDate: new Date('2023-11-14T14:00:00Z'),
+            endDate: new Date('2023-11-14T17:00:00Z'),
+            time: '02:00 PM - 05:00 PM',
+            activityId: activity11.id,
+            creatorId: user4.id,
+            peopleNeeded: 8,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post18 = await prisma.post.create({
+        data: {
+            title: 'Fitness Bootcamp',
+            description: 'Join us for an intensive fitness bootcamp.',
+            startDate: new Date('2023-11-15T06:00:00Z'),
+            endDate: new Date('2023-11-15T08:00:00Z'),
+            time: '06:00 AM - 08:00 AM',
+            activityId: activity6.id,
+            creatorId: user5.id,
+            peopleNeeded: 12,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post19 = await prisma.post.create({
+        data: {
+            title: 'Writing Workshop',
+            description: 'Improve your writing skills in this workshop.',
+            startDate: new Date('2023-11-16T10:00:00Z'),
+            endDate: new Date('2023-11-16T12:00:00Z'),
+            time: '10:00 AM - 12:00 PM',
+            activityId: activity7.id,
+            creatorId: user6.id,
+            peopleNeeded: 10,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post20 = await prisma.post.create({
+        data: {
+            title: 'Music Jam Session',
+            description: 'Join us for a fun music jam session.',
+            startDate: new Date('2023-11-17T18:00:00Z'),
+            endDate: new Date('2023-11-17T20:00:00Z'),
+            time: '06:00 PM - 08:00 PM',
+            activityId: activity4.id,
+            creatorId: user7.id,
+            peopleNeeded: 8,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post21 = await prisma.post.create({
+        data: {
+            title: 'Art Exhibition',
+            description: 'Showcase your art in this exhibition.',
+            startDate: new Date('2023-11-18T10:00:00Z'),
+            endDate: new Date('2023-11-18T14:00:00Z'),
+            time: '10:00 AM - 02:00 PM',
+            activityId: activity3.id,
+            creatorId: user8.id,
+            peopleNeeded: 10,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post22 = await prisma.post.create({
+        data: {
+            title: 'Hiking Adventure',
+            description: 'Join us for an adventurous hike.',
+            startDate: new Date('2023-11-19T08:00:00Z'),
+            endDate: new Date('2023-11-19T12:00:00Z'),
+            time: '08:00 AM - 12:00 PM',
+            activityId: activity1.id,
+            creatorId: user9.id,
+            peopleNeeded: 8,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post23 = await prisma.post.create({
+        data: {
+            title: 'Swimming Competition',
+            description: 'Compete in a friendly swimming competition.',
+            startDate: new Date('2023-11-20T10:00:00Z'),
+            endDate: new Date('2023-11-20T12:00:00Z'),
+            time: '10:00 AM - 12:00 PM',
+            activityId: activity2.id,
+            creatorId: user10.id,
+            peopleNeeded: 6,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post24 = await prisma.post.create({
+        data: {
+            title: 'Evening Run',
+            description: 'Join us for an evening run.',
+            startDate: new Date('2023-11-21T18:00:00Z'),
+            endDate: new Date('2023-11-21T19:00:00Z'),
+            time: '06:00 PM - 07:00 PM',
+            activityId: activity6.id,
+            creatorId: user1.id,
+            peopleNeeded: 8,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post25 = await prisma.post.create({
+        data: {
+            title: 'Gardening Workshop',
+            description: 'Learn the basics of gardening.',
+            startDate: new Date('2023-11-22T09:00:00Z'),
+            endDate: new Date('2023-11-22T11:00:00Z'),
+            time: '09:00 AM - 11:00 AM',
+            activityId: activity5.id,
+            creatorId: user2.id,
+            peopleNeeded: 5,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post26 = await prisma.post.create({
+        data: {
+            title: 'Cycling Tour',
+            description: 'Join us for a cycling tour around the city.',
+            startDate: new Date('2023-11-23T08:00:00Z'),
+            endDate: new Date('2023-11-23T10:00:00Z'),
+            time: '08:00 AM - 10:00 AM',
+            activityId: activity4.id,
+            creatorId: user3.id,
+            peopleNeeded: 10,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post27 = await prisma.post.create({
+        data: {
+            title: 'Painting Class',
+            description: 'Learn to paint beautiful landscapes.',
+            startDate: new Date('2023-11-24T14:00:00Z'),
+            endDate: new Date('2023-11-24T16:00:00Z'),
+            time: '02:00 PM - 04:00 PM',
+            activityId: activity3.id,
+            creatorId: user4.id,
+            peopleNeeded: 6,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post28 = await prisma.post.create({
+        data: {
+            title: 'Yoga Retreat',
+            description: 'Join us for a weekend yoga retreat.',
+            startDate: new Date('2023-11-25T08:00:00Z'),
+            endDate: new Date('2023-11-25T18:00:00Z'),
+            time: '08:00 AM - 06:00 PM',
+            activityId: activity7.id,
+            creatorId: user5.id,
+            peopleNeeded: 15,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post29 = await prisma.post.create({
+        data: {
+            title: 'Dance Workshop',
+            description: 'Learn new dance moves.',
+            startDate: new Date('2023-11-26T10:00:00Z'),
+            endDate: new Date('2023-11-26T12:00:00Z'),
+            time: '10:00 AM - 12:00 PM',
+            activityId: activity8.id,
+            creatorId: user6.id,
+            peopleNeeded: 10,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    const post30 = await prisma.post.create({
+        data: {
+            title: 'Fishing Trip',
+            description: 'Join us for a relaxing fishing trip.',
+            startDate: new Date('2023-11-27T06:00:00Z'),
+            endDate: new Date('2023-11-27T12:00:00Z'),
+            time: '06:00 AM - 12:00 PM',
+            activityId: activity10.id,
+            creatorId: user7.id,
+            peopleNeeded: 4,
+            preferredGender: 'any',
+            location: "50.8503|&|4.3517",
+        },
+    });
+
+    // await prisma.participant.create({
+    //     data: {
+    //         postId: post1.id,
+    //         userId: user1.id,
+    //         status: "accepted",
+    //     },
+    // });
+
+    // await prisma.participant.create({
+    //     data: {
+    //         postId: post2.id,
+    //         userId: user8.id,
+    //         status: "accepted",
+    //     },
+    // });
+
+    // await prisma.participant.create({
+    //     data: {
+    //         postId: post3.id,
+    //         userId: user9.id,
+    //         status: "accepted",
+    //     },
+    // });
+
+    // await prisma.participant.create({
+    //     data: {
+    //         postId: post4.id,
+    //         userId: user10.id,
+    //         status: "accepted",
+    //     },
+    // });
+
+    // await prisma.participant.create({
+    //     data: {
+    //         postId: post5.id,
+    //         userId: user1.id,
+    //         status: "accepted",
+    //     },
+    // });
 
 };
 
