@@ -8,7 +8,7 @@ export type UserLogin = {
     password: string;
 };
 
-export type UserRegistraion = {
+export type UserRegistration = {
     id?: number;
     firstName: string;
     lastName: string;

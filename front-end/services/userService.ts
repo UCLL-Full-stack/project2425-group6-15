@@ -1,6 +1,6 @@
-import { RegisterUser, User, UserSummary } from "@/types";
+import { UserRegistration, User, UserSummary } from "@/types";
 
-const register = (user: RegisterUser) => {
+const register = (user: UserRegistration) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/register", {
       method: "POST",
       headers: {

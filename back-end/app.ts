@@ -16,8 +16,9 @@ const API_KEY = process.env.API_KEY || 'default_api_key_here';
 
 app.use(cors({
     origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'OPTIONS'], 
-    allowedHeaders: ['Content-Type', 'x-api-key', 'Authorization'], 
+    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'], 
+    allowedHeaders: ['Content-Type', 'x-api-key', 'Authorization'],
+    credentials: true, 
 }));
 
 const swaggerOpts = {
