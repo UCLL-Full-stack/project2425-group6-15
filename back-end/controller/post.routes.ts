@@ -89,7 +89,7 @@
  *           type: integer
  *         preferredGender:
  *           type: string
- *           enum: [male, female, both]
+ *           enum: [male, female, any]
  *     PostInput:
  *       type: object
  *       properties:
@@ -113,7 +113,7 @@
  *           type: integer
  *         preferredGender:
  *           type: string
- *           enum: [male, female, both]
+ *           enum: [male, female, any]
  *     Interest:
  *       type: object
  *       properties:

@@ -1,14 +1,12 @@
 import { Gender, PhoneNumber, UserSummary } from "../types";
 import { Activity } from "./activity";
 import { Interest } from "./interest";
-import { Participant } from "./participant";
 import { Post } from "./post";
 
 import {
     User as UserPrisma,
     Interest as InterestPrisma,
     Post as PostPrisma,
-    Participant as ParticipantPrisma,
 } from '@prisma/client';
 
 export class User {
@@ -21,7 +19,7 @@ export class User {
     private interests: Interest[];
     private gender: Gender;
     private posts: Post[];
-    private joinedPosts: Participant[];
+    private joinedPosts: Post[];
 
     constructor(user: {
         id?: number;
@@ -33,7 +31,7 @@ export class User {
         password: string;
         interests: Interest[];
         posts: Post[];
-        joinedPosts: Participant[];
+        joinedPosts: Post[];
     }) {
         this.validate(user);
         this.id = user.id;
@@ -84,7 +82,7 @@ export class User {
         return this.posts;
     }
 
-    getJoinedPosts(): Participant[] {
+    getJoinedPosts(): Post[] {
         return this.joinedPosts;
     }
 
@@ -143,7 +141,7 @@ export class User {
         this.posts = posts;
     }
 
-    setJoinedPosts(joinedPosts: Participant[]): void {
+    setJoinedPosts(joinedPosts: Post[]): void {
         this.joinedPosts = joinedPosts;
     }
 
@@ -198,7 +196,7 @@ export class User {
         );
     }
 
-    toPrisma(): UserPrisma & { interests: InterestPrisma[], posts: PostPrisma[], joinedPosts: ParticipantPrisma[]} {
+    toPrisma(): UserPrisma & { interests: InterestPrisma[], posts: PostPrisma[] } {
         return {
             id: this.id ?? 0,
             firstName: this.firstName,
@@ -209,7 +207,6 @@ export class User {
             password: this.password,
             interests: this.interests.map((interest) => interest.toPrisma()),
             posts: this.posts.map((post) => post.toPrisma()),
-            joinedPosts: this.joinedPosts.map(post => post.toPrisma()),
         };
     }
 
@@ -223,8 +220,7 @@ export class User {
         password,
         interests,
         posts,
-        joinedPosts,
-    }: UserPrisma & { interests: InterestPrisma[], posts: PostPrisma[], joinedPosts: ParticipantPrisma[]}) {
+    }: UserPrisma & { interests: InterestPrisma[], posts: PostPrisma[]}) {
         return new User({
             id,
             firstName,
@@ -237,10 +233,10 @@ export class User {
             posts: posts.map(post => Post.from({
                 ...post,
                 activity: { id: 0, name: '', type: '' },
-                creator: { id: 0, firstName: '', lastName: '', phoneNumber: '', email: '', password: '', gender: '' },
+                creator: { id, firstName, lastName, phoneNumber, email, password, gender  },
                 participants: [],
             })),
-            joinedPosts: joinedPosts.map(post => Participant.from(post)),
+            joinedPosts: [],
         });
     }
     static toSummary(user: User): UserSummary {

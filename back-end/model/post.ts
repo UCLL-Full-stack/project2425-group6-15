@@ -2,8 +2,7 @@ import { Activity } from "./activity";
 import { User } from "./user";
 import { Gender, Location, PostSummary, UserSummary } from "../types";
 
-import { Post as PostPrisma, Activity as ActivityPrisma, User as UserPrisma, Participant as ParticipantPrisma } from '@prisma/client';
-import { Participant } from "./participant";
+import { Post as PostPrisma, Activity as ActivityPrisma, User as UserPrisma } from '@prisma/client';
 
 export class Post {
     private id?: number;
@@ -14,9 +13,9 @@ export class Post {
     private time: string;
     private location: Location;
     private activity: Activity;
-    private participants: Participant[];
+    private participants: User[];
     private peopleNeeded: number;
-    private preferredGender: Gender | 'both';
+    private preferredGender: Gender | 'any';
     private creator: User;
 
     constructor(post: {
@@ -29,9 +28,9 @@ export class Post {
         location: Location;
         activity: Activity;
         creator: User;
-        participants: Participant[];
+        participants: User[];
         peopleNeeded: number;
-        preferredGender: Gender | 'both';
+        preferredGender: Gender | 'any';
     }) {
         this.id = post.id;
         this.title = post.title;
@@ -83,7 +82,7 @@ export class Post {
         return this.creator;
     }
 
-    getparticipants(): Participant[] {
+    getParticipants(): User[] {
         return this.participants;
     }
 
@@ -91,11 +90,11 @@ export class Post {
         return this.peopleNeeded;
     }
 
-    getPreferredGender(): Gender | 'both' {
+    getPreferredGender(): Gender | 'any' {
         return this.preferredGender;
     }
 
-    toPrisma(): PostPrisma & { activity: ActivityPrisma, creator: UserPrisma, participants: ParticipantPrisma[] } {
+    toPrisma(): PostPrisma & { activity: ActivityPrisma, creator: UserPrisma, participants: UserPrisma[] } {
         return {
             id: this.id ?? 0,
             title: this.title,
@@ -127,7 +126,7 @@ export class Post {
         peopleNeeded,
         preferredGender,
         creator,
-    }: PostPrisma & { activity: ActivityPrisma, creator: UserPrisma, participants: ParticipantPrisma[] }): Post {
+    }: PostPrisma & { activity: ActivityPrisma, creator: UserPrisma, participants: UserPrisma[] }): Post {
         return new Post({
             id,
             title,
@@ -141,17 +140,20 @@ export class Post {
                 ...creator,
                 interests: [],
                 posts: [],
-                joinedPosts: []
             }),
-            participants: participants.map(participant => Participant.from(participant)),
+            participants: participants.map((participant: UserPrisma) => User.from({
+                ...participant,
+                interests: [],
+                posts: [],
+            })),
             peopleNeeded,
-            preferredGender: preferredGender as Gender | 'both',
+            preferredGender: preferredGender as Gender | 'any',
         });
     }
 
     static toSummary(post: Post): PostSummary {
-        const participants = post.getparticipants()
-            .map(participant => participant.user ? User.toSummary(participant.user) : undefined)
+        const participants = post.getParticipants()
+            .map(participant => participant ? User.toSummary(participant) : undefined)
             .filter((user): user is UserSummary => user !== undefined);
 
         return {

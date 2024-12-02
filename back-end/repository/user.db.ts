@@ -1,12 +1,18 @@
 import { User } from "../model/user";
 import database from "./database";
-
+import postdb from "./post.db";
 const getAll = async (): Promise<User[]> => {
     try {
         const UserPrisma = await database.user.findMany({
-            include:  { interests: true, posts: true, joinedPosts: true },
+            include:  { interests: true, posts: true},
         });
-        return UserPrisma.map((userPrisma) => User.from(userPrisma));
+        const users = await Promise.all(UserPrisma.map(async (userPrisma) => {
+            const user = User.from(userPrisma);
+            const joinedPosts = await postdb.getByJoinedUserId(userPrisma.id);
+            user.setJoinedPosts(joinedPosts);
+            return user;
+        }));
+        return users;
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details');
@@ -68,7 +74,6 @@ const getById = async (id: number): Promise<User | null> => {
             ...user,
             interests: user.interests || [],
             posts: user.posts || [],
-            joinedPosts: user.joinedPosts || []
         }) : null;
     } catch (error) {
         console.error(error);

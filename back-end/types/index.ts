@@ -39,7 +39,7 @@ export type PostSummary = {
     creator: UserSummary,
     participants: UserSummary[],
     peopleNeeded: number,
-    preferredGender: Gender | 'both';
+    preferredGender: Gender | 'any';
 };
 
 
@@ -57,5 +57,5 @@ export type PostInput = {
     creator?: UserSummary;
     participants?: UserSummary[];
     peopleNeeded: number;
-    preferredGender: Gender | 'both';
+    preferredGender: Gender | 'any';
 };

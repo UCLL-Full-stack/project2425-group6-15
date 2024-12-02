@@ -40,8 +40,21 @@ const create = async (post: Post): Promise<Post> => {
         throw new Error('Database error. See server log for details');
     }
 }
+const getByJoinedUserId = async (userId: number): Promise<Post[]> => {
+    try {
+        const posts = await database.post.findMany({
+            where: { participants: { some: { id: userId } } },
+            include: { activity: true, creator: true, participants: true },
+        });
+        return posts.map((post) => Post.from(post));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details');
+    }
+}
 export default{
     getAll,
     getById,
-    create
+    create,
+    getByJoinedUserId
 };

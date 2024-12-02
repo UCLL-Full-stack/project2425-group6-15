@@ -117,7 +117,7 @@
  *              type: integer
  *            preferredGender:
  *              type: string
- *              enum: [male, female, both]
+ *              enum: [male, female, any]
  *      Activity:
  *          type: object
  *          properties:

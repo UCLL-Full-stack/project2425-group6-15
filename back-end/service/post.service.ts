@@ -2,8 +2,6 @@ import { User} from '../model/user';
 import { PostInput, PostSummary, UserInput, UserSummary } from '../types';
 import { ServiceError } from './service.error';
 import postdb from '../repository/post.db';
-import { Participant } from '../model/participant';
-import participantService from './participant.service';
 import userDb from '../repository/user.db';
 import { Post } from '../model/post';
 import activityDb from '../repository/activity.db';
@@ -13,34 +11,11 @@ const getPosts = async (): Promise<PostSummary[]> => {
     if (!posts) {
         throw new ServiceError('Posts not found', 404);
     }
-    let postSummaries: PostSummary[] = [];
-    for (let post of posts) {
-        let participants = await Promise.all(post.getparticipants().map(async participant => {
-            let p = await participantService.getById(participant.getId());
-            p.post = undefined;
-            if (!p.user) {
-                throw new ServiceError('User not found', 404);
-            }
-            return User.toSummary(p.user);
-        }));
-        let postSummary: PostSummary = {
-            id: post.getId(),
-            title: post.getTitle(),
-            description: post.getDescription(),
-            activity: post.getActivity(),
-            creator: User.toSummary(post.getCreator()),
-            participants: participants,
-            startDate: post.getStartDate(),
-            endDate: post.getEndDate(),
-            time: post.getTime(),
-            location: post.getLocation(),
-            peopleNeeded: post.getPeopleNeeded(),
-            preferredGender: 'male'
-        };
-        postSummaries.push(postSummary);
-    }
+    const postSummaries: PostSummary[] = posts.map((post) => {
+        return Post.toSummary(post);
+    });
     return postSummaries;
-};
+}; 
 const createPost = async (post: PostInput, currentUser : User): Promise<PostSummary> => {
     let creator = currentUser;
     const activityId = post.activity.getId();

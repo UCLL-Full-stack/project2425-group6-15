@@ -15,29 +15,20 @@ model Interest {
 }
 
 model User {
-  id          Int           @id @unique @default(autoincrement())
+  id          Int        @id @unique @default(autoincrement())
   firstName   String
   lastName    String
-  phoneNumber String        @unique
-  email       String        @unique
+  phoneNumber String     @unique
+  email       String     @unique
   password    String
   gender      String
   interests   Interest[]
-  posts       Post[]        @relation("postcreater")
-  joinedPosts Participant[]
-}
-
-model Participant {
-  id     Int    @id @default(autoincrement())
-  post   Post   @relation(fields: [postId], references: [id])
-  user   User   @relation(fields: [userId], references: [id])
-  postId Int
-  userId Int
-  status String
+  posts       Post[]     @relation("postcreater")
+  joinedPosts Post[]     @relation("participant")
 }
 
 model Post {
-  id              Int           @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   title           String
   description     String
   startDate       DateTime
@@ -45,10 +36,10 @@ model Post {
   time            String
   location        String
   activityId      Int
-  activity        Activity      @relation(fields: [activityId], references: [id])
+  activity        Activity @relation(fields: [activityId], references: [id])
   creatorId       Int
-  creator         User          @relation("postcreater", fields: [creatorId], references: [id])
-  participants    Participant[]
+  creator         User     @relation("postcreater", fields: [creatorId], references: [id])
+  participants    User[]   @relation("participant")
   peopleNeeded    Int
   preferredGender String
 }

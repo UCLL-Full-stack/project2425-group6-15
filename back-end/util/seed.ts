@@ -4,9 +4,7 @@ import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 const main = async () => {
-    await prisma.participant.deleteMany();
     await prisma.post.deleteMany();
-    await prisma.participant.deleteMany();
     await prisma.user.deleteMany();
     await prisma.interest.deleteMany();
     await prisma.activity.deleteMany();
@@ -202,7 +200,7 @@ const main = async () => {
             phoneNumber: '+32 1122334455',
             password: hashedPassword,
             email: 'liam.smith@gmail.com',
-            gender: 'non-binary',
+            gender: 'male',
             interests: {
                 connect: [{ id: interest1.id }, { id: interest3.id }],
             },
@@ -244,7 +242,7 @@ const main = async () => {
             phoneNumber: '+32 4455667788',
             password: hashedPassword,
             email: 'alex.johnson@gmail.com',
-            gender: 'non-binary',
+            gender: 'male',
             interests: {
                 connect: [{ id: interest8.id }, { id: interest9.id }],
             },
@@ -286,7 +284,7 @@ const main = async () => {
             phoneNumber: '+32 7788990011',
             password: hashedPassword,
             email: 'ravi.patel@gmail.com',
-            gender: 'non-binary',
+            gender: 'male',
             interests: {
                 connect: [{ id: interest4.id }, { id: interest5.id }],
             },
@@ -319,6 +317,9 @@ const main = async () => {
             peopleNeeded: 5,
             preferredGender: 'any',
             location: "50.8503|&|4.3517",
+            participants: {
+                connect: [{ id: user3.id }, { id: user4.id }]
+            }
         },
     });
 
@@ -334,6 +335,9 @@ const main = async () => {
             peopleNeeded: 10,
             preferredGender: 'any',
             location: "50.8503|&|4.3517",
+            participants: {
+                connect: [{ id: user5.id }, { id: user6.id }]
+            }
         },
     });
 
@@ -757,45 +761,9 @@ const main = async () => {
         },
     });
 
-    // await prisma.participant.create({
-    //     data: {
-    //         postId: post1.id,
-    //         userId: user1.id,
-    //         status: "accepted",
-    //     },
-    // });
 
-    // await prisma.participant.create({
-    //     data: {
-    //         postId: post2.id,
-    //         userId: user8.id,
-    //         status: "accepted",
-    //     },
-    // });
 
-    // await prisma.participant.create({
-    //     data: {
-    //         postId: post3.id,
-    //         userId: user9.id,
-    //         status: "accepted",
-    //     },
-    // });
-
-    // await prisma.participant.create({
-    //     data: {
-    //         postId: post4.id,
-    //         userId: user10.id,
-    //         status: "accepted",
-    //     },
-    // });
-
-    // await prisma.participant.create({
-    //     data: {
-    //         postId: post5.id,
-    //         userId: user1.id,
-    //         status: "accepted",
-    //     },
-    // });
+    
 
 };
 
