@@ -2,7 +2,7 @@ import { Gender, PhoneNumber, UserInput, UserSummary } from "../types";
 import { Activity } from "./activity";
 import { Interest } from "./interest";
 import { Post } from "./post";
-
+import { Role } from "../types";
 import {
     User as UserPrisma,
     Interest as InterestPrisma,
@@ -20,6 +20,7 @@ export class User {
     private gender: Gender;
     private posts: Post[];
     private joinedPosts: Post[];
+    private role: Role;
 
     constructor(user: {
         id?: number;
@@ -28,6 +29,7 @@ export class User {
         phoneNumber: PhoneNumber;
         email: string;
         gender: Gender;
+        role: Role;
         password: string;
         interests: Interest[];
         posts: Post[];
@@ -44,6 +46,7 @@ export class User {
         this.interests = user.interests || [];
         this.posts = user.posts || [];
         this.joinedPosts = user.joinedPosts || [];
+        this.role = user.role;
     }
 
     getId(): number | undefined {
@@ -90,6 +93,9 @@ export class User {
         return `${this.firstName} ${this.lastName}`;
     }
 
+    getRole(): Role {
+        return this.role;
+    }
 
     setFirstName(firstName: string): void {
         if (!firstName.trim()) {
@@ -158,6 +164,7 @@ export class User {
         gender: Gender;
         password: string;
         interests: Interest[];
+        role: Role;
     }) {
         if (!user.firstName?.trim()) {
             throw new Error('First name is required');
@@ -196,7 +203,8 @@ export class User {
             this.lastName === user.getLastName() &&
             this.phoneNumber === user.getPhoneNumber() &&
             this.email === user.getEmail() &&
-            this.gender === user.getGender()
+            this.gender === user.getGender() &&
+            this.role === user.getRole()
         );
     }
 
@@ -207,6 +215,7 @@ export class User {
             email: this.getEmail(),
             gender: this.getGender(),
             interests: this.getInterests(),
+            
         };
     }
 
@@ -219,6 +228,7 @@ export class User {
             phoneNumber: `${this.phoneNumber.countryCode} ${this.phoneNumber.number}`,
             email: this.email,
             gender: this.gender,
+            role: this.role,
             password: this.password,
             interests: this.interests.map((interest) => interest.toPrisma()),
             posts: this.posts.map((post) => post.toPrisma()),
@@ -232,10 +242,11 @@ export class User {
         phoneNumber,
         email,
         gender,
+        role,
         password,
         interests,
         posts,
-    }: UserPrisma & { interests: InterestPrisma[], posts: PostPrisma[]}) {
+    }: UserPrisma & { interests: InterestPrisma[], posts: PostPrisma[] }) {
         return new User({
             id,
             firstName,
@@ -243,12 +254,13 @@ export class User {
             phoneNumber: { countryCode: phoneNumber.split(' ')[0], number: phoneNumber.split(' ')[1] } as PhoneNumber,
             email,
             gender: gender as Gender,
+            role: role as Role,
             password,
             interests: interests.map(interest => Interest.from(interest)),
             posts: posts.map(post => Post.from({
                 ...post,
                 activity: { id: 0, name: '', type: '' },
-                creator: { id, firstName, lastName, phoneNumber, email, password, gender  },
+                creator: { id, firstName, lastName, phoneNumber, email, password, gender, role  },
                 participants: [],
             })),
             joinedPosts: [],
@@ -264,6 +276,7 @@ export class User {
             phoneNumber: user.phoneNumber,
             email: user.email,
             gender: user.gender,
+            role: 'user',
             password: user.password,
             interests:  [],
             posts: [],

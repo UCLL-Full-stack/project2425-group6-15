@@ -35,8 +35,22 @@ const getByName = async (name: string): Promise<Interest | null> => {
     }
 }
 
+const create = async (interest: Interest): Promise<void> => {
+    try {
+        await database.interest.create({
+            data: {
+                name: interest.getName(),
+                description: interest.getDescription(),
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details');
+    }
+};
 export default{
     getAll,
     getById,
     getByName,
+    create,
 };

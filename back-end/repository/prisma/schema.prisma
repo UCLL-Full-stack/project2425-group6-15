@@ -22,6 +22,7 @@ model User {
   email       String     @unique
   password    String
   gender      String
+  role        String     @default("user")
   interests   Interest[]
   posts       Post[]     @relation("postcreater")
   joinedPosts Post[]     @relation("participant")

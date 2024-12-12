@@ -11,6 +11,18 @@ const getAll = async (currentUser : User): Promise<Interest[]> => {
     return interest;
 }; 
 
+const createInterest = async (interest: Interest, currentUser: User): Promise<void> => {
+    if (!interest) throw new ServiceError('Interest is required');
+    if (currentUser.getRole() != 'admin') {
+        throw new ServiceError('Only Admin users can add interests', 403);
+    }
+    if (await interestdb.getByName(interest.getName())) {
+        throw new ServiceError('Dublication of interest is not allowed');
+    }
+    await interestdb.create(interest);
+};
+
 export default {
     getAll,
+    createInterest,
 };

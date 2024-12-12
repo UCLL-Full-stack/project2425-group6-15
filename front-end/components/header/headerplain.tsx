@@ -10,7 +10,7 @@ const Headerplain: React.FC = () => {
 
   return (
     <header className="fixed left-0 top-0 bg-white p-2 w-full font-sans grid grid-cols-[max-content,1fr] gap-x-2">
-
+        
         <h1 className="text-3xl w-fit font- font-normal text-blue-950"><strong className="font-bold">Join</strong>Me</h1>
         
         <div className="flex items-center justify-end gap-4 text-base">

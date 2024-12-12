@@ -35,6 +35,7 @@ const createUser = async (userInput: UserInput): Promise<User> => {
         email: userInput.email,
         gender: userInput.gender,
         password: hashedPassword,
+        role: 'user',
         interests: [],
         posts: [],
         joinedPosts: [],
