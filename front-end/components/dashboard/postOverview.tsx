@@ -9,6 +9,8 @@ import { LatLngExpression } from "leaflet";
 import 'leaflet/dist/leaflet.css';
 import Image from 'next/image';
 
+import filterimg from "@/images/icons/dashboard/filter.svg";
+
 
 const MapContainerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
 const TileLayerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
@@ -58,7 +60,8 @@ const postOverview: React.FC = () => {
         </div>
         <div className="h-full box-border bg-white shadow-lg rounded-lg p-6 grid grid-rows-[auto_1fr]">
           <div className="flex items-center justify-between">
-          <button title="Filteren"><Image src="/path/to/image" alt="Image description" width={50} height={50} /></button>
+            <h2 className="text-3xl font-semibold text-slate-700">Posts</h2>
+            <button title="Filteren"><Image src={filterimg.src} alt="Image description" width={30} height={30} /></button>
           </div>
           <div className="border-t-2 border-slate-600 w-full h-0 min-h-full max-h-full flex flex-col overflow-y-auto">
             {posts.length === 0 && <p className="text-slate-500">No posts available</p>}

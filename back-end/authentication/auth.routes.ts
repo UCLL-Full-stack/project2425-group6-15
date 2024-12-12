@@ -108,8 +108,7 @@ authRouter.post('/register', async (req: Request, res: Response, next: NextFunct
     try {
         const { email, password, firstName, lastName, phoneNumber, gender } = req.body;
         let response = await register(req.body);
-        res.cookie('refreshToken', response.refreshToken, /*{ httpOnly: true, secure: true, sameSite: 'strict' }*/);
-        res.status(200).json(response);
+        res.status(200).json({"token":response});
     } catch (error) {        
         next(error);
     }
@@ -160,8 +159,7 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     try {
         const user = req.body;
         let response = await login(user);
-        res.cookie('refreshToken', response.refreshToken, /*{ httpOnly: true, secure: true, sameSite: 'strict' }*/);
-        return res.status(200).json(response);
+        return res.status(200).json({"token":response});
     } catch (error) {
         next(error);
     }
@@ -175,6 +173,7 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  *     tags: [authentication]
  *     security:                    
  *       - ApiKeyAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: JWT token.
@@ -183,7 +182,7 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  *             schema:
  *               type: object
  *               properties:
- *                 newToken:
+ *                 token:
  *                   type: string
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
@@ -192,9 +191,8 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  */
 authRouter.post('/refresh', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const refreshtoken = req.cookies.refreshToken;
-        let newToken = await refreshToken(refreshtoken);
-        return res.status(200).json({token : newToken});
+        let newToken = await refreshToken(req.headers);
+        return res.status(200).json({ token: newToken });
     } catch (error) {
         next(error);
     }

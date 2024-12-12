@@ -4,6 +4,7 @@ import { User } from "../model/user";
 
 export type Gender = 'male' | 'female';
 export type PhoneNumber = { countryCode: string, number: string };
+export type Role = 'admin' | 'user' | 'guest';
 
 export type Location = {
     longitude: String;
