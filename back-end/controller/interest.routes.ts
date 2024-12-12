@@ -176,13 +176,12 @@ interestRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
 
 
 
-export { interestRouter };
 
 
 
 
 
-interestRouter.get('/create', async (req: Request, res: Response, next: NextFunction) => {
+interestRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const newInterest :Interest = req.body.json();
         await interestService.createInterest(newInterest, await authService.authenticateToken(req.headers));
@@ -192,3 +191,4 @@ interestRouter.get('/create', async (req: Request, res: Response, next: NextFunc
     }
 });
     
+export { interestRouter };

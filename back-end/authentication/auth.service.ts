@@ -5,12 +5,12 @@ import { AuthError } from './auth.error';
 import userdb from '../repository/user.db';
 import { User } from '../model/user';
 import { UserInput } from '../types';
-
+import {Role}from '../types';
 const JWT_ACCES_SECRET = process.env.JWT_ACCES_SECRET || 'secretkey'; 
 const JWT_ACCES_EXPIRATION = process.env.JWT_ACCES_EXPIRATION || '10m';
 
-const generateAccesToken = (email: string, fullname : string) => {
-        return jwt.sign({ email, fullname }, JWT_ACCES_SECRET, { expiresIn: JWT_ACCES_EXPIRATION });
+const generateAccesToken = (email: string, fullname : string, role:Role) => {
+        return jwt.sign({ email, fullname, role }, JWT_ACCES_SECRET, { expiresIn: JWT_ACCES_EXPIRATION });
 }
 
 const authenticateToken = async (headers: { [key: string]: string | string[] | undefined }): Promise<User> => {
@@ -68,7 +68,7 @@ const refreshToken = async (headers: { [key: string]: string | string[] | undefi
     if (!user) {
         throw new AuthError('Wrong token.', 404);
     }
-    const newToken = generateAccesToken(user.getEmail(), user.getFullName());
+    const newToken = generateAccesToken(user.getEmail(), user.getFullName(),user.getRole());
     return newToken;
 };
 const login = async (data : UserLogin): Promise<JWTGivenToken> => {
@@ -80,7 +80,7 @@ const login = async (data : UserLogin): Promise<JWTGivenToken> => {
     if (!isValid) {
         throw new AuthError('Invalid password', 401);
     }
-    const token = generateAccesToken(user.getEmail(), user.getFullName());
+    const token = generateAccesToken(user.getEmail(), user.getFullName(), user.getRole());
     return token;
 }
 const register = async (data : UserInput): Promise<JWTGivenToken> => {
@@ -93,7 +93,7 @@ const register = async (data : UserInput): Promise<JWTGivenToken> => {
     const newUser = User.fromUserinput(data);
     const savedUser :User = await userdb.create(newUser);
 
-    const token = generateAccesToken(newUser.getEmail(), newUser.getFullName());
+    const token = generateAccesToken(newUser.getEmail(), newUser.getFullName(), newUser.getRole());
 
     return token;
 };

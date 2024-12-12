@@ -49,6 +49,7 @@ export type UserSummary = {
     email: string;
     interests: Interest[];
     gender: Gender;
+    role?:Role;
 };
 
 export type PostSummary = {

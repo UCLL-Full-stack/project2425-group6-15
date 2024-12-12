@@ -10,6 +10,7 @@ const main = async () => {
     await prisma.activity.deleteMany();
         
     const hashedPassword = bcrypt.hashSync('user123', 10);
+    const hashedAdminPassword = bcrypt.hashSync('admin123', 10);
 
     const interest1 = await prisma.interest.create({
         data: {
@@ -446,6 +447,20 @@ const main = async () => {
             },
         },
     });
+
+    const userAdmin = await prisma.user.create({
+        data: {
+            firstName: 'admin',
+            lastName: 'test',
+            phoneNumber: '+32 1234567770',
+            password: hashedAdminPassword,
+            email: 'admin@gmail.com',
+            gender:'male',
+            role: 'admin',
+            interests: {
+                connect: [],
+            },
+        }});
 
     const post1 = await prisma.post.create({
         data: {
