@@ -11,6 +11,217 @@ const main = async () => {
         
     const hashedPassword = bcrypt.hashSync('user123', 10);
 
+    const interest1 = await prisma.interest.create({
+        data: {
+            name: 'Reading',
+            description: 'Reading books and articles',
+        },
+    });
+    
+    const interest2 = await prisma.interest.create({
+        data: {
+            name: 'Traveling',
+            description: 'Exploring new places and cultures',
+        },
+    });
+    
+    const interest3 = await prisma.interest.create({
+        data: {
+            name: 'Cooking',
+            description: 'Preparing and experimenting with food',
+        },
+    });
+    
+    const interest4 = await prisma.interest.create({
+        data: {
+            name: 'Music',
+            description: 'Listening to and playing music',
+        },
+    });
+    
+    const interest5 = await prisma.interest.create({
+        data: {
+            name: 'Gaming',
+            description: 'Playing video games',
+        },
+    });
+    
+    const interest6 = await prisma.interest.create({
+        data: {
+            name: 'Fitness',
+            description: 'Working out and staying fit',
+        },
+    });
+    
+    const interest7 = await prisma.interest.create({
+        data: {
+            name: 'Writing',
+            description: 'Writing stories and articles',
+        },
+    });
+    
+    const interest8 = await prisma.interest.create({
+        data: {
+            name: 'Photography',
+            description: 'Taking and editing photos',
+        },
+    });
+    
+    const interest9 = await prisma.interest.create({
+        data: {
+            name: 'Dancing',
+            description: 'Learning and performing dance',
+        },
+    });
+    
+    const interest10 = await prisma.interest.create({
+        data: {
+            name: 'Yoga',
+            description: 'Practicing yoga and meditation',
+        },
+    });
+    
+    const interest11 = await prisma.interest.create({
+        data: {
+            name: 'Hiking',
+            description: 'Exploring nature through hikes',
+        },
+    });
+    
+    const interest12 = await prisma.interest.create({
+        data: {
+            name: 'Painting',
+            description: 'Creating art with paints and brushes',
+        },
+    });
+    
+    const interest13 = await prisma.interest.create({
+        data: {
+            name: 'Crafting',
+            description: 'DIY projects and handmade creations',
+        },
+    });
+    
+    const interest14 = await prisma.interest.create({
+        data: {
+            name: 'Gardening',
+            description: 'Growing and caring for plants',
+        },
+    });
+    
+    const interest15 = await prisma.interest.create({
+        data: {
+            name: 'Fishing',
+            description: 'Fishing in rivers, lakes, or seas',
+        },
+    });
+    
+    const interest16 = await prisma.interest.create({
+        data: {
+            name: 'Swimming',
+            description: 'Enjoying and practicing swimming',
+        },
+    });
+    
+    const interest17 = await prisma.interest.create({
+        data: {
+            name: 'Martial Arts',
+            description: 'Learning self-defense and martial arts',
+        },
+    });
+    
+    const interest18 = await prisma.interest.create({
+        data: {
+            name: 'Cycling',
+            description: 'Riding bicycles for leisure or sport',
+        },
+    });
+    
+    const interest19 = await prisma.interest.create({
+        data: {
+            name: 'Volunteering',
+            description: 'Helping out in community and charity work',
+        },
+    });
+    
+    const interest20 = await prisma.interest.create({
+        data: {
+            name: 'Chess',
+            description: 'Playing and mastering the game of chess',
+        },
+    });
+    
+    const interest21 = await prisma.interest.create({
+        data: {
+            name: 'Podcasting',
+            description: 'Creating and sharing podcasts',
+        },
+    });
+    
+    const interest22 = await prisma.interest.create({
+        data: {
+            name: 'Astronomy',
+            description: 'Studying and observing celestial objects',
+        },
+    });
+    
+    const interest23 = await prisma.interest.create({
+        data: {
+            name: 'Woodworking',
+            description: 'Building and crafting with wood',
+        },
+    });
+    
+    const interest24 = await prisma.interest.create({
+        data: {
+            name: 'Robotics',
+            description: 'Designing and building robots',
+        },
+    });
+    
+    const interest25 = await prisma.interest.create({
+        data: {
+            name: 'Board Games',
+            description: 'Playing and enjoying board games',
+        },
+    });
+    
+    const interest26 = await prisma.interest.create({
+        data: {
+            name: 'Acting',
+            description: 'Performing in plays, movies, or shows',
+        },
+    });
+    
+    const interest27 = await prisma.interest.create({
+        data: {
+            name: 'Knitting',
+            description: 'Creating garments and items with knitting',
+        },
+    });
+    
+    const interest28 = await prisma.interest.create({
+        data: {
+            name: 'Language Learning',
+            description: 'Learning and practicing new languages',
+        },
+    });
+    
+    const interest29 = await prisma.interest.create({
+        data: {
+            name: 'Meditation',
+            description: 'Practicing mindfulness and relaxation techniques',
+        },
+    });
+    
+    const interest30 = await prisma.interest.create({
+        data: {
+            name: 'Birdwatching',
+            description: 'Observing and identifying birds in the wild',
+        },
+    });
+    
+
     const activity1 = await prisma.activity.create({
         data: {
             name: 'Hiking',
@@ -95,75 +306,6 @@ const main = async () => {
         },
     });
 
-    const interest1 = await prisma.interest.create({
-        data: {
-            name: 'Reading',
-            description: 'Reading books and articles',
-        },
-    });
-
-    const interest2 = await prisma.interest.create({
-        data: {
-            name: 'Traveling',
-            description: 'Exploring new places and cultures',
-        },
-    });
-
-    const interest3 = await prisma.interest.create({
-        data: {
-            name: 'Cooking',
-            description: 'Preparing and experimenting with food',
-        },
-    });
-
-    const interest4 = await prisma.interest.create({
-        data: {
-            name: 'Music',
-            description: 'Listening to and playing music',
-        },
-    });
-
-    const interest5 = await prisma.interest.create({
-        data: {
-            name: 'Gaming',
-            description: 'Playing video games',
-        },
-    });
-
-    const interest6 = await prisma.interest.create({
-        data: {
-            name: 'Fitness',
-            description: 'Working out and staying fit',
-        },
-    });
-
-    const interest7 = await prisma.interest.create({
-        data: {
-            name: 'Writing',
-            description: 'Writing stories and articles',
-        },
-    });
-
-    const interest8 = await prisma.interest.create({
-        data: {
-            name: 'Photography',
-            description: 'Taking and editing photos',
-        },
-    });
-
-    const interest9 = await prisma.interest.create({
-        data: {
-            name: 'Dancing',
-            description: 'Learning and performing dance',
-        },
-    });
-
-    const interest10 = await prisma.interest.create({
-        data: {
-            name: 'Yoga',
-            description: 'Practicing yoga and meditation',
-        },
-    });
 
     const user1 = await prisma.user.create({
         data: {

@@ -1,14 +1,22 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { JWTGivenToken, JWTTOKEN, UserLogin } from './auth.model';
+import { authResponse, JWTGivenToken, JWTTOKEN, UserLogin } from './auth.model';
 import { AuthError } from './auth.error';
 import userdb from '../repository/user.db';
 import { User } from '../model/user';
+import { UserInput } from '../types';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secretkey'; 
+const JWT_ACCES_SECRET = process.env.JWT_ACCES_SECRET || 'secretkey'; 
+const JWT_ACCES_EXPIRATION = process.env.JWT_ACCES_EXPIRATION || '10m';
 
-const generateToken = (email: string) => {
-        return jwt.sign({ email }, JWT_SECRET, { expiresIn: '30m' });
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'refresh';
+const JWT_REFRESH_EXPIRATION = process.env.JWT_REFRESH_EXPIRATION || '30d';
+
+const generateAccesToken = (email: string, fullname : string) => {
+        return jwt.sign({ email, fullname }, JWT_ACCES_SECRET, { expiresIn: JWT_ACCES_EXPIRATION });
+}
+const generateRefreshToken = (email: string) => {
+    return jwt.sign({ email }, JWT_REFRESH_SECRET, { expiresIn: JWT_REFRESH_EXPIRATION });
 }
 
 const authenticateToken = async (headers: { [key: string]: string | string[] | undefined }): Promise<User> => {
@@ -19,14 +27,15 @@ const authenticateToken = async (headers: { [key: string]: string | string[] | u
     }
 
     const token = authHeader.split(' ')[1];
-
     const email =  verifyToken(token);
     const user = await userdb.getByEmail(email);
     if (!user) {
-        throw new AuthError('User not found', 404);
+        throw new AuthError('Wrong token.', 404);
     }
     return user;
 };
+
+
 
 const verifyToken = (token: JWTGivenToken): string => {
     if (!token) {
@@ -34,7 +43,7 @@ const verifyToken = (token: JWTGivenToken): string => {
     }
 
     try {
-        const decoded = jwt.verify(token as unknown as string, JWT_SECRET) as { email: string };
+        const decoded = jwt.verify(token as unknown as string, JWT_ACCES_SECRET) as { email: string };
         
         if (!decoded.email) {
             throw new AuthError('Email not found in token');
@@ -51,16 +60,69 @@ const verifyToken = (token: JWTGivenToken): string => {
         throw new AuthError('Token verification failed');
     }
 };
-const login = async (data : UserLogin): Promise<JWTTOKEN> => {
+const verifyRefreshToken = (token: JWTGivenToken): string => {
+    if (!token) {
+        throw new AuthError('Token is required');
+    }
+
+    try {
+        const decoded = jwt.verify(token as unknown as string, JWT_REFRESH_SECRET) as { email: string };
+        
+        if (!decoded.email) {
+            throw new AuthError('Email not found in token');
+        }
+
+        return decoded.email; 
+    } catch (error) {
+        if (error instanceof jwt.JsonWebTokenError) {
+            throw new AuthError('Invalid token');
+        }
+        if (error instanceof jwt.TokenExpiredError) {
+            throw new AuthError('Token has expired');
+        }
+        throw new AuthError('Token verification failed');
+    }
+}
+
+const refreshToken = async (token: JWTGivenToken): Promise<JWTTOKEN> => {
+    if (!token) {
+        throw new AuthError('Token is required');
+    }
+    const email = verifyRefreshToken(token);
+    const user = await userdb.getByEmail(email);
+    if (!user) {
+        throw new AuthError('Wrong token.', 404);
+    }
+    const newToken = generateAccesToken(user.getEmail(), user.getFullName());
+    return newToken;
+}
+const login = async (data : UserLogin): Promise<authResponse> => {
     const user = await userdb.getByEmail(data.email);
     if (!user) {
-        throw new AuthError('User not found', 404);
+        throw new AuthError('Invalid email or password', 404);
     }
     const isValid = await bcrypt.compare(data.password, user.getPassword());
     if (!isValid) {
         throw new AuthError('Invalid password', 401);
     }
-    const token = generateToken(user.getEmail());
-    return token;
+    const token = generateAccesToken(user.getEmail(), user.getFullName());
+    const refreshToken = generateRefreshToken(user.getEmail());
+    return {token, refreshToken};
 }
-export default {generateToken, verifyToken, authenticateToken, login};
+const register = async (data : UserInput): Promise<authResponse> => {
+    const user = await userdb.getByEmail(data.email);
+    if (user) {
+        throw new AuthError('Email already exists', 409);
+    }
+    const hash = await bcrypt.hash(data.password, 10);
+    data.password = hash;
+    const newUser = User.fromUserinput(data);
+    const savedUser :User = await userdb.create(newUser);
+
+    const token = generateAccesToken(newUser.getEmail(), newUser.getFullName());
+    const refreshToken = generateRefreshToken(newUser.getEmail());
+
+    return {token, refreshToken};
+};
+export default {authenticateToken};
+export {login, register ,refreshToken };

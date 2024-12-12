@@ -26,20 +26,6 @@ const getById = async (id: number): Promise<Post | null> => {
         throw new Error('Database error. See server log for details');
     }
 }
-const create = async (post: Post): Promise<Post> => {
-    try {
-        let prismapost = post.toPrisma();
-        const { activity, creator, participants, ...prismapostWithoutActivity } = prismapost;
-        const createdPost = await database.post.create({
-            data: prismapostWithoutActivity,
-            include: { activity: true, creator: true, participants: true },
-        });
-        return Post.from(createdPost);
-    } catch (error) {
-        console.error(error);
-        throw new Error('Database error. See server log for details');
-    }
-}
 const getByJoinedUserId = async (userId: number): Promise<Post[]> => {
     try {
         const posts = await database.post.findMany({
@@ -52,9 +38,43 @@ const getByJoinedUserId = async (userId: number): Promise<Post[]> => {
         throw new Error('Database error. See server log for details');
     }
 }
+
+const update = async (post: Post): Promise<Post> => {
+    try {
+        let prismapost = post.toPrisma();
+        const { activity, creator, participants, ...prismapostWithoutActivity } = prismapost;
+        const updatedPost = await database.post.update({
+            where: { id: post.getId() },
+            data: prismapostWithoutActivity,
+            include: { activity: true, creator: true, participants: true },
+        });
+        return Post.from(updatedPost);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details');
+    }
+}
+
+const create = async (post: Post): Promise<Post> => {
+    try {
+        let prismapost = post.toPrisma();
+        const { activity, creator, participants, id, ...prismapostWithoutActivity } = prismapost;
+        const createdPost = await database.post.create({
+            data: prismapostWithoutActivity,
+            include: { activity: true, creator: true, participants: true },
+        });
+        return Post.from(createdPost);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details');
+    }
+}
+
+
 export default{
     getAll,
     getById,
     create,
-    getByJoinedUserId
+    getByJoinedUserId,
+    update,
 };

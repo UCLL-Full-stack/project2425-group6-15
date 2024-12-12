@@ -2,6 +2,7 @@ import userService from "@/services/userService";
 import { Gender } from "@/types";
 import React, { useState } from "react";
 import { useRouter } from 'next/router';
+import authService from "@/services/authService";
 
 const UserRegisterForm: React.FC = () => {
   const router = useRouter();
@@ -69,7 +70,6 @@ const UserRegisterForm: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
 
-    // Validate gender type before registration
     if (gender !== "male" && gender !== "female") {
       setGenderError("Sex must be either male or female.");
       return;
@@ -84,12 +84,13 @@ const UserRegisterForm: React.FC = () => {
       password: password,
     };
 
-    const response = await userService.register(userLogin);
+    const response = await authService.register(userLogin);
     const data = await response.json();
     if (response.status == 200) {
       sessionStorage.setItem("token", data.token)
+      
 
-      router.push('/dashboard');      
+      router.push('/register/interests');      
     }
     else {
       setServerError(data.message);
@@ -111,7 +112,7 @@ const UserRegisterForm: React.FC = () => {
     setLastName("");
     setEmail("");
     setPhone(null);
-    setCountryCode("+32"); // Reset country code to default
+    setCountryCode("+32"); 
     setGender("");
     setPassword("");
     setConfirmPassword("");
@@ -127,6 +128,8 @@ const UserRegisterForm: React.FC = () => {
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your first name"
+            title="First Name"
           />
           {firstName.trim() === "" && (
             <p className="text-red-500 text-sm"></p>
@@ -139,6 +142,8 @@ const UserRegisterForm: React.FC = () => {
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            title="Last Name"
+            placeholder="Enter your last name"
           />
           {lastName.trim() === "" && (
             <p className="text-red-500 text-sm">.</p>
@@ -147,6 +152,8 @@ const UserRegisterForm: React.FC = () => {
         <div>
           <label className="block text-sm font-medium text-gray-700">Email</label>
           <input
+            title="Email"
+            placeholder="Enter your email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -158,6 +165,7 @@ const UserRegisterForm: React.FC = () => {
           <label className="block text-sm font-medium text-gray-700">Phone Number</label>
           <div className="flex">
             <select
+              title="countryCode"
               value={countryCode}
               onChange={(e) => setCountryCode(e.target.value)}
               className="p-2 w-fit border border-gray-300 rounded-tl-lg rounded-bl-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -179,7 +187,9 @@ const UserRegisterForm: React.FC = () => {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">Sex</label>
-          <select
+            <select
+            title="Sex"
+            aria-label="Sex"
             value={gender}
             onChange={(e) => setGender(e.target.value as Gender)}
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -197,6 +207,8 @@ const UserRegisterForm: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            title="Password"
+            placeholder="Enter your password"
           />
           {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
         </div>
@@ -207,6 +219,8 @@ const UserRegisterForm: React.FC = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            title="Confirm Password"
+            placeholder="Confirm your password"
           />
           {confirmPasswordError && (
             <p className="text-red-500 text-sm">{confirmPasswordError}</p>

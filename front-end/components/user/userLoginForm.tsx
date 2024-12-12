@@ -2,6 +2,8 @@ import userService from "@/services/userService";
 import { Gender } from "@/types";
 import React, { useState } from "react";
 import { useRouter } from 'next/router';
+import authService from "@/services/authService";
+import Cookies from 'js-cookie';
 
 const UserLoginForm: React.FC = () => {
   const router = useRouter();
@@ -40,12 +42,11 @@ const UserLoginForm: React.FC = () => {
       password: password,
     };
 
-    const response = await userService.login(userLogin);
+    const response = await authService.login(userLogin);
     const data = await response.json();
     if (response.status == 200) {
       sessionStorage.setItem("token", data.token)
-
-      router.push('/dashboard');      
+      router.push('/');      
     }
     else {
       setServerError(data.message);
@@ -66,6 +67,7 @@ const UserLoginForm: React.FC = () => {
         <div>
           <label className="block text-sm font-medium text-gray-700">Email</label>
           <input
+            title="Email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -76,6 +78,7 @@ const UserLoginForm: React.FC = () => {
         <div>
           <label className="block text-sm font-medium text-gray-700">Password</label>
           <input
+            title="Password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

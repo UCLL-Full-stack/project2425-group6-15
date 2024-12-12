@@ -8,13 +8,17 @@ import { userRouter } from './controller/user.routes';
 import { authRouter } from './authentication/auth.routes';
 import { activityRouter } from './controller/activity.routes';
 import { postRouter } from './controller/post.routes';
+import { interestRouter } from './controller/interest.routes';
 
 const app = express();
 dotenv.config();
+
+app.use(cors());
+
+
 const port = process.env.APP_PORT || 3000;
 const API_KEY = process.env.API_KEY || 'default_api_key_here';
 
-app.use(cors());
 
 const swaggerOpts = {
     definition: {
@@ -103,6 +107,7 @@ app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/activity', activityRouter);
 app.use('/post', postRouter);
+app.use('/interest', interestRouter);
 
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     // console.error(err.stack); 
@@ -116,3 +121,5 @@ app.listen(port, async () => {
     console.log(`Back-end is running on port ${port}.`);
     console.log(`Swagger is running on http://localhost:${port}/api-docs`);
 });
+
+

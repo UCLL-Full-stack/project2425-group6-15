@@ -1,4 +1,4 @@
-import { Gender, PhoneNumber, UserSummary } from "../types";
+import { Gender, PhoneNumber, UserInput, UserSummary } from "../types";
 import { Activity } from "./activity";
 import { Interest } from "./interest";
 import { Post } from "./post";
@@ -86,6 +86,9 @@ export class User {
         return this.joinedPosts;
     }
 
+    getFullName(): string {
+        return `${this.firstName} ${this.lastName}`;
+    }
 
 
     setFirstName(firstName: string): void {
@@ -181,8 +184,9 @@ export class User {
 
     addInterestToUser(interest: Interest) {
         if (!interest) throw new Error('Interest is required');
-        if (this.interests.includes(interest))
-            throw new Error('Interest already exists');
+        if (this.interests.some(existingInterest => existingInterest.getId() === interest.getId())) {
+            throw new Error('Dublication of interest is not allowed');
+        }
         this.interests.push(interest);
     }
 
@@ -195,6 +199,17 @@ export class User {
             this.gender === user.getGender()
         );
     }
+
+    toSummary(): UserSummary {
+        return {
+            firstName: this.getFirstName(),
+            lastName: this.getLastName(),
+            email: this.getEmail(),
+            gender: this.getGender(),
+            interests: this.getInterests(),
+        };
+    }
+
 
     toPrisma(): UserPrisma & { interests: InterestPrisma[], posts: PostPrisma[] } {
         return {
@@ -239,13 +254,20 @@ export class User {
             joinedPosts: [],
         });
     }
-    static toSummary(user: User): UserSummary {
-        return {
-            firstName: user.getFirstName(),
-            lastName: user.getLastName(),
-            email: user.getEmail(),
-            gender: user.getGender(),
-            interests: user.getInterests(),
-        };
+
+
+    static fromUserinput(user: UserInput): User {
+        return new User({
+            id: 0,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phoneNumber: user.phoneNumber,
+            email: user.email,
+            gender: user.gender,
+            password: user.password,
+            interests:  [],
+            posts: [],
+            joinedPosts: [],
+        });
     }
 }

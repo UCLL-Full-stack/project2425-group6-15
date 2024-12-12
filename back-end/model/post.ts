@@ -1,6 +1,6 @@
 import { Activity } from "./activity";
 import { User } from "./user";
-import { Gender, Location, PostSummary, UserSummary } from "../types";
+import { Gender, Location, PostInput, PostPrevieuw, PostSummary, UserSummary } from "../types";
 
 import { Post as PostPrisma, Activity as ActivityPrisma, User as UserPrisma } from '@prisma/client';
 
@@ -44,6 +44,24 @@ export class Post {
         this.participants = post.participants || [];
         this.peopleNeeded = post.peopleNeeded;
         this.preferredGender = post.preferredGender;
+    }
+
+    validate(post: {
+        id?: number;
+        title: string;
+        description: string;
+        startdate: string;
+        enddate: string;
+        time: String;
+        location: Location;
+        activity: Activity;
+        creator: User;
+        peopleNeeded: number;
+        preferredGender: Gender | "any";
+    }) {
+        if (!post.title?.trim()) {
+            throw new Error('Title is required');
+        }
     }
 
     getId(): number | undefined {
@@ -92,6 +110,59 @@ export class Post {
 
     getPreferredGender(): Gender | 'any' {
         return this.preferredGender;
+    }
+
+    isFull(): boolean {
+        return this.participants.length >= this.peopleNeeded;
+    }
+
+    addParticipant(user: User): void {
+        if (this.participants.length >= this.peopleNeeded){
+            throw new Error('max participants.')
+        } 
+        this.participants.push(user);
+    }
+
+    getPlacesLeft(): number{
+        return (this.peopleNeeded - this.participants.length)
+    }
+
+    toPrevieuw( userid : number | undefined ): PostPrevieuw{
+        return {
+            id: this.getId(),
+            title: this.getTitle(),
+            description: this.getDescription(),
+            startDate: this.getStartDate(),
+            endDate: this.getEndDate(),
+            location: this.getLocation(),
+            activity: this.getActivity(),
+            creator: this.getCreator().toSummary(),
+            peopleNeeded: this.getPeopleNeeded(),
+            peopleJoined : this.getParticipants().length,
+            hasJoined : this.getParticipants().some(participant => participant.getId() === userid),
+            preferredGender: this.getPreferredGender()
+        }
+    }
+
+    toSummary(): PostSummary {
+        const participants = this.getParticipants()
+            .map(participant => participant ? participant.toSummary() : undefined)
+            .filter((user): user is UserSummary => user !== undefined);
+
+        return {
+            id: this.getId(),
+            title: this.getTitle(),
+            description: this.getDescription(),
+            startDate: this.getStartDate(),
+            endDate: this.getEndDate(),
+            time: this.getTime(),
+            location: this.getLocation(),
+            activity: this.getActivity(),
+            creator: this.getCreator().toSummary(),
+            participants: participants,
+            peopleNeeded: this.getPeopleNeeded(),
+            preferredGender: this.getPreferredGender(),
+        };
     }
 
     toPrisma(): PostPrisma & { activity: ActivityPrisma, creator: UserPrisma, participants: UserPrisma[] } {
@@ -151,24 +222,25 @@ export class Post {
         });
     }
 
-    static toSummary(post: Post): PostSummary {
-        const participants = post.getParticipants()
-            .map(participant => participant ? User.toSummary(participant) : undefined)
-            .filter((user): user is UserSummary => user !== undefined);
-
-        return {
-            id: post.getId(),
-            title: post.getTitle(),
-            description: post.getDescription(),
-            startDate: post.getStartDate(),
-            endDate: post.getEndDate(),
-            time: post.getTime(),
-            location: post.getLocation(),
-            activity: post.getActivity(),
-            creator: User.toSummary(post.getCreator()),
-            participants: participants,
-            peopleNeeded: post.getPeopleNeeded(),
-            preferredGender: post.getPreferredGender(),
-        };
+    static fromPostInput(post: PostInput): Post {
+        if (post.creator === undefined) {
+            throw new Error('Creator is required');
+        }
+        return new Post({
+            id: undefined,
+            title: post.title,
+            description: post.description,
+            startDate: post.startDate,
+            endDate: post.endDate,
+            time: post.time,
+            location: post.location,
+            activity: post.activity,
+            creator: post.creator,
+            participants: [],
+            peopleNeeded: post.peopleNeeded,
+            preferredGender: post.preferredGender,
+        });
     }
+
+
 }

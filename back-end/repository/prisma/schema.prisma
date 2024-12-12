@@ -9,7 +9,7 @@ datasource db {
 
 model Interest {
   id          Int    @id @default(autoincrement())
-  name        String
+  name        String @unique
   description String
   users       User[]
 }

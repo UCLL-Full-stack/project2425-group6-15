@@ -1,6 +1,7 @@
 import { User} from '../model/user'; 
 import { UserInput, UserSummary } from '../types';
 import userDB from '../repository/user.db';
+import interestdb from '../repository/interest.db';
 import { Interest } from '../model/interest';
 import { ServiceError } from './service.error';
 import bcrypt from 'bcryptjs';
@@ -65,14 +66,19 @@ const findUserByEmail = async (email: string, currentUser: User): Promise<User |
     return userSummary;
 };
 
-const addInterestToUser = async (currentUser: User, interestData: { name: string; description: string }): Promise<User> => {
+const changeInterestOfUser = async (currentUser: User, newInterests : string[]): Promise<User> => {
     const user = await userDB.getByEmail(currentUser.getEmail());
     if (!user) {
         throw new ServiceError('User not found', 404);
     }
+    user.setInterests([]);
 
-    const interest = new Interest(interestData);
-    user.addInterestToUser(interest);
+    const interestData = await Promise.all(newInterests.map(async (interest) => await interestdb.getByName(interest)));
+    interestData.forEach((interest) => {
+        if (interest) {
+            user.addInterestToUser(interest);
+        }
+    });
 
     await userDB.update(user);
     return user;
@@ -83,5 +89,5 @@ export default {
     createUser,
     getAllUsers,
     findUserByEmail,
-    addInterestToUser,
+    changeInterestOfUser,
 };

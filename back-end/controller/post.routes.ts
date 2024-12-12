@@ -137,7 +137,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import postService from '../service/post.service';
-import { PostSummary } from '../types';
+import { PostPrevieuw, PostSummary } from '../types';
 import authService from '../authentication/auth.service';
 
 const postRouter = express.Router();
@@ -163,12 +163,88 @@ const postRouter = express.Router();
  */
 postRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const posts: PostSummary[] = await postService.getPosts();
+        const posts: PostPrevieuw[] = await postService.getAllPosts(await authService.authenticateToken(req.headers));
         res.status(200).json(posts);
     } catch (error) {
         next(error);
     }
 });
+
+/**
+ * @swagger
+ * /post/{id}:
+ *  get:
+ *    summary: Get a post by ID
+ *    tags: [Posts]
+ *    security:
+ *      - ApiKeyAuth: []
+ *      - BearerAuth: []
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        description: ID of the post to return
+ *        schema:
+ *          type: integer
+ *    responses:
+ *      200:
+ *        description: A post
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/PostSummary'
+ *      404:
+ *        description: Post not found
+ */
+postRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const post: PostSummary = await postService.getPostById(parseInt(req.params.id), await authService.authenticateToken(req.headers));
+        if (post) {
+            res.status(200).json(post);
+        } else {
+            res.status(404).send('Post not found');
+        }
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /post/{id}/join:
+ *  post:
+ *    summary: Join a post
+ *    tags: [Posts]
+ *    security:
+ *      - ApiKeyAuth: []
+ *      - BearerAuth: []
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        description: ID of the post to join
+ *        schema:
+ *          type: integer
+ *    responses:
+ *      200:
+ *        description: Successfully joined the post
+ *      404:
+ *        description: Post not found
+ */
+postRouter.post('/:id/join', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const postId = parseInt(req.params.id);
+        const post = await postService.joinPost(postId, await authService.authenticateToken(req.headers));
+        if (post) {
+            res.status(200).json({ message: 'Successfully joined the post' });
+        } else {
+            res.status(404).send('Post not found');
+        }
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 /**
  * @swagger

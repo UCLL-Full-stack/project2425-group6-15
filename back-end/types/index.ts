@@ -1,8 +1,21 @@
 import { Activity } from "../model/activity";
 import { Interest } from "../model/interest";
+import { User } from "../model/user";
 
+export type Gender = 'male' | 'female';
+export type PhoneNumber = { countryCode: string, number: string };
+
+export type Location = {
+    longitude: String;
+    latitude: String;
+};
+
+/**
+ * Represents the input data required for registering a user.
+ * ONLY USE FOR REGISTERING A USER.
+ */
 export type UserInput = {
-    id?: number;
+    
     firstName: string;
     lastName: string;
     phoneNumber: PhoneNumber;
@@ -11,8 +24,23 @@ export type UserInput = {
     gender: Gender;
 };
 
-export type Gender = 'male' | 'female';
-export type PhoneNumber = { countryCode: string, number: string };
+/**
+ * Represents the input data required for registering a post.
+ * ONLY USE FOR CREATING A POST.
+ */
+export type PostInput = {
+    title: string;
+    description: string;
+    startDate: Date;
+    endDate: Date;
+    time: string;
+    location: Location;
+    activity: Activity;
+    creator?: User;
+    peopleNeeded: number;
+    preferredGender: Gender | 'any';
+};
+
 
 export type UserSummary = {
     firstName: string;
@@ -20,11 +48,6 @@ export type UserSummary = {
     email: string;
     interests: Interest[];
     gender: Gender;
-};
-
-export type Location = {
-    longitude: String;
-    latitude: String;
 };
 
 export type PostSummary = {
@@ -43,19 +66,20 @@ export type PostSummary = {
 };
 
 
-
-
-export type PostInput = {
-    id?: number;
-    title: string;
-    description: string;
-    startDate: Date;
-    endDate: Date;
-    time: string;
-    location: Location;
-    activity: Activity;
-    creator?: UserSummary;
-    participants?: UserSummary[];
-    peopleNeeded: number;
+export type PostPrevieuw = {
+    id?: number,
+    title: string,
+    description: string,
+    startDate: Date,
+    endDate: Date,
+    location: Location,
+    activity: Activity,
+    creator: UserSummary,
+    peopleNeeded: number,
+    peopleJoined : number,
+    hasJoined : boolean,
     preferredGender: Gender | 'any';
-};
+}
+
+
+

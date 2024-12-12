@@ -2,8 +2,21 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Helmet } from "react-helmet";
 import { appWithTranslation } from "next-i18next";
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const App = ({ Component, pageProps }: AppProps) => {
+  const router = useRouter();
+  const publicRoutes = ["/login", "/register", "/about", "/"];
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+
+    if (!token && !publicRoutes.includes(router.pathname)) {
+      router.push('/login');
+    }
+  }, [router.pathname]);
+
   return (
     <>
       <Helmet>

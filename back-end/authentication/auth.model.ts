@@ -2,6 +2,11 @@ import { Gender, PhoneNumber } from "../types";
 
 type JWTTOKEN = string;
 
+type authResponse = {
+    token: JWTTOKEN;
+    refreshToken: JWTTOKEN;
+};
+
 type JWTGivenToken = String | Array<String> | undefined ;
 
 type UserLogin = {
@@ -19,4 +24,4 @@ type UserRegistraion = {
     gender: Gender;
 };
 
-export { JWTTOKEN,JWTGivenToken, UserLogin, UserRegistraion};
+export { JWTTOKEN,JWTGivenToken, UserLogin, UserRegistraion, authResponse};

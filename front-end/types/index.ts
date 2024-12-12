@@ -40,7 +40,7 @@ export type User = {
     interests: Interest[],
     gender: Gender,
     posts: Post[],
-    joinedPosts: Participant[],
+    joinedPosts: Post[],
 }
 export type PostSummary = {
     id?: number,
@@ -66,19 +66,11 @@ export type Post = {
     location: Location,
     activity: Activity,
     creator: User,
-    participants: Participant[],
+    participants: User[],
     peopleNeeded: number,
     preferredGender: Gender | 'both',
 };
 
-export type Participant = {
-    id?: number,
-    userId?: number,
-    postId?: number,
-    user?: User,
-    post?: Post,
-    status: 'accepted' | 'pending' | 'rejected',
-};
 
 export type Activity = {
     id?: number;

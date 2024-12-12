@@ -176,7 +176,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 /**
  * @swagger
- * /user/current:
+ * /user/me:
  *   get:
  *     summary: Retrieve user information of logged in user
  *     description: Gives sertain user information by email based on the token
@@ -199,7 +199,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *       500:
  *         description: Internal server error
  */
-userRouter.get('/current', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/me', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const currentuser = await authService.authenticateToken(req.headers);
         const user = await userService.findUserByEmail( currentuser.getEmail(), currentuser);
@@ -211,75 +211,29 @@ userRouter.get('/current', async (req: Request, res: Response, next: NextFunctio
 
 /**
  * @swagger
- * /user/{email}:
- *   get:
- *     summary: Retrieve user information by email
- *     description: Gives sertain user information by email based on the token
- *     tags: [User]
- *     security:                    
- *       - ApiKeyAuth: []           
- *       - BearerAuth: []
- *     parameters:
- *       - name: email
- *         in: path
- *         required: true
- *         description: The email address of the user to retrieve.
- *         schema:
- *           type: string
- *           example: "user@example.com"
- *     responses:
- *       200:
- *         description: A user object containing user details.
- *         content:
- *           application/json:
- *             schema:
- *               oneOf:
- *                 - $ref: '#/components/schemas/User' 
- *                 - $ref: '#/components/schemas/UserSummary'
- *          
- *       404:
- *         description: User not found.
- * 
- *       500:
- *         description: Internal server error
- */
-userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const email = req.params.email;
-        
-        const user = await userService.findUserByEmail(email, await authService.authenticateToken(req.headers));
-        res.status(200).json(user);
-    } catch (error) {
-        next(error);
-    }
-});
-
-
-/**
- * @swagger
  * /user/interests:
  *   post:
  *     summary: Add an interest to a user
  *     tags: [User]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: The user ID
+ *     security:
+ *       - ApiKeyAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
+ *             type: array
+ *             items:
+ *               type: string
+ *               example: "Swimming"
  *     responses:
  *       200:
  *         description: Interest added to user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       404:
  *         description: User not found.
  *       500:
@@ -287,9 +241,8 @@ userRouter.get('/:email', async (req: Request, res: Response, next: NextFunction
  */
 userRouter.post('/interests', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const currentUser = await authService.authenticateToken(req.headers);
         const interestData = req.body;
-        const updatedUser = await userService.addInterestToUser(currentUser, interestData);
+        const updatedUser = await userService.changeInterestOfUser(await authService.authenticateToken(req.headers), interestData);
         res.status(200).json(updatedUser);
     } catch (error) {
         next(error);
