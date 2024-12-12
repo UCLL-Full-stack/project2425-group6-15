@@ -12,10 +12,9 @@ const getAll = async (currentUser : User): Promise<Interest[]> => {
 }; 
 
 const createInterest = async (interest: Interest, currentUser: User): Promise<void> => {
-    if (!interest) throw new ServiceError('Interest is required');
     if (currentUser.getRole() != 'admin') {
-        throw new ServiceError('Only Admin users can add interests', 403);
-    }
+        throw new ServiceError('Only Admin users can add interests', 403);}
+    if (!interest) throw new ServiceError('Interest is required');
     if (await interestdb.getByName(interest.getName())) {
         throw new ServiceError('Dublication of interest is not allowed');
     }
@@ -24,5 +23,5 @@ const createInterest = async (interest: Interest, currentUser: User): Promise<vo
 
 export default {
     getAll,
-    createInterest,
+    createInterest
 };

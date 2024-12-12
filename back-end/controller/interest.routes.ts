@@ -140,6 +140,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import interestService from '../service/interest.service';
 import authService from '../authentication/auth.service';
+import { Interest } from '../model/interest';
 
 const interestRouter = express.Router();
 
@@ -172,4 +173,22 @@ interestRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
         next(error);  
     }
 });
+
+
+
 export { interestRouter };
+
+
+
+
+
+interestRouter.get('/create', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const newInterest :Interest = req.body.json();
+        await interestService.createInterest(newInterest, await authService.authenticateToken(req.headers));
+        res.status(200);
+    } catch (error) {
+        next(error);
+    }
+});
+    

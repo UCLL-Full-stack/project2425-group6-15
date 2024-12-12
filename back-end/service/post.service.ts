@@ -20,6 +20,9 @@ const getAllPosts = async (currentUser : User): Promise<PostPrevieuw[]> => {
 }; 
 
 const getCurrentUserPosts = async (currentUser : User): Promise<PostPrevieuw[]> => {
+    if (currentUser.getRole() != 'user') {
+        throw new ServiceError('Only users can have posts', 403);
+    }
     const posts = await postdb.getAll();
     if (!posts) {
         throw new ServiceError('Posts not found', 404);
@@ -41,6 +44,9 @@ const getPostById = async (id: number, currentUser : User): Promise<PostSummary>
     return post.toSummary();
 };
 const createPost = async (post: PostInput, currentUser : User): Promise<PostSummary> => {
+    if (currentUser.getRole() != 'user') {
+        throw new ServiceError('Only users can create posts', 403);
+    }
     let creator = currentUser;
     const activityId = post.activity.getId();
     if (activityId === undefined) {
@@ -59,6 +65,10 @@ const createPost = async (post: PostInput, currentUser : User): Promise<PostSumm
 };
 
 const joinPost = async (id: number, currentUser : User): Promise<PostSummary> => {
+    if (currentUser.getRole() != 'user') {
+        throw new ServiceError('Only users and guests can join posts', 403);
+    }
+
     const post = await postdb.getById(id);
     if (!post) {
         throw new ServiceError('Post not found', 404);
@@ -76,6 +86,7 @@ const joinPost = async (id: number, currentUser : User): Promise<PostSummary> =>
     post.addParticipant(currentUser);
     const updatedPost = await postdb.update(post);
     return updatedPost.toSummary();
+    
 };
 
 export default {
