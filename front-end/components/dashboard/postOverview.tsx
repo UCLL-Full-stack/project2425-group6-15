@@ -69,7 +69,7 @@ const postOverview: React.FC = () => {
               <div
               key={post.id}
               className={`w-full h-20 ${index !== 0 ? 'border-t-2 border-slate-400' : ''} p-2 cursor-pointer`}
-              onClick={() => router.push(`/dashboard/posts/${post.id}`)}
+              onClick={() => router.push(`/post/${post.id}`)}
               >
               <h3 className="text-lg font-semibold text-slate-700">{post.title}</h3>
               <p className="text-sm text-slate-500">{post.description}</p>

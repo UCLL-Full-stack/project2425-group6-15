@@ -180,12 +180,34 @@ interestRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
 
 
 
-
+/**
+ * @swagger
+ * /interest:
+ *   post:
+ *     summary: Create a new interest
+ *     description: This endpoint allows you to create a new interest.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Interest'
+ *     responses:
+ *       200:
+ *         description: Interest created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Interest'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 interestRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const newInterest :Interest = req.body.json();
-        await interestService.createInterest(newInterest, await authService.authenticateToken(req.headers));
-        res.status(200);
+        const newInterest = await interestService.createInterest(req.body, await authService.authenticateToken(req.headers));
+        res.status(200).json(newInterest);
     } catch (error) {
         next(error);
     }
