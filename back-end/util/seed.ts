@@ -10,6 +10,7 @@ const main = async () => {
     await prisma.activity.deleteMany();
         
     const hashedPassword = bcrypt.hashSync('user123', 10);
+    const hashedAdminPassword = bcrypt.hashSync('admin123', 10);
 
     const interest1 = await prisma.interest.create({
         data: {
@@ -447,6 +448,20 @@ const main = async () => {
         },
     });
 
+    const userAdmin = await prisma.user.create({
+        data: {
+            firstName: 'admin',
+            lastName: 'test',
+            phoneNumber: '+32 1234567770',
+            password: hashedAdminPassword,
+            email: 'admin@gmail.com',
+            gender:'male',
+            role: 'admin',
+            interests: {
+                connect: [],
+            },
+        }});
+
     const post1 = await prisma.post.create({
         data: {
             title: 'Morning Hike',
@@ -458,7 +473,7 @@ const main = async () => {
             creatorId: user2.id,
             peopleNeeded: 5,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "6.8503|&|50.3517",
             participants: {
                 connect: [{ id: user3.id }, { id: user4.id }]
             }
@@ -476,7 +491,7 @@ const main = async () => {
             creatorId: user4.id,
             peopleNeeded: 10,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "6.8503|&|50.3517",
             participants: {
                 connect: [{ id: user5.id }, { id: user6.id }]
             }
@@ -494,7 +509,7 @@ const main = async () => {
             creatorId: user5.id,
             peopleNeeded: 8,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "2.8503|&|50.3517",
         },
     });
 
@@ -509,7 +524,7 @@ const main = async () => {
             creatorId: user6.id,
             peopleNeeded: 6,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "6.9503|&|50.3517",
         },
     });
 
@@ -524,7 +539,7 @@ const main = async () => {
             creatorId: user7.id,
             peopleNeeded: 4,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "6.5503|&|49.3517",
         },
     });
 
@@ -539,7 +554,7 @@ const main = async () => {
             creatorId: user3.id,
             peopleNeeded: 6,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "6.7503|&|50.3517",
         },
     });
 

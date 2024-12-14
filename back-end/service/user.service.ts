@@ -61,13 +61,17 @@ const findUserByEmail = async (email: string, currentUser: User): Promise<User |
         lastName: user.getLastName(),
         email: user.getEmail(),
         interests: user.getInterests(),
-        gender: user.getGender()
+        gender: user.getGender(),
+        role: user.getRole(),
 };
     
     return userSummary;
 };
 
 const changeInterestOfUser = async (currentUser: User, newInterests : string[]): Promise<User> => {
+    if(currentUser.getRole() !== 'user') {
+        throw new ServiceError('Only users can change their interests', 403);
+    }
     const user = await userDB.getByEmail(currentUser.getEmail());
     if (!user) {
         throw new ServiceError('User not found', 404);
