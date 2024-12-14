@@ -54,6 +54,23 @@ const findUserByEmail = async (email:string) => {
 
   };
 
+  const changePassword = async (currentPassword: string, newPassword : string) => {
+    let token = sessionStorage.getItem("token");
+    if (!token) {
+      throw new Error("Token not found");
+    }
+    return await fetch(process.env.NEXT_PUBLIC_API_URL + `/auth/change-password`, {
+      method: 'POST',
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        ...(process.env.NEXT_PUBLIC_API_KEY && { "x-api-key": process.env.NEXT_PUBLIC_API_KEY }),
+      },
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+  }
 
 
-export default { addInterestToUser, findUserByEmail, findCurrentUser };
+
+export default { addInterestToUser, findUserByEmail, findCurrentUser , changePassword};

@@ -9,7 +9,11 @@ import { Post } from "@/types/index";
 import Sidebar from "@/components/dashboard/postOverview";
 import { LatLngExpression } from "leaflet";
 
-const ChangeInterests: React.FC = () => {
+interface ChangeInterestsProps {
+    onClose(): void;
+}
+
+const ChangeInterests: React.FC<ChangeInterestsProps> = ({ onClose }) => {
     const router = useRouter();
     const [interests, setInterests] = useState<Interest[]>([]);
     const [selectedInterests, setSelectedInterests] = useState<Interest[]>([]);
@@ -50,7 +54,7 @@ const ChangeInterests: React.FC = () => {
             console.error("Failed to update interests");
             return;
         }
-        router.push("/");
+        onClose();
     }
 
     return (

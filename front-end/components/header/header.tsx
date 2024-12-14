@@ -13,6 +13,7 @@ import unselectedLogout from "@/images/icons/header/unselectLogout.svg";
 import selectedLogout from "@/images/icons/header/selectLogout.svg";
 import interestIcon from "@/images/icons/header/interests.svg"
 import postIcon from "@/images/icons/header/posts.svg"
+import CreateNewPostPopup from "../posts/createNewPostPopup";
 
 
 const Header: React.FC = () => {
@@ -21,6 +22,7 @@ const Header: React.FC = () => {
   const [theme, setTheme] = useState("light");
   const [fullname, setFullname] = useState<String>("");
   const [email, setEmail] = useState<String>("");
+  const [CreateNewPostPopupOpen, setCreateNewPostPopupOpen] = useState(false);
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -52,24 +54,18 @@ const Header: React.FC = () => {
     };
   }, [accountMenuOpen]);
 
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [theme]);
-
   const logOut = () => {  
     sessionStorage.removeItem("token");
-    Router.push("/login");
+    Router.push("/");
   };
+
+
 
   return (
     <header className="fixed left-0 top-0 bg-white p-2 w-full font-sans grid grid-cols-[max-content,1fr,max-content,max-content] grid-rows-2 gap-x-2">
         <Link href={"/"} className="text-3xl w-fit font- font-normal text-blue-950"><strong className="font-bold">Join</strong>Me</Link>
         <input type="search" className="outline-none border border-gray-300 rounded-full px-4 max-w-xl" placeholder="Zoek op locatie, activiteit,..."/>
-        <button className="text-blue-600 border-2 border-blue-600 rounded-full px-2 transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white">Create Meetup</button>
+        <button onClick={() => setCreateNewPostPopupOpen(true)} className="text-blue-600 border-2 border-blue-600 rounded-full px-2 transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white">Create Meetup</button>
         <button onClick={() => setAccountMenuOpen(true)} className="h-full bg-blue-200 aspect-square rounded-full" title="Profile"></button>
         {accountMenuOpen && (
         <div ref={accountMenuRef}>
@@ -107,12 +103,11 @@ const Header: React.FC = () => {
                 <Image src={unselectedLogout.src} alt="Sun Icon" width={20} height={20} />
               Log Out
             </button>
-
            
           </div>
         </div>
         )}
-        
+        {CreateNewPostPopupOpen && (<CreateNewPostPopup onClose={() => setCreateNewPostPopupOpen(false)} />)}        
     </header>
   );
 };

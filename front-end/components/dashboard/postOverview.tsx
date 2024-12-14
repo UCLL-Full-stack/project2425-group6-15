@@ -50,7 +50,7 @@ const postOverview: React.FC = () => {
       <div className="container grid grid-cols-[1fr_370px] gap-4 h-screen max-h-screen min-w-full text-gray-800 box-border pt-24 pb-5 px-3">
         <div className="w-full h-full bg-white rounded-lg">
           {position && (
-            <MapContainerNoSSR center={position} zoom={13} style={{ height: "100%", width: "100%" }}>
+            <MapContainerNoSSR center={position} zoom={13} style={{ height: "100%", width: "100%", zIndex: 1 }}>
               <TileLayerNoSSR
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
