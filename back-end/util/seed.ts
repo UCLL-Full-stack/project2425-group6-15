@@ -491,7 +491,7 @@ const main = async () => {
             creatorId: user4.id,
             peopleNeeded: 10,
             preferredGender: 'any',
-            location: "6.8503|&|50.3517",
+            location: "5.8503|&|50.3517",
             participants: {
                 connect: [{ id: user5.id }, { id: user6.id }]
             }
@@ -509,7 +509,7 @@ const main = async () => {
             creatorId: user5.id,
             peopleNeeded: 8,
             preferredGender: 'any',
-            location: "2.8503|&|50.3517",
+            location: "3.8503|&|50.3517",
         },
     });
 
@@ -569,7 +569,7 @@ const main = async () => {
             creatorId: user4.id,
             peopleNeeded: 8,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "3.7503|&|50.3517",
         },
     });
 
@@ -584,7 +584,7 @@ const main = async () => {
             creatorId: user5.id,
             peopleNeeded: 5,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "6.7503|&|45.3517",
         },
     });
 
@@ -599,7 +599,7 @@ const main = async () => {
             creatorId: user6.id,
             peopleNeeded: 10,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "4.8503|&|50.3517",
         },
     });
 
@@ -614,7 +614,7 @@ const main = async () => {
             creatorId: user7.id,
             peopleNeeded: 6,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "5.8503|&|40.3517",
         },
     });
 
@@ -629,7 +629,7 @@ const main = async () => {
             creatorId: user8.id,
             peopleNeeded: 15,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "4.5503|&|50.6517",
         },
     });
 
@@ -644,7 +644,7 @@ const main = async () => {
             creatorId: user9.id,
             peopleNeeded: 10,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "4.1503|&|48.3517",
         },
     });
 
@@ -659,7 +659,7 @@ const main = async () => {
             creatorId: user10.id,
             peopleNeeded: 4,
             preferredGender: 'any',
-            location: "50.8503|&|4.3517",
+            location: "3.8503|&|52.3517",
         },
     });
 

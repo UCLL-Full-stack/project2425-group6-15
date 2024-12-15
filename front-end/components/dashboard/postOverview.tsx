@@ -11,9 +11,10 @@ import Image from 'next/image';
 
 import filterimg from "@/images/icons/dashboard/filter.svg";
 
-
 const MapContainerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
 const TileLayerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
+const MarkerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
+const PopupNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
 const CircleNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Circle), { ssr: false });
 
 const postOverview: React.FC = () => {
@@ -44,17 +45,38 @@ const postOverview: React.FC = () => {
       document.body.style.overflow = 'auto';
     };
   }, []);
+  useEffect(() => {
+    
+    if (typeof window !== 'undefined') {
+      const L = require('leaflet');
+      delete L.Icon.Default.prototype._getIconUrl;
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+        iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+      });
+    }
+  }, []);
 
   return (
     <>
       <div className="container grid grid-cols-[1fr_370px] gap-4 h-screen max-h-screen min-w-full text-gray-800 box-border pt-24 pb-5 px-3">
         <div className="w-full h-full bg-white rounded-lg">
           {position && (
-            <MapContainerNoSSR center={position} zoom={13} style={{ height: "100%", width: "100%", zIndex: 1 }}>
+            <MapContainerNoSSR center={position} zoom={7} style={{ height: "100%", width: "100%", zIndex: 1 }}>
               <TileLayerNoSSR
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
               <CircleNoSSR center={position} radius={15} pathOptions={{ color: 'white', fillColor: 'blue', fillOpacity: 1 }} />
+              {posts.map(post => (
+                <MarkerNoSSR key={post.id} position={[Number(post.location.latitude), Number(post.location.longitude)]}>
+                  <PopupNoSSR>
+                    <h2>{post.title}</h2>
+                    <p>{post.description}</p>
+                    <button onClick={() => router.push(`/post/${post.id}`)}>View Post</button>
+                  </PopupNoSSR>
+                </MarkerNoSSR>
+              ))}
             </MapContainerNoSSR>
           )}
         </div>
