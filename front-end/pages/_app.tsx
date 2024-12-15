@@ -5,14 +5,14 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 import { appWithTranslation } from "next-i18next";
+import nextI18NextConfig from '../next-i18next.config';
 
 const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
-  const publicRoutes = ["/login", "/register", "/about", "/"];
+  const publicRoutes = ["/login", "/register", "/about", "/", "/nl", "/en"];
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
-
     if (!token && !publicRoutes.includes(router.pathname)) {
       router.push('/login');
     }
@@ -33,4 +33,4 @@ const App = ({ Component, pageProps }: AppProps) => {
   )
 }
 
-export default appWithTranslation(App);
+export default appWithTranslation(App, nextI18NextConfig);

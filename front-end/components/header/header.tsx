@@ -14,6 +14,8 @@ import selectedLogout from "@/images/icons/header/selectLogout.svg";
 import interestIcon from "@/images/icons/header/interests.svg"
 import postIcon from "@/images/icons/header/posts.svg"
 import CreateNewPostPopup from "../posts/createNewPostPopup";
+import Language from "../language/Language";
+import LanguageSide from "../language/Language_side";
 
 
 const Header: React.FC = () => {
@@ -62,15 +64,15 @@ const Header: React.FC = () => {
 
 
   return (
-    <header className="fixed z-40 left-0 top-0 bg-white p-2 w-full font-sans grid grid-cols-[max-content,1fr,max-content,max-content] grid-rows-2 gap-x-2">
+    <header className="fixed z-40 left-0 top-0 bg-white p-2 w-full font-sans grid grid-cols-[max-content,1fr,max-content,max-content,max-content] grid-rows-2 gap-x-2">
       <Link href={"/"} className="text-3xl w-fit font- font-normal text-blue-950"><strong className="font-bold">Join</strong>Me</Link>
       <input type="search" className="outline-none border border-gray-300 rounded-full px-4 max-w-xl" placeholder="Zoek op locatie, activiteit,..." />
       <button onClick={() => setCreateNewPostPopupOpen(true)} className="text-blue-600 border-2 border-blue-600 rounded-full px-2 transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white">Create Meetup</button>
       <button onClick={() => setAccountMenuOpen(true)} className="h-full bg-blue-200 aspect-square rounded-full" title="Profile"></button>
       {accountMenuOpen && (
         <div ref={accountMenuRef}>
-          <div className="absolute right-2 mt-2 w-72 p-3 bg-white border border-gray-300 rounded-md shadow-lg ">
-            <Link href="/profile" className="w-full flex items-center hover:bg-gray-100 gap-2">
+          <div className="absolute right-2 mt-2 w-72 p-3 bg-white border border-gray-300 rounded-md shadow-lg flex flex-col gap-1.5">
+            <Link href="/profile" className="w-full flex items-center hover:bg-gray-100 gap-2 rounded-lg px-2 py-0.5">
               <div className="bg-blue-100 w-10 h-10 rounded-full flex items-center text-center justify-center text-blue-500 border border-blue-500 text-2xl font-mono font-medium">
                 {fullname[0].toLowerCase()}
               </div>
@@ -81,14 +83,17 @@ const Header: React.FC = () => {
                 </p>
               </div>
             </Link>
+            <div className="bg-gray-300 w-full h-0.5 rounded-xl" />
+
+            <LanguageSide />
 
             <div className="bg-gray-300 w-full h-0.5 rounded-xl" />
 
-            <Link href="/profile/posts" className="w-full flex gap-2 items-center justify-start px-4 py-2 text-gray-800 hover:bg-gray-100">
+            <Link href="/profile/posts" className="w-full flex gap-2 items-center justify-start px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-lg">
               <Image src={postIcon.src} alt="Sun Icon" width={20} height={20} />
               Your posts
             </Link>
-            <Link href="/profile/interests" className="w-full flex gap-2 items-center justify-start px-4 py-2 text-gray-800 hover:bg-gray-100">
+            <Link href="/profile/interests" className="w-full flex gap-2 items-center justify-start px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-lg">
               <Image src={interestIcon.src} alt="Sun Icon" width={20} height={20} />
               your interests
             </Link>
@@ -97,7 +102,7 @@ const Header: React.FC = () => {
 
             <button
               onClick={() => { logOut(); }}
-              className="w-full flex gap-2 items-center justify-start px-4 py-2 text-gray-800 hover:bg-gray-100 hover:text-red-500"
+              className="w-full flex gap-2 items-center justify-start px-4 py-2 text-gray-800 hover:bg-gray-100 hover:text-red-500 rounded-lg"
               onMouseEnter={(e) => { if (e.currentTarget.firstChild) (e.currentTarget.firstChild as HTMLImageElement).src = selectedLogout.src; }} onMouseLeave={(e) => { if (e.currentTarget.firstChild) (e.currentTarget.firstChild as HTMLImageElement).src = unselectedLogout.src; }}
             >
               <Image src={unselectedLogout.src} alt="Sun Icon" width={20} height={20} />

@@ -1,5 +1,29 @@
 {
+    "startheader":{
+        "buttons":{
+            "login": "Login",
+            "signup": "Register"
+        }
+    },
     "home":{
-        "description": "JoinMe is a social app to help you find the perfect buddy for any occasion! Whether you need a buddy to go to the movies or a friend to go mountain biking with, simply choose an activity, enter the date and location, and your post is ready to be discovered. People nearby with the same availability and interests can join you, making socializing effortless and fun."
+        "description": "JoinMe is a social app to help you find the perfect buddy for any occasion! Whether you need a buddy to go to the movies or a friend to go mountain biking with, simply choose an activity, enter the date and location, and your post is ready to be discovered. People nearby with the same availability and interests can join you, making socializing effortless and fun.",
+        "buttons": {
+            "action": "Get Started",
+            "info" : "Learn More"
+        },
+        "cards":{
+            "friends": {
+                "title": "Discover New Friends",
+                "description": "Connect with people who share your interests and hobbies."
+            },
+            "communities": {
+                "title": "Join Communities",
+                "description": "Be a part of communities that matter to you."
+            },
+            "moments": {
+                "title": "Share Your Moments",
+                "description": "Post updates and share your experiences with friends."
+            }
+        }
     }
 }

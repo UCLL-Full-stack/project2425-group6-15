@@ -1,5 +1,29 @@
 {
+    "startheader": {
+        "buttons": {
+            "login": "Inloggen",
+            "signup": "Registreren"
+        }
+    },
     "home":{
-        "description": "JoinMe is een sociale app die je helpt de perfecte buddy te vinden voor elke gelegenheid! Of je nu een maatje nodig hebt om naar de film te gaan of een vriend om mee te mountainbiken, kies gewoon een activiteit, voer de datum en locatie in, en je bericht is klaar om ontdekt te worden. Mensen in de buurt met dezelfde beschikbaarheid en interesses kunnen zich bij je aansluiten, waardoor socializen moeiteloos en leuk wordt."
+        "description": "JoinMe is een sociale app die je helpt de perfecte buddy te vinden voor elke gelegenheid! Of je nu een maatje nodig hebt om naar de film te gaan of een vriend om mee te mountainbiken, kies gewoon een activiteit, voer de datum en locatie in, en je bericht is klaar om ontdekt te worden. Mensen in de buurt met dezelfde beschikbaarheid en interesses kunnen zich bij je aansluiten, waardoor socializen moeiteloos en leuk wordt.",
+        "buttons": {
+            "action": "Begin",
+            "info" : "Meer Informatie"
+        },
+        "cards": {
+            "friends": {
+                "title": "Ontdek Nieuwe Vrienden",
+                "description": "Verbind met mensen die jouw interesses en hobby's delen."
+            },
+            "communities": {
+                "title": "Word Lid van Gemeenschappen",
+                "description": "Maak deel uit van gemeenschappen die voor jou belangrijk zijn."
+            },
+            "moments": {
+                "title": "Deel Jouw Momenten",
+                "description": "Plaats updates en deel je ervaringen met vrienden."
+            }
+        }
     }
 }

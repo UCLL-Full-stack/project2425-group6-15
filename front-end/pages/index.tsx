@@ -49,12 +49,12 @@ const Home: React.FC = () => {
         <div className="mt-8 flex space-x-4">
           <Link href="/register" legacyBehavior>
             <a className="px-6 py-3 bg-blue-600 text-white rounded-full text-lg font-semibold hover:bg-blue-700 transition duration-300">
-              Get Started
+              {t("home.buttons.action")}
             </a>
           </Link>
           <Link href="/about" legacyBehavior>
             <a className="px-6 py-3 bg-gray-200 text-gray-800 rounded-full text-lg font-semibold hover:bg-gray-300 transition duration-300">
-              Learn More
+              {t("home.buttons.info")}
             </a>
           </Link>
         </div>
@@ -63,22 +63,22 @@ const Home: React.FC = () => {
             <div className="w-full aspect-[6/5] object-cover rounded-t-lg relative">
               <Image src={friendsImg} alt="Friends" className="w-full bottom-0 object-cover rounded-t-lg absolute" />
             </div>
-            <h2 className="mt-4 text-2xl font-bold text-gray-900">Discover New Friends</h2>
-            <p className="mt-2 text-gray-700">Connect with people who share your interests and hobbies.</p>
+            <h2 className="mt-4 text-2xl font-bold text-gray-900">{t("home.cards.friends.title")}</h2>
+            <p className="mt-2 text-gray-700">{t("home.cards.friends.description")}</p>
           </div>
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="w-full aspect-[6/5] object-cover rounded-t-lg relative">
               <Image src={communitiesImg} alt="Communities" className="w-full bottom-0 object-cover rounded-t-lg absolute" />
             </div>
-            <h2 className="mt-4 text-2xl font-bold text-gray-900">Join Communities</h2>
-            <p className="mt-2 text-gray-700">Be a part of communities that matter to you.</p>
+            <h2 className="mt-4 text-2xl font-bold text-gray-900">{t("home.cards.communities.title")}</h2>
+            <p className="mt-2 text-gray-700">{t("home.cards.communities.description")}</p>
           </div>
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="w-full aspect-[6/5] object-cover rounded-t-lg relative">
               <Image src={momentsImg} alt="Moments" className="w-full bottom-0 object-cover rounded-t-lg absolute" />
             </div>
-            <h2 className="mt-4 text-2xl font-bold text-gray-900">Share Your Moments</h2>
-            <p className="mt-2 text-gray-700">Post updates and share your experiences with friends.</p>
+            <h2 className="mt-4 text-2xl font-bold text-gray-900">{t("home.cards.moments.title")}</h2>
+            <p className="mt-2 text-gray-700">{t("home.cards.moments.description")}</p>
           </div>
         </div>
       </div>
