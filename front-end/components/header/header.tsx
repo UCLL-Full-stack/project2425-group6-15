@@ -34,8 +34,8 @@ const Header: React.FC = () => {
     }
   }, []);
 
-  
-    
+
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (accountMenuRef.current && !accountMenuRef.current.contains(event.target as Node)) {
@@ -54,7 +54,7 @@ const Header: React.FC = () => {
     };
   }, [accountMenuOpen]);
 
-  const logOut = () => {  
+  const logOut = () => {
     sessionStorage.removeItem("token");
     Router.push("/");
   };
@@ -62,12 +62,12 @@ const Header: React.FC = () => {
 
 
   return (
-    <header className="fixed left-0 top-0 bg-white p-2 w-full font-sans grid grid-cols-[max-content,1fr,max-content,max-content] grid-rows-2 gap-x-2">
-        <Link href={"/"} className="text-3xl w-fit font- font-normal text-blue-950"><strong className="font-bold">Join</strong>Me</Link>
-        <input type="search" className="outline-none border border-gray-300 rounded-full px-4 max-w-xl" placeholder="Zoek op locatie, activiteit,..."/>
-        <button onClick={() => setCreateNewPostPopupOpen(true)} className="text-blue-600 border-2 border-blue-600 rounded-full px-2 transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white">Create Meetup</button>
-        <button onClick={() => setAccountMenuOpen(true)} className="h-full bg-blue-200 aspect-square rounded-full" title="Profile"></button>
-        {accountMenuOpen && (
+    <header className="fixed z-40 left-0 top-0 bg-white p-2 w-full font-sans grid grid-cols-[max-content,1fr,max-content,max-content] grid-rows-2 gap-x-2">
+      <Link href={"/"} className="text-3xl w-fit font- font-normal text-blue-950"><strong className="font-bold">Join</strong>Me</Link>
+      <input type="search" className="outline-none border border-gray-300 rounded-full px-4 max-w-xl" placeholder="Zoek op locatie, activiteit,..." />
+      <button onClick={() => setCreateNewPostPopupOpen(true)} className="text-blue-600 border-2 border-blue-600 rounded-full px-2 transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white">Create Meetup</button>
+      <button onClick={() => setAccountMenuOpen(true)} className="h-full bg-blue-200 aspect-square rounded-full" title="Profile"></button>
+      {accountMenuOpen && (
         <div ref={accountMenuRef}>
           <div className="absolute right-2 mt-2 w-72 p-3 bg-white border border-gray-300 rounded-md shadow-lg ">
             <Link href="/profile" className="w-full flex items-center hover:bg-gray-100 gap-2">
@@ -82,8 +82,8 @@ const Header: React.FC = () => {
               </div>
             </Link>
 
-            <div className="bg-gray-300 w-full h-0.5 rounded-xl"/>
-            
+            <div className="bg-gray-300 w-full h-0.5 rounded-xl" />
+
             <Link href="/profile/posts" className="w-full flex gap-2 items-center justify-start px-4 py-2 text-gray-800 hover:bg-gray-100">
               <Image src={postIcon.src} alt="Sun Icon" width={20} height={20} />
               Your posts
@@ -93,21 +93,21 @@ const Header: React.FC = () => {
               your interests
             </Link>
 
-            <div className="bg-gray-300 w-full h-0.5 rounded-xl"/>
+            <div className="bg-gray-300 w-full h-0.5 rounded-xl" />
 
-            <button 
-              onClick={() => {logOut();} }
+            <button
+              onClick={() => { logOut(); }}
               className="w-full flex gap-2 items-center justify-start px-4 py-2 text-gray-800 hover:bg-gray-100 hover:text-red-500"
               onMouseEnter={(e) => { if (e.currentTarget.firstChild) (e.currentTarget.firstChild as HTMLImageElement).src = selectedLogout.src; }} onMouseLeave={(e) => { if (e.currentTarget.firstChild) (e.currentTarget.firstChild as HTMLImageElement).src = unselectedLogout.src; }}
-              >
-                <Image src={unselectedLogout.src} alt="Sun Icon" width={20} height={20} />
+            >
+              <Image src={unselectedLogout.src} alt="Sun Icon" width={20} height={20} />
               Log Out
             </button>
-           
+
           </div>
         </div>
-        )}
-        {CreateNewPostPopupOpen && (<CreateNewPostPopup onClose={() => setCreateNewPostPopupOpen(false)} />)}        
+      )}
+      {CreateNewPostPopupOpen && (<CreateNewPostPopup onClose={() => setCreateNewPostPopupOpen(false)} />)}
     </header>
   );
 };

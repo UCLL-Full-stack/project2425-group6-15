@@ -1,10 +1,10 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Helmet } from "react-helmet";
-import { appWithTranslation } from "next-i18next";
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import TokenHandler from "@/util/tokenhandler";
+
+import { appWithTranslation } from "next-i18next";
 
 const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
@@ -18,7 +18,6 @@ const App = ({ Component, pageProps }: AppProps) => {
     }
   }, [router.pathname]);
 
-  // TokenHandler();
 
   return (
     <>
