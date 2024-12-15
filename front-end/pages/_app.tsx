@@ -18,18 +18,18 @@ const App = ({ Component, pageProps }: AppProps) => {
     }
   }, [router.pathname]);
 
-  TokenHandler();
-  
+  // TokenHandler();
+
   return (
     <>
       <Helmet>
-        <meta charSet="utf-8"/>
+        <meta charSet="utf-8" />
         <title>JoinMe</title>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
       </Helmet>
-        <div className="bg-white" >
-            <Component {...pageProps} />
-        </div>
+      <div className="bg-white" >
+        <Component {...pageProps} />
+      </div>
     </>
   )
 }

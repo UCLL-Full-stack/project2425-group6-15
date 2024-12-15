@@ -8,10 +8,12 @@ import PostOverview from "@/components/dashboard/postOverview";
 import postService from "@/services/postService";
 import { Post } from "@/types/index";
 import { LatLngExpression } from "leaflet";
+import { useTranslation } from "react-i18next";
 
 const Home: React.FC = () => {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -26,19 +28,18 @@ const Home: React.FC = () => {
         <Header />
         <PostOverview />
       </>
-
     );
   }
   return (
     <>
       <Headerplain />
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-50 to-blue-100 text-gray-800" style={{ backgroundImage: "url('/images/pattern.png')" }}>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-50 to-blue-100 text-gray-800">
         <div className="mb-8">
           <img src="/logo.png" alt="JoinMe Logo" className="w-32 h-32" />
         </div>
         <h1 className="text-6xl font-extrabold text-gray-900">JoinMe</h1>
         <p className="mt-4 text-xl text-center max-w-2xl text-gray-700">
-          JoinMe is a social app to help you find the perfect buddy for any occasion! Whether you need a buddy to go to the movies or a friend to go mountain biking with, simply choose an activity, enter the date and location, and your post is ready to be discovered. People nearby with the same availability and interests can join you, making socializing effortless and fun.
+          {t("home.description")}
         </p>
         <div className="mt-8 flex space-x-4">
           <Link href="/register" legacyBehavior>
