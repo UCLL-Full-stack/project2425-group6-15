@@ -97,5 +97,16 @@ const register = async (data : UserInput): Promise<JWTGivenToken> => {
 
     return token;
 };
+const changePassword = async (oldPassword: string, newPassword: string, loggedinUser: User): Promise<void> => {
+    const isValid = await bcrypt.compare(oldPassword, loggedinUser.getPassword());
+    if (!isValid) {
+        throw new AuthError('Invalid password', 401);
+    }
+    const hash = await bcrypt.hash(newPassword, 10);
+    loggedinUser.setPassword(hash);
+    await userdb.update(loggedinUser);
+}
+
+
 export default {authenticateToken};
-export {login, register ,refreshToken };
+export {login, register ,refreshToken, changePassword};

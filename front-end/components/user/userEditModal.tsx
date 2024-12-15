@@ -10,10 +10,10 @@ import Image from "next/image";
 
 interface UserProfileProps {
     user: User;
-    isOpen: boolean;
+    onclose(): void;
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({ user, isOpen }) => {
+const UserEditProfile: React.FC<UserProfileProps> = ({ user, onclose }) => {
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
     const [email, setEmail] = useState(user.email);
@@ -29,10 +29,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, isOpen }) => {
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
     const [serverError, setServerError] = useState("");
 
-    if (!isOpen) return null;
-
     return (
-        <div className="bg-white border border-slate-300 p-4 rounded-lg shadow-lg flex flex-col w-9/12">
+        <div className="bg-transparent p-4 flex flex-col w-full h-full">
             <div className="w-full border-b-2 border-gray-300">
                 <h1 className="text-2xl font-semibold">Account Details</h1>
                 <p className="text-base text-gray-300">manage your profile</p>
@@ -93,8 +91,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, isOpen }) => {
                     </div>
                 </div>
             </div>
+
+            <div className="w-full flex items-center justify-end gap-3">
+            <button onClick={() => onclose()} className="px-2 py-0 border border-gray-500 rounded-lg text-gray-500 hover:bg-red-500 hover:bg-opacity-20 hover:border-red-500 hover:text-red-500 text-lg">cancel</button>
+            <button className="px-2 py-0 border border-blue-500 rounded-lg text-blue-500 hover:bg-blue-500 hover:text-white text-lg">Save</button>
+            </div>
         </div>
     );
 };
 
-export default UserProfile;
+export default UserEditProfile;

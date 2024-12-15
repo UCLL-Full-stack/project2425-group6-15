@@ -26,9 +26,9 @@ const LoginUsersTable: React.FC = () => {
             <tbody>
                 {users.map(user => (
                     <tr key={user.id}>
-                        <td style={{ padding: '10px' }}>{user.email}</td>
-                        <td style={{ padding: '10px' }}>{user.password}</td>
-                        <td style={{ padding: '10px' }}>{user.role}</td>
+                        <td className='p-3'>{user.email}</td>
+                        <td className='p-3'>{user.password}</td>
+                        <td className='p-3'>{user.role}</td>
                     </tr>
                 ))}
             </tbody>

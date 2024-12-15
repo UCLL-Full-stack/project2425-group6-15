@@ -3,7 +3,6 @@ import { Gender } from "@/types";
 import React, { useState } from "react";
 import { useRouter } from 'next/router';
 import authService from "@/services/authService";
-import Cookies from 'js-cookie';
 
 const UserLoginForm: React.FC = () => {
   const router = useRouter();

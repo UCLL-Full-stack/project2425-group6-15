@@ -4,7 +4,11 @@ import { useRouter } from 'next/router';
 import userService from "@/services/userService";
 import interestService from "@/services/interestService";
 
-const ChangeInterests: React.FC = () => {
+interface ChangeInterestsProps {
+    onClose(): void;
+}
+
+const ChangeInterests: React.FC<ChangeInterestsProps> = ({ onClose }) => {
     const router = useRouter();
     const [interests, setInterests] = useState<Interest[]>([]);
     const [selectedInterests, setSelectedInterests] = useState<Interest[]>([]);
@@ -50,7 +54,7 @@ const ChangeInterests: React.FC = () => {
             console.error("Failed to update interests");
             return;
         }
-        router.push("/");
+        onClose();
     }
 
     const createInterest = async () => {

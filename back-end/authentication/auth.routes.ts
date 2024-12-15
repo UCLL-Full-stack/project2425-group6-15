@@ -64,7 +64,7 @@
  */
 
 import express, { NextFunction, Request, Response } from 'express';
-import { login, register, refreshToken } from './auth.service';
+import authService, { login, register, refreshToken, changePassword } from './auth.service';
 import { error } from 'console';
 
 const authRouter = express.Router();
@@ -160,6 +160,48 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
         const user = req.body;
         let response = await login(user);
         return res.status(200).json({"token":response});
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /auth/change-password:
+ *   post:
+ *     summary: Change user password
+ *     tags: [authentication]
+ *     security:                    
+ *       - ApiKeyAuth: []
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *                 example: "oldpassword.Example"
+ *               newPassword:
+ *                 type: string
+ *                 example: "newpassword.Example"
+ *     responses:
+ *       200:
+ *         description: Password changed successfully.
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       500:
+ *         description: Some server error
+ */
+authRouter.post('/change-password', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        await changePassword(currentPassword, newPassword, await authService.authenticateToken(req.headers));
+        
+        res.status(200).json({ message: 'Password changed successfully' });
     } catch (error) {
         next(error);
     }
