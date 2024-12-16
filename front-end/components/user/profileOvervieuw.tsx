@@ -85,16 +85,20 @@ const USerProfileOverview: React.FC = () => {
                     </button>
                 </div>
             </div>
-            <div className="w-full grid grid-cols-[max-content_1fr] items-center gap-2">
+            {user.role==="user" && (
+                <div className="w-full grid grid-cols-[max-content_1fr] items-center gap-2">
                 <p className="text-xl font-semibold text-slate-500 pb-1">{t("profile.interests")}</p>
                 <div className="w-full h-0.5 rounded-full bg-slate-200" />
-            </div>
+            </div>)}
+            
             <div className="w-full grid gap-y-4 relative">
+            {user.role==="user" && (
                 <button className="absolute top-0 right-1 px-2 py-1 border-gray-200 rounded-lg border text-sm text-slate-500"
                     onClick={() => { setEditInterestsIsOpen(!editProfileIsOpen) }}
                 >
                     {t("profile.edit")}
-                </button>
+                </button>)}
+
                 <div className="flex flex-wrap gap-2 items-center w-full px-6">
                     {user?.interests.map((interest, index) => (
                         <div key={index} className="bg-slate-200 rounded-lg px-2 py-1">
@@ -112,7 +116,7 @@ const USerProfileOverview: React.FC = () => {
                     </div>
                 </div>
             )}
-            {editInterestsIsOpen && (
+            {editInterestsIsOpen && user.role==="user" && (
                 <div className="fixed top-0 left-0 z-50 w-screen h-screen bg-black bg-opacity-45 flex items-center justify-center">
                     <div className="w-3/4 bg-white border border-gray-300 shadow-lg rounded-lg p-2">
                         <ChangeInterests onClose={() => setEditInterestsIsOpen(false)} />
