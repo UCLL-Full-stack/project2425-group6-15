@@ -17,10 +17,13 @@ const MarkerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Marker
 const PopupNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
 const CircleNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Circle), { ssr: false });
 
+const PostOverviewPopup = dynamic(() => import("@/components/posts/postOverviewPopup"), { ssr: false });
+
 const postOverview: React.FC = () => {
   const router = useRouter();
   const [position, setPosition] = useState<[number, number] | null>(null);
   const [posts, setPosts] = useState<PostPrevieuw[]>([]);
+  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -46,8 +49,8 @@ const postOverview: React.FC = () => {
       document.body.style.overflow = 'auto';
     };
   }, []);
-  useEffect(() => {
 
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       const L = require('leaflet');
       delete L.Icon.Default.prototype._getIconUrl;
@@ -59,8 +62,27 @@ const postOverview: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const postId = query.get("event");
+    if (postId) {
+      setSelectedPostId(Number(postId));
+    }
+  }, []);
+
+  const handlePostClick = (postId: number) => {
+    router.push(`?event=${postId}`, undefined, { shallow: true });
+    setSelectedPostId(postId);
+  };
+
+  const closePopup = () => {
+    router.push("", undefined, { shallow: true });
+    setSelectedPostId(null);
+  };
+
   return (
     <>
+      {selectedPostId && <PostOverviewPopup postId={selectedPostId} onClose={closePopup} />}
       <div className="container grid grid-cols-[1fr_370px] gap-4 h-screen max-h-screen min-w-full text-gray-800 box-border pt-24 pb-5 px-3">
         <div className="w-full h-full bg-white rounded-lg">
           {position && (
@@ -74,7 +96,7 @@ const postOverview: React.FC = () => {
                   <PopupNoSSR>
                     <h2>{post.title}</h2>
                     <p>{post.description}</p>
-                    <button onClick={() => router.push(`/post/${post.id}`)}>View Post</button>
+                    <button onClick={() => post.id !== undefined && handlePostClick(post.id)}>View Post</button>
                   </PopupNoSSR>
                 </MarkerNoSSR>
               ))}
@@ -104,7 +126,7 @@ const postOverview: React.FC = () => {
                 <div
                   key={post.id}
                   className={`w-full h-20 ${index !== 0 ? 'border-t-2 border-slate-400' : ''} p-2 cursor-pointer `}
-                  onClick={() => router.push(`/post/${post.id}`)}
+                  onClick={() => post.id !== undefined && handlePostClick(post.id)}
                 >
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-slate-700">{post.title}</h3>
@@ -119,7 +141,7 @@ const postOverview: React.FC = () => {
                 <div
                   key={post.id}
                   className={`w-full h-20 ${index !== 0 ? 'border-t-2 border-slate-400' : ''} p-2 cursor-pointer `}
-                  onClick={() => router.push(`/post/${post.id}`)}
+                  onClick={() => post.id !== undefined && handlePostClick(post.id)}
                 >
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-slate-700">{post.title}</h3>
