@@ -2,7 +2,7 @@ import { PostPrevieuw } from "@/types";
 import { GetStaticProps } from "next";
 import React, { useState, useEffect } from "react";
 import userService from "@/services/userService";
-import { useTranslation } from "react-i18next"; // Add this import
+import { useTranslation } from "next-i18next";
 
 const UserPostOverview: React.FC = () => {
   const [posts, setPosts] = useState<PostPrevieuw[]>([]);
@@ -38,9 +38,8 @@ const UserPostOverview: React.FC = () => {
             {posts.map((post, index) => (
               <div
                 key={post.id}
-                className={`w-full h-20 ${
-                  index !== 0 ? "border-t-2 border-slate-400" : ""
-                } p-2 cursor-pointer `}
+                className={`w-full h-20 ${index !== 0 ? "border-t-2 border-slate-400" : ""
+                  } p-2 cursor-pointer `}
               >
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-slate-700">
@@ -68,9 +67,8 @@ const UserPostOverview: React.FC = () => {
             {joinedPosts.map((joinedPost, index) => (
               <div
                 key={joinedPost.id}
-                className={`w-full h-20 ${
-                  index !== 0 ? "border-t-2 border-slate-400" : ""
-                } p-2 cursor-pointer `}
+                className={`w-full h-20 ${index !== 0 ? "border-t-2 border-slate-400" : ""
+                  } p-2 cursor-pointer `}
               >
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-slate-700">

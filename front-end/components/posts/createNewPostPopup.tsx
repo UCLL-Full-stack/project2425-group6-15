@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useMapEvents, useMap } from "react-leaflet";
 import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
-import { useTranslation } from "react-i18next"; // Add this import
+import { useTranslation } from "next-i18next";
 
 import checkmarkImg from "@/images/icons/createpost/check.svg";
 
@@ -184,37 +184,32 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
           <button
             onClick={() => setCurrentStep(0)}
             title="Name and description"
-            className={`w-6 h-6 border-blue-500 border-2 rounded ${
-              stepsCompleted[0] ? "bg-blue-400" : ""
-            }`}
+            className={`w-6 h-6 border-blue-500 border-2 rounded ${stepsCompleted[0] ? "bg-blue-400" : ""
+              }`}
           >
             <Image src={checkmarkImg} alt="checkmark" width={20} height={20} />
           </button>
           <div
-            className={`w-12 h-3 border-blue-500 border-y-2 ${
-              stepsCompleted[0] && stepsCompleted[1] ? "bg-blue-400" : ""
-            }`}
+            className={`w-12 h-3 border-blue-500 border-y-2 ${stepsCompleted[0] && stepsCompleted[1] ? "bg-blue-400" : ""
+              }`}
           />
           <button
             onClick={() => setCurrentStep(1)}
             title="when and where"
-            className={`w-6 h-6 border-blue-500 border-2 rounded ${
-              stepsCompleted[1] ? "bg-blue-400" : ""
-            }`}
+            className={`w-6 h-6 border-blue-500 border-2 rounded ${stepsCompleted[1] ? "bg-blue-400" : ""
+              }`}
           >
             <Image src={checkmarkImg} alt="checkmark" width={20} height={20} />
           </button>
           <div
-            className={`w-12 h-3 border-blue-500 border-y-2 ${
-              stepsCompleted[1] && stepsCompleted[2] ? "bg-blue-400" : ""
-            }`}
+            className={`w-12 h-3 border-blue-500 border-y-2 ${stepsCompleted[1] && stepsCompleted[2] ? "bg-blue-400" : ""
+              }`}
           />
           <button
             onClick={() => setCurrentStep(2)}
             title="with how many and how late"
-            className={`w-6 h-6 border-blue-500 border-2 rounded ${
-              stepsCompleted[2] ? "bg-blue-400" : ""
-            }`}
+            className={`w-6 h-6 border-blue-500 border-2 rounded ${stepsCompleted[2] ? "bg-blue-400" : ""
+              }`}
           >
             <Image src={checkmarkImg} alt="checkmark" width={20} height={20} />
           </button>
