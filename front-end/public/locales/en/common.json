@@ -83,6 +83,7 @@
     "posts": {
         "title": "Your Events",
         "create_post": "Create Event",
+        "joined": "Events you joined",
         "search_placeholder": "Search by location, activity,...",
         "no_posts": "No events found.",
         "edit": "Edit",
