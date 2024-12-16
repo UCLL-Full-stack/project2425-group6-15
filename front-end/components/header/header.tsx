@@ -66,7 +66,12 @@ const Header: React.FC = () => {
 
   const logOut = () => {
     sessionStorage.removeItem("token");
-    Router.push("/");
+    if (Router.pathname === "/") {
+      Router.reload();
+    } else {
+      Router.push("/");
+    }
+
   };
 
 
