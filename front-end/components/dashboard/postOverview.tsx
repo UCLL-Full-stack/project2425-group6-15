@@ -9,7 +9,10 @@ import { LatLngExpression } from "leaflet";
 import 'leaflet/dist/leaflet.css';
 import Image from 'next/image';
 
+
 import filterimg from "@/images/icons/dashboard/filter.svg";
+import CurrentlocImg from "@/images/icons/dashboard/currentlocation.svg";
+import PinlocImg from "@/images/icons/dashboard/maplocation.svg";
 
 const MapContainerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
 const TileLayerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
@@ -24,6 +27,12 @@ const postOverview: React.FC = () => {
   const [position, setPosition] = useState<[number, number] | null>(null);
   const [posts, setPosts] = useState<PostPrevieuw[]>([]);
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
+  const [showFilter, setShowFilter] = useState<boolean>(false);
+
+  const [filterLocationType, setFilterLocationType] = useState<"current" | "pin">("current");
+  const [filterLocation, setFilterLocation] = useState<LatLngExpression | null>(null);
+  const [filterRadius, setFilterRadius] = useState<number | null>(null);
+  const [filterDate, setFilterDate] = useState<Date | null>(null);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -104,9 +113,33 @@ const postOverview: React.FC = () => {
           )}
         </div>
         <div className="h-full box-border bg-white shadow-lg rounded-lg p-6 grid grid-rows-[auto_1fr]">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between relative">
             <h2 className="text-3xl font-semibold text-slate-700">Posts</h2>
-            <button title="Filteren"><Image src={filterimg.src} alt="Image description" width={30} height={30} /></button>
+            <button onClick={() => setShowFilter(!showFilter)} title="Filteren"><Image src={filterimg.src} alt="Image description" width={30} height={30} /></button>
+            {showFilter && (
+              <div className="absolute top-8 right-0 bg-white shadow-lg rounded-lg p-6">
+                <p className="text-base text-gray-600">location</p>
+                <div className="flex items-center">
+                  <button title="current location" className={`w-28 h-7 border border-gray-300 rounded-l-lg flex items-center justify-center ${filterLocationType === "current" ? "shadow-inner" : ""}`} onClick={() => setFilterLocationType("current")}>
+                    <Image src={CurrentlocImg} alt="Image description" width={20} height={20} />
+                  </button>
+                  <button title="pin location" className={`w-28 h-7 border border-gray-300 rounded-r-lg flex items-center justify-center ${filterLocationType === "pin" ? "shadow-inner" : ""}`} onClick={() => setFilterLocationType("pin")}>
+                    <Image src={PinlocImg} alt="Image description" width={20} height={20} />
+                  </button>
+                </div>
+                <p className="text-base text-gray-600">radius</p>
+                <select className="w-full h-7 border border-gray-300 rounded-lg py-1 px-2" title="Select a radius">
+                  <option value="5">5km</option>
+                  <option value="7">7km</option>
+                  <option value="8">8km</option>
+                  <option value="10">10km</option>
+                  <option value="20">20km</option>
+                  <option value="all">all</option>
+                </select>
+                <p className="text-base text-gray-600">date</p>
+                <input type="date" className="w-full h-7 border border-gray-300 rounded-lg py-1 px-2" title="Select a date" />
+              </div>
+            )}
           </div>
           <div className="border-t-2 border-slate-600 w-full h-0 min-h-full max-h-full flex flex-col overflow-y-auto">
             {posts.length === 0 && <p className="text-slate-500">No posts available</p>}
