@@ -80,6 +80,33 @@
         "search_placeholder": "Search here...",
         "save": "Save"
     },
+    "posts": {
+        "title": "Your Events",
+        "create_post": "Create Event",
+        "search_placeholder": "Search by location, activity,...",
+        "no_posts": "No events found.",
+        "edit": "Edit",
+        "delete": "Delete",
+        "confirm_delete": "Are you sure you want to delete this event?",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "create": {
+            "title": "Create Event",
+            "name": "Name",
+            "description": "Description",
+            "location": "Location",
+            "startdate": "Start Date",
+            "endDate":"End Date",
+            "time": "Time",
+            "interests": "Interests",
+            "create": "Create Event",
+            "cancel": "Cancel",
+            "required": "is required.",
+            "next": "Next Step",
+            "previous": "Previous Step",
+            "participants": "Participants"
+        }
+    },
     "profile": {
         "title": "Your Profile!",
         "edit": "Edit",
