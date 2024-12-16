@@ -29,20 +29,19 @@ model User {
 }
 
 model Post {
-  id              Int      @id @default(autoincrement())
-  title           String
-  description     String
-  startDate       DateTime
-  endDate         DateTime
-  time            String
-  location        String
-  activityId      Int
-  activity        Activity @relation(fields: [activityId], references: [id])
-  creatorId       Int
-  creator         User     @relation("postcreater", fields: [creatorId], references: [id])
-  participants    User[]   @relation("participant")
-  peopleNeeded    Int
-  preferredGender String
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String
+  startDate    DateTime
+  endDate      DateTime
+  time         String
+  location     String
+  activityId   Int
+  activity     Activity @relation(fields: [activityId], references: [id])
+  creatorId    Int
+  creator      User     @relation("postcreater", fields: [creatorId], references: [id])
+  participants User[]   @relation("participant")
+  peopleNeeded Int
 }
 
 model Activity {

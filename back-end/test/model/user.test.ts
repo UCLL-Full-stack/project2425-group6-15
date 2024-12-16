@@ -1,7 +1,6 @@
 import { User } from "../../model/user";
-import { Gender, PhoneNumber } from "../../types";
+import { Gender, PhoneNumber, Role } from "../../types";
 import { Interest } from "../../model/interest";
-
 
 const validUser = {
     id: 2,
@@ -12,8 +11,10 @@ const validUser = {
     gender: 'female' as Gender,
     password: 'securepassword',
     interests: [],
+    role: 'user' as Role,
+    posts: [],
+    joinedPosts: [],
 };
-
 
 test('given:valid values for user, when:user is created, then:user is created with those values', () => {
     const user = new User(validUser);
@@ -57,6 +58,11 @@ test('should throw an error if phone number is missing', () => {
     }).toThrow('phone number is required');
 });
 
+test('should throw an error if password is missing', () => {
+    expect(() => {
+        new User({ ...validUser, password: "" });
+    }).toThrow('Password is required');
+});
 
 test('should throw an error if gender is missing', () => {
     expect(() => {
@@ -71,14 +77,18 @@ test('should add an interest to the validUser', () => {
     expect(user.getInterests()).toContain(interest);
 });
 
-test('should throw an error if interest already exists', () => {
-    const user = new User(validUser);
-    const interest = new Interest({ name: "Reading", description: "Reading books" });
-    user.addInterestToUser(interest);
+test('should throw an error if role is admin and gender is provided', () => {
     expect(() => {
-        user.addInterestToUser(interest);
-    }).toThrow('Interest already exists');
+        new User({ ...validUser, role: 'admin', gender: 'female' as Gender });
+    }).toThrow('Only users can have a gender');
 });
+
+test('should throw an error if role is admin and interests are provided', () => {
+    expect(() => {
+        new User({ ...validUser, role: 'admin', gender : null, interests: [new Interest({ name: "Reading", description: "Reading books" })] });
+    }).toThrow('Only users can have interests');
+});
+
 
 test('should return true if two validUsers are equal', () => {
     const validUser1 = new User(validUser);
@@ -92,8 +102,30 @@ test('should return false if two validUsers are not equal', () => {
     expect(validUser1.equals(validUser2)).toBe(false);
 });
 
-    
-    
-    
+test('should convert user to summary correctly', () => {
+    const user = new User(validUser);
+    const summary = user.toSummary();
+    expect(summary.firstName).toEqual(validUser.firstName);
+    expect(summary.lastName).toEqual(validUser.lastName);
+    expect(summary.email).toEqual(validUser.email);
+    expect(summary.gender).toEqual(validUser.gender);
+    expect(summary.interests).toEqual(validUser.interests);
+});
+
+test('should convert user to prisma format correctly', () => {
+    const user = new User(validUser);
+    const prismaUser = user.toPrisma();
+    expect(prismaUser.firstName).toEqual(validUser.firstName);
+    expect(prismaUser.lastName).toEqual(validUser.lastName);
+    expect(prismaUser.email).toEqual(validUser.email);
+    expect(prismaUser.gender).toEqual(validUser.gender);
+    expect(prismaUser.phoneNumber).toEqual(`${validUser.phoneNumber.countryCode} ${validUser.phoneNumber.number}`);
+    expect(prismaUser.role).toEqual(validUser.role);
+    expect(prismaUser.password).toEqual(validUser.password);
+});
+
+
+
+
 
 

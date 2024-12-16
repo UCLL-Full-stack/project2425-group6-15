@@ -4,7 +4,7 @@ import { User } from "../model/user";
 
 export type Gender = 'male' | 'female';
 export type PhoneNumber = { countryCode: string, number: string };
-export type Role = 'admin' | 'user' | 'guest';
+export type Role = 'admin' | 'user' | 'organization';
 
 export type Location = {
     longitude: String;
@@ -39,16 +39,14 @@ export type PostInput = {
     activity: Activity;
     creator?: User;
     peopleNeeded: number;
-    preferredGender: Gender | 'any';
 };
-
 
 export type UserSummary = {
     firstName: string;
     lastName: string;
     email: string;
     interests: Interest[];
-    gender: Gender;
+    gender: Gender | null;
     role?:Role;
 };
 
@@ -64,9 +62,7 @@ export type PostSummary = {
     creator: UserSummary,
     participants: UserSummary[],
     peopleNeeded: number,
-    preferredGender: Gender | 'any';
 };
-
 
 export type PostPrevieuw = {
     id?: number,
@@ -80,8 +76,7 @@ export type PostPrevieuw = {
     peopleNeeded: number,
     peopleJoined : number,
     hasJoined : boolean,
-    preferredGender: Gender | 'any';
-}
+};
 
 
 

@@ -15,7 +15,6 @@ export class Post {
     private activity: Activity;
     private participants: User[];
     private peopleNeeded: number;
-    private preferredGender: Gender | 'any';
     private creator: User;
 
     constructor(post: {
@@ -30,7 +29,6 @@ export class Post {
         creator: User;
         participants: User[];
         peopleNeeded: number;
-        preferredGender: Gender | 'any';
     }) {
         this.id = post.id;
         this.title = post.title;
@@ -43,7 +41,6 @@ export class Post {
         this.creator = post.creator;
         this.participants = post.participants || [];
         this.peopleNeeded = post.peopleNeeded;
-        this.preferredGender = post.preferredGender;
     }
 
     validate(post: {
@@ -57,9 +54,8 @@ export class Post {
         activity: Activity;
         creator: User;
         peopleNeeded: number;
-        preferredGender: Gender | "any";
     }) {
-        if (!post.title?.trim()) {
+        if (!post.title.trim()) {
             throw new Error('Title is required');
         }
     }
@@ -108,10 +104,6 @@ export class Post {
         return this.peopleNeeded;
     }
 
-    getPreferredGender(): Gender | 'any' {
-        return this.preferredGender;
-    }
-
     isFull(): boolean {
         return this.participants.length >= this.peopleNeeded;
     }
@@ -140,7 +132,6 @@ export class Post {
             peopleNeeded: this.getPeopleNeeded(),
             peopleJoined : this.getParticipants().length,
             hasJoined : this.getParticipants().some(participant => participant.getId() === userid),
-            preferredGender: this.getPreferredGender()
         }
     }
 
@@ -161,7 +152,6 @@ export class Post {
             creator: this.getCreator().toSummary(),
             participants: participants,
             peopleNeeded: this.getPeopleNeeded(),
-            preferredGender: this.getPreferredGender(),
         };
     }
 
@@ -180,7 +170,6 @@ export class Post {
             creator: this.creator.toPrisma(),
             participants: this.participants.map(participant => participant.toPrisma()),
             peopleNeeded: this.peopleNeeded,
-            preferredGender: this.preferredGender,
         };
     }
 
@@ -195,7 +184,6 @@ export class Post {
         activity,
         participants,
         peopleNeeded,
-        preferredGender,
         creator,
     }: PostPrisma & { activity: ActivityPrisma, creator: UserPrisma, participants: UserPrisma[] }): Post {
         return new Post({
@@ -218,7 +206,6 @@ export class Post {
                 posts: [],
             })),
             peopleNeeded,
-            preferredGender: preferredGender as Gender | 'any',
         });
     }
 
@@ -238,7 +225,6 @@ export class Post {
             creator: post.creator,
             participants: [],
             peopleNeeded: post.peopleNeeded,
-            preferredGender: post.preferredGender,
         });
     }
 
