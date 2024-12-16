@@ -17,7 +17,7 @@ export class User {
     private email: string;
     private password: string;
     private interests: Interest[];
-    private gender: Gender;
+    private gender: Gender | null;
     private posts: Post[];
     private joinedPosts: Post[];
     private role: Role;
@@ -28,7 +28,7 @@ export class User {
         lastName: string;
         phoneNumber: PhoneNumber;
         email: string;
-        gender: Gender;
+        gender: Gender | null;
         role: Role;
         password: string;
         interests: Interest[];
@@ -42,10 +42,10 @@ export class User {
         this.phoneNumber = user.phoneNumber;
         this.email = user.email;
         this.password = user.password;
-        this.gender = user.gender;
-        this.interests = user.interests || [];
-        this.posts = user.posts || [];
-        this.joinedPosts = user.joinedPosts || [];
+        this.gender = user.role === 'user' ? user.gender : null;
+        this.interests = user.role === 'user' ? user.interests || [] : [];
+        this.posts = user.role === 'admin' ? [] : user.posts || [];
+        this.joinedPosts = user.role === 'user' ? user.joinedPosts || [] : [];
         this.role = user.role;
     }
 
@@ -73,7 +73,7 @@ export class User {
         return this.password;
     }
 
-    getGender(): Gender {
+    getGender(): Gender | null {
         return this.gender;
     }
 
@@ -136,6 +136,9 @@ export class User {
     }
 
     setGender(gender: Gender): void {
+        if (this.role !== 'user') {
+            throw new Error('Only users can have a gender');
+        }
         if (!gender) {
             throw new Error('Gender is required');
         }
@@ -143,29 +146,38 @@ export class User {
     }
 
     setInterests(interests: Interest[]): void {
+        if (this.role !== 'user') {
+            throw new Error('Only users can have interests');
+        }
         this.interests = interests;
     }
 
     setPosts(posts: Post[]): void {
+        if (this.role === 'admin') {
+            throw new Error('Admins cannot create posts');
+        }
         this.posts = posts;
     }
 
     setJoinedPosts(joinedPosts: Post[]): void {
+        if (this.role !== 'user') {
+            throw new Error('Only users can join posts');
+        }
         this.joinedPosts = joinedPosts;
     }
 
 
     validate(user: {
-        id?: number;
-        firstName: string;
-        lastName: string;
-        phoneNumber: PhoneNumber;
-        email: string;
-        gender: Gender;
-        password: string;
-        interests: Interest[];
-        role: Role;
-    }) {
+            id?: number;
+            firstName: string;
+            lastName: string;
+            phoneNumber: PhoneNumber;
+            email: string;
+            gender: Gender | null;
+            password: string;
+            interests: Interest[];
+            role: Role;
+        }) {
         if (!user.firstName?.trim()) {
             throw new Error('First name is required');
         }
@@ -184,12 +196,21 @@ export class User {
         if (!user.password?.trim()) {
             throw new Error('Password is required');
         }
-        if (!user.gender) {
+        if (user.role == 'user' && !user.gender) {
             throw new Error('Gender is required');
+        }
+        if (user.role !== 'user' && user.gender) {
+            throw new Error('Only users can have a gender');
+        }
+        if (user.role !== 'user' && user.interests.length > 0) {
+            throw new Error('Only users can have interests');
         }
     }
 
     addInterestToUser(interest: Interest) {
+        if (this.role !== 'user') {
+            throw new Error('Only users can have interests');
+        }
         if (!interest) throw new Error('Interest is required');
         if (this.interests.some(existingInterest => existingInterest.getId() === interest.getId())) {
             throw new Error('Dublication of interest is not allowed');
@@ -213,7 +234,7 @@ export class User {
             firstName: this.getFirstName(),
             lastName: this.getLastName(),
             email: this.getEmail(),
-            gender: this.getGender(),
+            gender: this.getGender() , 
             interests: this.getInterests(),
             
         };
@@ -227,7 +248,7 @@ export class User {
             lastName: this.lastName,
             phoneNumber: `${this.phoneNumber.countryCode} ${this.phoneNumber.number}`,
             email: this.email,
-            gender: this.gender,
+            gender: this.gender ?? '',
             role: this.role,
             password: this.password,
             interests: this.interests.map((interest) => interest.toPrisma()),
@@ -253,7 +274,7 @@ export class User {
             lastName,
             phoneNumber: { countryCode: phoneNumber.split(' ')[0], number: phoneNumber.split(' ')[1] } as PhoneNumber,
             email,
-            gender: gender as Gender,
+            gender: role === 'user' ? gender as Gender : null,
             role: role as Role,
             password,
             interests: interests.map(interest => Interest.from(interest)),

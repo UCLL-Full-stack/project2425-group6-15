@@ -42,10 +42,16 @@ const getByJoinedUserId = async (userId: number): Promise<Post[]> => {
 const update = async (post: Post): Promise<Post> => {
     try {
         let prismapost = post.toPrisma();
-        const { activity, creator, participants, ...prismapostWithoutActivity } = prismapost;
+        const { activity, creator, participants, id, ...prismapostWithoutActivity } = prismapost;
+
         const updatedPost = await database.post.update({
             where: { id: post.getId() },
-            data: prismapostWithoutActivity,
+            data: {
+                ...prismapostWithoutActivity,
+                participants: {
+                    set: participants.map((participant: any) => ({ id: participant.id })),
+                },
+            },
             include: { activity: true, creator: true, participants: true },
         });
         return Post.from(updatedPost);

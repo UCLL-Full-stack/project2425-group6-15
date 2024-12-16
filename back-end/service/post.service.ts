@@ -4,8 +4,12 @@ import { ServiceError } from './service.error';
 import postdb from '../repository/post.db';
 import { Post } from '../model/post';
 import activityDb from '../repository/activity.db';
+import { log } from 'console';
 
 const getAllPosts = async (currentUser : User): Promise<PostPrevieuw[]> => {
+    if (currentUser.getRole() == 'organization') {
+        throw new ServiceError('You dont have permission.', 403);
+    }
     const posts = await postdb.getAll();
     if (!posts) {
         throw new ServiceError('Posts not found', 404);
@@ -44,7 +48,7 @@ const getPostById = async (id: number, currentUser : User): Promise<PostSummary>
     return post.toSummary();
 };
 const createPost = async (post: PostInput, currentUser : User): Promise<PostSummary> => {
-    if (currentUser.getRole() != 'user') {
+    if (currentUser.getRole() != 'user' || currentUser.getRole() != 'organization') {
         throw new ServiceError('Only users can create posts', 403);
     }
     let creator = currentUser;
@@ -64,9 +68,9 @@ const createPost = async (post: PostInput, currentUser : User): Promise<PostSumm
     return postSummary;
 };
 
-const joinPost = async (id: number, currentUser : User): Promise<PostSummary> => {
+const joinPost = async (id: number, currentUser: User): Promise<PostSummary> => {
     if (currentUser.getRole() != 'user') {
-        throw new ServiceError('Only users and guests can join posts', 403);
+        throw new ServiceError('Only users can join posts', 403);
     }
 
     const post = await postdb.getById(id);
@@ -84,9 +88,10 @@ const joinPost = async (id: number, currentUser : User): Promise<PostSummary> =>
     }
 
     post.addParticipant(currentUser);
+    log(post);
     const updatedPost = await postdb.update(post);
+
     return updatedPost.toSummary();
-    
 };
 
 export default {

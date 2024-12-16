@@ -55,8 +55,7 @@ export type PostSummary = {
     activity: Activity,
     creator: UserSummary,
     participants: UserSummary[],
-    peopleNeeded: number,
-    preferredGender: Gender | 'both';
+    peopleNeeded: number
 };
 export type Post = {
     id?: number,
@@ -69,8 +68,7 @@ export type Post = {
     activity: Activity,
     creator: User,
     participants: User[],
-    peopleNeeded: number,
-    preferredGender: Gender | 'both',
+    peopleNeeded: number
 };
 
 
@@ -98,7 +96,6 @@ export type PostPrevieuw = {
     creator: UserSummary,
     peopleNeeded: number,
     peopleJoined : number,
-    hasJoined : boolean,
-    preferredGender: Gender | 'any';
+    hasJoined : boolean
 }
 
