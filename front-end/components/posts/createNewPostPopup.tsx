@@ -74,7 +74,6 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
         setAddress(suggestion);
         setSuggestions([]);
 
-        // Fetch coordinates from address
         fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${suggestion}`)
             .then(response => response.json())
             .then(data => {
