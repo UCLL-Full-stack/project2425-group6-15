@@ -95,6 +95,7 @@ const postOverview: React.FC = () => {
   };
 
   const closePopup = () => {
+    loadPosts();
     router.push("", undefined, { shallow: true });
     setSelectedPostId(null);
   };
@@ -275,7 +276,7 @@ const postOverview: React.FC = () => {
                 >
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-slate-700">{post.title}</h3>
-                    <p className="text-sm text-slate-500">({post.peopleJoined}/{post.peopleNeeded})</p>
+                    <p className={`text-sm ${post.hasJoined ? "text-green-400" : "text-slate-500"}`}>({post.peopleJoined}/{post.peopleNeeded})</p>
                   </div>
                   <div>
                     <p className="text-sm text-slate-500">{post.description}</p>
