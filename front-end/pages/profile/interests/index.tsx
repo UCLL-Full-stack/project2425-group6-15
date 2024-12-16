@@ -8,7 +8,7 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticProps } from "next";
 
-const Profile: React.FC = () => {
+const Interests: React.FC = () => {
     const { t } = useTranslation();
     return (
         <>
@@ -31,4 +31,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     },
 });
 
-export default Profile;
+export default Interests;

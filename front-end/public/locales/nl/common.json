@@ -83,6 +83,7 @@
     "posts": {
         "title": "Jouw Evenementen",
         "create_post": "Maak Evenement",
+        "joined": "Evenementen waar je aan deelneemt",
         "search_placeholder": "Zoek op locatie, activiteit,...",
         "no_posts": "Geen evenementen gevonden.",
         "edit": "Bewerken",

@@ -8,12 +8,11 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticProps } from "next";
 
-const Profile: React.FC = () => {
+const Posts: React.FC = () => {
     return (
         <>
             <Header />
             <div className="flex flex-col items-center justify-center min-h-screen bg-white text-gray-800">
-                <h1 className="text-5xl font-bold text-gray-900">Your interests!</h1>
                 <UserPostOverview />
             </div>
         </>
@@ -26,4 +25,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     },
 });
 
-export default Profile;
+export default Posts;
