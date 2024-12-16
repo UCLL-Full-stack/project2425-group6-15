@@ -2,6 +2,7 @@ export type Gender = 'male' | 'female';
 export type PhoneNumber = { countryCode: string, number: string };
 export type JWTTOKEN = string;
 export type JWTGivenToken = String | Array<String> | undefined ;
+export type Role = 'user' | 'admin' | 'organization';
 
 export type UserLogin = {
     email: string;
@@ -39,6 +40,7 @@ export type User = {
     password: string,
     interests: Interest[],
     gender: Gender,
+    role: Role,
     posts: Post[],
     joinedPosts: Post[],
 }

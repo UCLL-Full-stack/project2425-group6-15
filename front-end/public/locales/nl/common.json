@@ -89,6 +89,8 @@
         "phone": "Telefoon",
         "password": "Wachtwoord",
         "change_password": "Wachtwoord wijzigen",
-        "interests": "Interesses"
+        "interests": "Interesses",
+        "save": "opslaan",
+        "cancel":"annuleren"
     }
 }

@@ -89,6 +89,8 @@
         "phone": "Phone",
         "password": "Password",
         "change_password": "Change password",
-        "interests": "Interests"
+        "interests": "Interests",
+        "save": "Save",
+        "cancel":"Cancel"
     }
 }
