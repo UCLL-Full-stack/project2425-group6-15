@@ -4,7 +4,6 @@ import Head from "next/head";
 import Link from "next/link";
 import Header from "@/components/header/header";
 import Headerplain from "@/components/header/headerplain";
-import PostOverview from "@/components/dashboard/postOverview";
 import postService from "@/services/postService";
 import { Post } from "@/types/index";
 import { LatLngExpression } from "leaflet";
@@ -17,6 +16,9 @@ import Image from "next/image";
 import friendsImg from "@/images/crl/friends.png";
 import communitiesImg from "@/images/crl/communities.png";
 import momentsImg from "@/images/crl/moments.png";
+import dynamic from "next/dynamic";
+
+const PostOverview = dynamic(() => import("@/components/dashboard/postOverview"), { ssr: false });
 
 const Home: React.FC = () => {
   const router = useRouter();

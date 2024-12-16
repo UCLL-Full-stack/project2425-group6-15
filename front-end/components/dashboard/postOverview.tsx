@@ -6,6 +6,8 @@ import userService from "@/services/userService";
 import interestService from "@/services/interestService";
 import dynamic from 'next/dynamic';
 import { LatLngExpression } from "leaflet";
+import L from 'leaflet';
+import { useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import Image from 'next/image';
 
@@ -30,9 +32,12 @@ const postOverview: React.FC = () => {
   const [showFilter, setShowFilter] = useState<boolean>(false);
 
   const [filterLocationType, setFilterLocationType] = useState<"current" | "pin">("current");
-  const [filterLocation, setFilterLocation] = useState<LatLngExpression | null>(null);
+  const [filterLocation, setFilterLocation] = useState<[number, number] | null>(null);
   const [filterRadius, setFilterRadius] = useState<number | null>(null);
-  const [filterDate, setFilterDate] = useState<Date | null>(null);
+  const [filterStartDate, setFilterStartDate] = useState<Date | null>(null);
+  const [filterEndDate, setFilterEndDate] = useState<Date | null>(null);
+  const [filterAddress, setFilterAddress] = useState<string>("");
+  const [filterSuggestions, setFilterSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -47,8 +52,9 @@ const postOverview: React.FC = () => {
     if (!response.ok) {
       throw new Error("Failed to load posts");
     }
-    const posts = await response.json();
-    posts.filter((post: PostPrevieuw) => post.peopleNeeded > post.peopleJoined);
+    let posts = await response.json();
+    posts = posts.filter((post: PostPrevieuw) => post.peopleNeeded > post.peopleJoined);
+
     setPosts(posts);
   }
 
@@ -79,6 +85,10 @@ const postOverview: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    loadPosts();
+  }, [filterLocation, filterRadius, filterStartDate, filterEndDate]);
+
   const handlePostClick = (postId: number) => {
     router.push(`?event=${postId}`, undefined, { shallow: true });
     setSelectedPostId(postId);
@@ -87,6 +97,51 @@ const postOverview: React.FC = () => {
   const closePopup = () => {
     router.push("", undefined, { shallow: true });
     setSelectedPostId(null);
+  };
+
+  const handleFilterAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFilterAddress(value);
+
+    if (value.length > 3) {
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${value}`)
+        .then(response => response.json())
+        .then(data => {
+          setFilterSuggestions(data.map((item: any) => item.display_name));
+        });
+    } else {
+      setFilterSuggestions([]);
+    }
+  };
+
+  const handleFilterSuggestionClick = (suggestion: string) => {
+    setFilterAddress(suggestion);
+    setFilterSuggestions([]);
+
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${suggestion}`)
+      .then(response => response.json())
+      .then(data => {
+        const location = data[0];
+        const newCoords = { latitude: parseFloat(location.lat), longitude: parseFloat(location.lon) };
+        setFilterLocation([newCoords.latitude, newCoords.longitude]);
+      });
+  };
+
+  const handleFilterStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterStartDate(new Date(e.target.value));
+  };
+
+  const handleFilterEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterEndDate(new Date(e.target.value));
+  };
+
+  const MapClickHandler: React.FC<{ setFilterLocation: (location: [number, number]) => void }> = ({ setFilterLocation }) => {
+    useMapEvents({
+      click(e) {
+        setFilterLocation([e.latlng.lat, e.latlng.lng]);
+      },
+    });
+    return null;
   };
 
   return (
@@ -109,26 +164,63 @@ const postOverview: React.FC = () => {
                   </PopupNoSSR>
                 </MarkerNoSSR>
               ))}
+              {filterLocation && (
+                <MarkerNoSSR position={filterLocation} icon={new L.Icon({
+                  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-red.png',
+                  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+                })}>
+                  <PopupNoSSR>
+                    <span>Pinned Location</span>
+                  </PopupNoSSR>
+                </MarkerNoSSR>
+              )}
             </MapContainerNoSSR>
           )}
         </div>
-        <div className="h-full box-border bg-white shadow-lg rounded-lg p-6 grid grid-rows-[auto_1fr]">
-          <div className="flex items-center justify-between relative">
+        <div className="h-full box-border bg-white shadow-lg rounded-lg p-6 grid grid-rows-[auto_1fr] relative">
+          <div className="flex items-center justify-between">
             <h2 className="text-3xl font-semibold text-slate-700">Posts</h2>
             <button onClick={() => setShowFilter(!showFilter)} title="Filteren"><Image src={filterimg.src} alt="Image description" width={30} height={30} /></button>
             {showFilter && (
-              <div className="absolute top-8 right-0 bg-white shadow-lg rounded-lg p-6">
-                <p className="text-base text-gray-600">location</p>
-                <div className="flex items-center">
-                  <button title="current location" className={`w-28 h-7 border border-gray-300 rounded-l-lg flex items-center justify-center ${filterLocationType === "current" ? "shadow-inner" : ""}`} onClick={() => setFilterLocationType("current")}>
-                    <Image src={CurrentlocImg} alt="Image description" width={20} height={20} />
-                  </button>
-                  <button title="pin location" className={`w-28 h-7 border border-gray-300 rounded-r-lg flex items-center justify-center ${filterLocationType === "pin" ? "shadow-inner" : ""}`} onClick={() => setFilterLocationType("pin")}>
-                    <Image src={PinlocImg} alt="Image description" width={20} height={20} />
-                  </button>
+              <div className="absolute top-16 right-0 bg-white shadow-lg rounded-lg p-6 flex flex-col gap-2">
+                <div>
+                  <p className="text-base text-gray-600">location</p>
+                  <div className="flex items-center">
+                    <button title="current location" className={`w-28 h-7 border border-gray-300 rounded-l-lg flex items-center justify-center ${filterLocationType === "current" ? "shadow-inner" : ""}`} onClick={() => setFilterLocationType("current")}>
+                      <Image src={CurrentlocImg} alt="Image description" width={20} height={20} />
+                    </button>
+                    <button title="pin location" className={`w-28 h-7 border border-gray-300 rounded-r-lg flex items-center justify-center ${filterLocationType === "pin" ? "shadow-inner" : ""}`} onClick={() => setFilterLocationType("pin")}>
+                      <Image src={PinlocImg} alt="Image description" width={20} height={20} />
+                    </button>
+                  </div>
                 </div>
+
+                {filterLocationType === "pin" && (
+                  <div>
+                    <input
+                      type="text"
+                      className="w-full h-7 border border-gray-300 rounded-lg py-1 px-2"
+                      title="Enter an address"
+                      value={filterAddress}
+                      onChange={handleFilterAddressChange}
+                    />
+                    {filterSuggestions.length > 0 && (
+                      <ul className="border border-gray-300 rounded-lg mt-1 max-h-40 overflow-y-auto">
+                        {filterSuggestions.map((suggestion, index) => (
+                          <li
+                            key={index}
+                            className="p-2 cursor-pointer hover:bg-gray-200"
+                            onClick={() => handleFilterSuggestionClick(suggestion)}
+                          >
+                            {suggestion}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
                 <p className="text-base text-gray-600">radius</p>
-                <select className="w-full h-7 border border-gray-300 rounded-lg py-1 px-2" title="Select a radius">
+                <select className="w-full h-7 border border-gray-300 rounded-lg py-1 px-2" title="Select a radius" onChange={(e) => setFilterRadius(Number(e.target.value))}>
                   <option value="5">5km</option>
                   <option value="7">7km</option>
                   <option value="8">8km</option>
@@ -136,14 +228,34 @@ const postOverview: React.FC = () => {
                   <option value="20">20km</option>
                   <option value="all">all</option>
                 </select>
-                <p className="text-base text-gray-600">date</p>
-                <input type="date" className="w-full h-7 border border-gray-300 rounded-lg py-1 px-2" title="Select a date" />
+                <p className="text-base text-gray-600">start date</p>
+                <input type="date" className="w-full h-7 border border-gray-300 rounded-lg py-1 px-2" title="Select a start date" onChange={handleFilterStartDateChange} />
+                <p className="text-base text-gray-600">end date</p>
+                <input type="date" className="w-full h-7 border border-gray-300 rounded-lg py-1 px-2" title="Select an end date" onChange={handleFilterEndDateChange} />
               </div>
             )}
           </div>
           <div className="border-t-2 border-slate-600 w-full h-0 min-h-full max-h-full flex flex-col overflow-y-auto">
             {posts.length === 0 && <p className="text-slate-500">No posts available</p>}
             {position ? posts
+              .filter(post => {
+                if (filterLocationType === "pin" && filterLocation) {
+                  const distance = Math.sqrt(
+                    Math.pow(Number(post.location.latitude) - filterLocation[0], 2) +
+                    Math.pow(Number(post.location.longitude) - filterLocation[1], 2)
+                  );
+                  return filterRadius === null || distance <= filterRadius;
+                }
+                return true;
+              })
+              .filter(post => {
+                if (filterStartDate && filterEndDate) {
+                  const postStartDate = new Date(post.startDate);
+                  const postEndDate = new Date(post.endDate);
+                  return postStartDate >= filterStartDate && postEndDate <= filterEndDate;
+                }
+                return true;
+              })
               .sort((a, b) => {
                 const distanceA = Math.sqrt(
                   Math.pow(Number(a.location.latitude) - position[0], 2) +
