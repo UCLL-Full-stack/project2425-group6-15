@@ -85,3 +85,18 @@ export type Interest = {
 };
 
 
+export type PostPrevieuw = {
+    id?: number,
+    title: string,
+    description: string,
+    startDate: Date,
+    endDate: Date,
+    location: Location,
+    activity: Activity,
+    creator: UserSummary,
+    peopleNeeded: number,
+    peopleJoined : number,
+    hasJoined : boolean,
+    preferredGender: Gender | 'any';
+}
+

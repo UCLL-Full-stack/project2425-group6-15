@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Router from "next/router";
 import jwt from 'jsonwebtoken';
+import dynamic from 'next/dynamic';
 import unselectedMoon from "@/images/icons/header/unselectMoon.svg";
 import selectedMoon from "@/images/icons/header/selectMoon.svg";
 import unselectedSun from "@/images/icons/header/unselectSun.svg";
@@ -13,10 +14,10 @@ import unselectedLogout from "@/images/icons/header/unselectLogout.svg";
 import selectedLogout from "@/images/icons/header/selectLogout.svg";
 import interestIcon from "@/images/icons/header/interests.svg"
 import postIcon from "@/images/icons/header/posts.svg"
-import CreateNewPostPopup from "../posts/createNewPostPopup";
 import Language from "../language/Language";
 import LanguageSide from "../language/Language_side";
 
+const CreateNewPostPopup = dynamic(() => import("../posts/createNewPostPopup"), { ssr: false });
 
 const Header: React.FC = () => {
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
@@ -36,7 +37,12 @@ const Header: React.FC = () => {
     }
   }, []);
 
-
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const L = require('leaflet');
+      // ...initialize Leaflet map or other Leaflet-related code...
+    }
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
