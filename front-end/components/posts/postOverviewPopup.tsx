@@ -40,9 +40,18 @@ const fetchNearestAddress = async (latitude: number, longitude: number) => {
   return data.display_name;
 };
 
-const joinpost = async ()=>{
-
-}
+const joinpost = async (postId: number) => {
+  try {
+    const response = await postService.joinPost(postId);
+    if (response.ok) {
+      alert("Successfully joined the post!");
+    } else {
+      console.error("Failed to join the post");
+    }
+  } catch (error) {
+    console.error("An error occurred while joining the post", error);
+  }
+};
 
 const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
   onClose,
@@ -150,18 +159,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
             <div className="w-full flex items-center justify-end">
               <button
                 className="flex items-center justify-center gap-2 bg-blue-500 text-white rounded-full px-4 py-2 transition-all duration-300 ease-in-out hover:bg-blue-600"
-                onClick={async () => {
-                  try {
-                    const response = await postService.joinPost(postId);
-                    if (response.ok) {
-                      alert("Successfully joined the post!");
-                    } else {
-                      console.error("Failed to join the post");
-                    }
-                  } catch (error) {
-                    console.error("An error occurred while joining the post", error);
-                  }
-                }}
+                onClick={() => joinpost(postId)}
               >
                 <Image
                   src={checkmarkImg}
