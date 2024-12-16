@@ -6,6 +6,10 @@ import { useEffect, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import Header from '@/components/header/header';
 
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetStaticProps } from "next";
+
 const MapContainerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
 const MarkerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
 const PopupNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
@@ -36,7 +40,7 @@ const PostPage = () => {
   }, [id]);
 
   useEffect(() => {
-    
+
     if (typeof window !== 'undefined') {
       const L = require('leaflet');
       delete L.Icon.Default.prototype._getIconUrl;
@@ -50,7 +54,7 @@ const PostPage = () => {
 
   return (
     <>
-    <Header />
+      <Header />
       {!post && <div>Loading...</div>}
       {post && (
         <div className='container grid grid-cols-[1fr_370px] gap-4 h-screen max-h-screen min-w-full text-gray-800 box-border pt-24 pb-5 px-3'>
@@ -76,4 +80,11 @@ const PostPage = () => {
     </>
   );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+  },
+});
+
 export default PostPage;

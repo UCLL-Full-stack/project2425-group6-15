@@ -3,25 +3,28 @@ import LoginUsersTable from "@/components/login/loginUsersTable";
 import Head from "next/head";
 import Link from "next/link";
 
-const Register: React.FC = () => {
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetStaticProps } from "next";
+
+
+
+const Login: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <>
-      <Head>
-        <title>Register - JoinMe</title>
-        <meta charSet="utf-8" />
-      </Head>
       <div className="flex flex-col items-center justify-center min-h-screen bg-white text-gray-800">
         <div className="mb-8">
         </div>
 
-        <h1 className="text-5xl font-bold text-gray-900">Inloggen</h1>
+        <h1 className="text-5xl font-bold text-gray-900">{t("login.title")}</h1>
 
         <UserLoginForm />
         <LoginUsersTable />
         <div className="mt-4">
           <Link href="/register">
             <span className="text-blue-500 hover:underline cursor-pointer">
-              Nog geen account? Maak hier een aan.
+              {t("login.form.signup")}
             </span>
           </Link>
         </div>
@@ -30,4 +33,10 @@ const Register: React.FC = () => {
   );
 };
 
-export default Register;
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+  },
+});
+
+export default Login;

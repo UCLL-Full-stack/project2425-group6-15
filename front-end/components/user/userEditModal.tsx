@@ -7,6 +7,7 @@ import unselectfemaleimage from "@/images/icons/profile/unselectfemale.svg";
 import selectfemaleimage from "@/images/icons/profile/selectfemale.svg";
 import selectmaleimage from "@/images/icons/profile/selectmale.svg";
 import Image from "next/image";
+import { useTranslation } from "next-i18next";
 
 interface UserProfileProps {
     user: User;
@@ -14,6 +15,7 @@ interface UserProfileProps {
 }
 
 const UserEditProfile: React.FC<UserProfileProps> = ({ user, onclose }) => {
+    const { t } = useTranslation();
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
     const [email, setEmail] = useState(user.email);
@@ -32,20 +34,20 @@ const UserEditProfile: React.FC<UserProfileProps> = ({ user, onclose }) => {
     return (
         <div className="bg-transparent p-4 flex flex-col w-full h-full">
             <div className="w-full border-b-2 border-gray-300">
-                <h1 className="text-2xl font-semibold">Account Details</h1>
-                <p className="text-base text-gray-300">manage your profile</p>
+                <h1 className="text-2xl font-semibold">{t("profile.edit_account_details")}</h1>
+                <p className="text-base text-gray-300">{t("profile.manage_profile")}</p>
             </div>
             <div className="w-full grid grid-cols-2 grid-rows-5 gap-x-2 gap-y-3 pt-2">
                 <div className="flex flex-col">
-                    <label htmlFor="firstName" className="text-base text-slate-600">First Name</label>
-                    <input id="firstName" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="Enter your first name" className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
+                    <label htmlFor="firstName" className="text-base text-slate-600">{t("signup.form.first_name")}</label>
+                    <input id="firstName" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder={t("signup.form.first_name")} className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
                 </div>
                 <div className="flex flex-col">
-                    <label htmlFor="lastName" className="text-base text-slate-600">Last Name</label>
-                    <input id="lastName" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Enter your last name" className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
+                    <label htmlFor="lastName" className="text-base text-slate-600">{t("signup.form.last_name")}</label>
+                    <input id="lastName" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder={t("signup.form.last_name")} className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
                 </div>
                 <div className="flex flex-col col-span-2">
-                    <label htmlFor="" className="text-base text-slate-600">Sex</label>
+                    <label htmlFor="" className="text-base text-slate-600">{t("signup.form.gender")}</label>
                     <div className="w-full grid grid-cols-2">
                         <button
                             className={`p-2 w-full border border-gray-300 rounded-l-lg focus:outline-none text-base flex ${gender === "male" ? "bg-[#7EC7DE]" : ""}`}
@@ -64,11 +66,11 @@ const UserEditProfile: React.FC<UserProfileProps> = ({ user, onclose }) => {
                     </div>
                 </div>
                 <div className="flex flex-col col-span-2">
-                    <label htmlFor="email" className="text-base text-slate-600">Email</label>
-                    <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
+                    <label htmlFor="email" className="text-base text-slate-600">{t("signup.form.email")}</label>
+                    <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("signup.form.email")} className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
                 </div>
                 <div className="flex flex-col col-span-2">
-                    <label htmlFor="phone" className="text-base text-slate-600">Phone Number</label>
+                    <label htmlFor="phone" className="text-base text-slate-600">{t("signup.form.phone")}</label>
                     <div className="flex">
                         <select
                             title="countryCode"
@@ -86,15 +88,15 @@ const UserEditProfile: React.FC<UserProfileProps> = ({ user, onclose }) => {
                             value={phone ?? ""}
                             onChange={(e) => setPhone(Number(e.target.value))}
                             className="w-full p-2 border border-gray-300 rounded-tr-lg rounded-br-lg focus:outline-none text-base"
-                            placeholder="Enter your phone number"
+                            placeholder={t("signup.form.phone")}
                         />
                     </div>
                 </div>
             </div>
 
             <div className="w-full flex items-center justify-end gap-3">
-            <button onClick={() => onclose()} className="px-2 py-0 border border-gray-500 rounded-lg text-gray-500 hover:bg-red-500 hover:bg-opacity-20 hover:border-red-500 hover:text-red-500 text-lg">cancel</button>
-            <button className="px-2 py-0 border border-blue-500 rounded-lg text-blue-500 hover:bg-blue-500 hover:text-white text-lg">Save</button>
+                <button onClick={() => onclose()} className="px-2 py-0 border border-gray-500 rounded-lg text-gray-500 hover:bg-red-500 hover:bg-opacity-20 hover:border-red-500 hover:text-red-500 text-lg">{t("profile.cancel")}</button>
+                <button className="px-2 py-0 border border-blue-500 rounded-lg text-blue-500 hover:bg-blue-500 hover:text-white text-lg">{t("profile.save")}</button>
             </div>
         </div>
     );

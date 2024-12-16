@@ -5,6 +5,14 @@
             "signup": "Registreren"
         }
     },
+    "header": {
+        "search_placeholder": "Zoek op locatie, activiteit,...",
+        "create_meetup": "Maak Meetup",
+        "profile": "Profiel",
+        "your_posts": "Jouw berichten",
+        "your_interests": "Jouw interesses",
+        "logout": "Uitloggen"
+    },
     "home":{
         "description": "JoinMe is een sociale app die je helpt de perfecte buddy te vinden voor elke gelegenheid! Of je nu een maatje nodig hebt om naar de film te gaan of een vriend om mee te mountainbiken, kies gewoon een activiteit, voer de datum en locatie in, en je bericht is klaar om ontdekt te worden. Mensen in de buurt met dezelfde beschikbaarheid en interesses kunnen zich bij je aansluiten, waardoor socializen moeiteloos en leuk wordt.",
         "buttons": {
@@ -25,5 +33,62 @@
                 "description": "Plaats updates en deel je ervaringen met vrienden."
             }
         }
+    },
+    "login": {
+        "title": "Inloggen",
+        "form": {
+            "email": "E-mail",
+            "password": "Wachtwoord",
+            "submit": "Inloggen",
+            "forgot": "Wachtwoord vergeten?",
+            "signup": "Heb je nog geen account? Registreer hier.",
+            "required": "is verplicht."
+        },
+        "errors": {
+            "invalid_credentials": "Ongeldige inloggegevens."
+        }
+    },
+    "signup": {
+        "title": "Registreren",
+        "form": {
+            "name": "Naam",
+            "email": "E-mail",
+            "password": "Wachtwoord",
+            "submit": "Registreren",
+            "login": "Heb je al een account? Log hier in.",
+            "required": "is verplicht.",
+            "confirm_password": "Bevestig Wachtwoord",
+            "first_name": "Voornaam",
+            "last_name": "Achternaam",
+            "phone": "Telefoonnummer",
+            "gender": "Geslacht",
+            "select_gender": "Selecteer Geslacht",
+            "male": "Man",
+            "female": "Vrouw",
+            "password_mismatch": "Wachtwoorden komen niet overeen."
+        },
+        "errors": {
+            "invalid_credentials": "Ongeldige registratiegegevens."
+        }
+    },
+    "interests": {
+        "title": "Wat zijn je interesses?",
+        "select_minimum": "Selecteer minimaal 5 interesses",
+        "new_interest_name": "Naam van de interesse",
+        "new_interest_description": "Beschrijving van de interesse",
+        "create_interest": "Maak Interesse",
+        "search_placeholder": "Zoek hier...",
+        "save": "Opslaan"
+    },
+    "profile": {
+        "title": "Jouw Profiel!",
+        "edit": "Bewerken",
+        "full_name": "Volledige naam",
+        "gender": "Geslacht",
+        "email": "E-mail",
+        "phone": "Telefoon",
+        "password": "Wachtwoord",
+        "change_password": "Wachtwoord wijzigen",
+        "interests": "Interesses"
     }
 }

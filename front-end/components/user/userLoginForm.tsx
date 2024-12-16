@@ -3,29 +3,29 @@ import { Gender } from "@/types";
 import React, { useState } from "react";
 import { useRouter } from 'next/router';
 import authService from "@/services/authService";
+import { useTranslation } from "next-i18next";
 
 const UserLoginForm: React.FC = () => {
+  const { t } = useTranslation();
   const router = useRouter();
-
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-  
+
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  
-  const [serverError, setServerError] = useState("");
 
+  const [serverError, setServerError] = useState("");
 
   const validate = (): boolean => {
     setEmailError("");
     setPasswordError("");
     if (email.trim() === "") {
-      setEmailError("Email is required.");
+      setEmailError(t("login.form.email") + " " + t("login.form.required"));
       return false;
     }
     if (password === "") {
-      setPasswordError("Password is required.");
+      setPasswordError(t("login.form.password") + " " + t("login.form.required"));
       return false;
     }
     return true;
@@ -34,7 +34,6 @@ const UserLoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
-
 
     const userLogin = {
       email: email,
@@ -45,16 +44,11 @@ const UserLoginForm: React.FC = () => {
     const data = await response.json();
     if (response.status == 200) {
       sessionStorage.setItem("token", data.token)
-      router.push('/');      
+      router.push('/');
     }
     else {
-      setServerError(data.message);
+      setServerError(t("login.errors.invalid_credentials"));
     }
-    
-
-
-
-
 
     setEmail("");
     setPassword("");
@@ -64,9 +58,9 @@ const UserLoginForm: React.FC = () => {
     <>
       <form onSubmit={handleSubmit} className="mt-8 w-full max-w-md space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <label className="block text-sm font-medium text-gray-700">{t("login.form.email")}</label>
           <input
-            title="Email"
+            title={t("login.form.email")}
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -75,9 +69,9 @@ const UserLoginForm: React.FC = () => {
           {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Password</label>
+          <label className="block text-sm font-medium text-gray-700">{t("login.form.password")}</label>
           <input
-            title="Password"
+            title={t("login.form.password")}
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -89,11 +83,11 @@ const UserLoginForm: React.FC = () => {
           type="submit"
           className="w-full px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition duration-300 mt-4"
         >
-          Login
+          {t("login.form.submit")}
         </button>
         {serverError && (
-            <p className="text-red-500 text-sm">{serverError}</p>
-          )}
+          <p className="text-red-500 text-sm">{serverError}</p>
+        )}
       </form>
     </>
   );

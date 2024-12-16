@@ -1,17 +1,25 @@
 {
-    "startheader":{
-        "buttons":{
+    "startheader": {
+        "buttons": {
             "login": "Login",
             "signup": "Register"
         }
     },
-    "home":{
+    "header": {
+        "search_placeholder": "Search by location, activity,...",
+        "create_meetup": "Create Meetup",
+        "profile": "Profile",
+        "your_posts": "Your posts",
+        "your_interests": "Your interests",
+        "logout": "Log Out"
+    },
+    "home": {
         "description": "JoinMe is a social app to help you find the perfect buddy for any occasion! Whether you need a buddy to go to the movies or a friend to go mountain biking with, simply choose an activity, enter the date and location, and your post is ready to be discovered. People nearby with the same availability and interests can join you, making socializing effortless and fun.",
         "buttons": {
             "action": "Get Started",
-            "info" : "Learn More"
+            "info": "Learn More"
         },
-        "cards":{
+        "cards": {
             "friends": {
                 "title": "Discover New Friends",
                 "description": "Connect with people who share your interests and hobbies."
@@ -25,5 +33,62 @@
                 "description": "Post updates and share your experiences with friends."
             }
         }
+    },
+    "login": {
+        "title": "Login",
+        "form": {
+            "email": "Email",
+            "password": "Password",
+            "submit": "Login",
+            "forgot": "Forgot Password?",
+            "signup": "Don't have an account? Register here.",
+            "required": "is required."
+        },
+        "errors": {
+            "invalid_credentials": "Invalid login credentials."
+        }
+    },
+    "signup": {
+        "title": "Register",
+        "form": {
+            "name": "Name",
+            "email": "Email",
+            "password": "Password",
+            "submit": "Register",
+            "login": "Already have an account? Login here.",
+            "required": "is required.",
+            "confirm_password": "Confirm Password",
+            "first_name": "First Name",
+            "last_name": "Last Name",
+            "phone": "Phone Number",
+            "gender": "Gender",
+            "select_gender": "Select Gender",
+            "male": "Male",
+            "female": "Female",
+            "password_mismatch": "Passwords do not match."
+        },
+        "errors": {
+            "invalid_credentials": "Invalid registration details."
+        }
+    },
+    "interests": {
+        "title": "What are you interested in?",
+        "select_minimum": "Please select at least 5 interests",
+        "new_interest_name": "Interest Name",
+        "new_interest_description": "Interest Description",
+        "create_interest": "Create Interest",
+        "search_placeholder": "Search here...",
+        "save": "Save"
+    },
+    "profile": {
+        "title": "Your Profile!",
+        "edit": "Edit",
+        "full_name": "Full name",
+        "gender": "Gender",
+        "email": "Email",
+        "phone": "Phone",
+        "password": "Password",
+        "change_password": "Change password",
+        "interests": "Interests"
     }
 }
