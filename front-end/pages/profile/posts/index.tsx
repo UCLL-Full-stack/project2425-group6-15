@@ -11,8 +11,10 @@ const Posts: React.FC = () => {
     return (
         <>
             <Header />
-            <div className="flex flex-col items-center justify-center min-h-screen bg-white text-gray-800">
-                <AccountPostOverview />
+            <div className="bg-slate-50 flex w-full h-screen pt-24">
+                <div >
+                    <h1 className='text-2xl '>Your events</h1>
+                </div>
             </div>
         </>
     );
