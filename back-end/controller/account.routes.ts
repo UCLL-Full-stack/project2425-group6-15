@@ -2,7 +2,7 @@
  * @swagger
  *   components:
  *    schemas:
- *      User:
+ *      Account:
  *          type: object
  *          properties:
  *            id:
@@ -21,22 +21,19 @@
  *                  type: string
  *            email:
  *              type: string
- *            gender:
- *              type: string
- *              enum: [male, female]
  *            interests:
  *              type: array
  *              items:
  *                $ref: '#/components/schemas/Interest'
- *            posts:
+ *            events:
  *              type: array
  *              items:
- *                $ref: '#/components/schemas/Post'
- *            joinedPosts:
+ *                $ref: '#/components/schemas/Event'
+ *            joinedEvents:
  *              type: array
  *              items:
- *                $ref: '#/components/schemas/Post'
- *      UserInput:
+ *                $ref: '#/components/schemas/Event'
+ *      AccountInput:
  *          type: object
  *          properties:
  *            firstName:
@@ -52,10 +49,7 @@
  *                  type: string
  *            email:
  *              type: string
- *            gender:
- *              type: string
- *              enum: [male, female]
- *      UserSummary:
+ *      AccountSummary:
  *          type: object
  *          properties:
  *            firstName:
@@ -71,10 +65,6 @@
  *              type: array
  *              items:
  *                $ref: '#/components/schemas/Interest'
- *            gender:
- *              type: string
- *              enum: [male, female]
- *              example: "female"
  *      Interest:
  *          type: object
  *          properties:
@@ -85,7 +75,7 @@
  *              type: string
  *            description:
  *              type: string
- *      Post:
+ *      Event:
  *          type: object
  *          properties:
  *            id:
@@ -108,11 +98,11 @@
  *            activity:
  *              $ref: '#/components/schemas/Activity'
  *            creator:
- *              $ref: '#/components/schemas/UserSummary'
+ *              $ref: '#/components/schemas/AccountSummary'
  *            participants:
  *              type: array
  *              items:
- *                $ref: '#/components/schemas/UserSummary'
+ *                $ref: '#/components/schemas/AccountSummary'
  *            peopleNeeded:
  *              type: integer
  *            preferredGender:
@@ -139,36 +129,36 @@
 
 
 import express, { NextFunction, Request, Response } from 'express';
-import userService from '../service/user.service'; 
+import accountService from '../service/account.service'; 
 import authService from '../authentication/auth.service';
 
-const userRouter = express.Router();
+const accountRouter = express.Router();
 
 /**
  * @swagger
- * /user:
+ * /account:
  *   get:
- *     summary: Retrieve a list of users
- *     tags: [User]
+ *     summary: Retrieve a list of accounts
+ *     tags: [Account]
  *     security:                    
  *       - ApiKeyAuth: []           
  *       - BearerAuth: []
  *     responses:
  *       200:
- *         description: A list of users
+ *         description: A list of accounts
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/User'
+ *                 $ref: '#/components/schemas/Account'
  *       500:
  *         description: Internal server error
  */
-userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+accountRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const users = await userService.getAllUsers();  
-        res.status(200).json(users);  
+        const accounts = await accountService.getAllAccounts();  
+        res.status(200).json(accounts);  
     } catch (error) {
         next(error);  
     }
@@ -176,34 +166,33 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 /**
  * @swagger
- * /user/me:
+ * /account/me:
  *   get:
- *     summary: Retrieve user information of logged in user
- *     description: Gives sertain user information by email based on the token
- *     tags: [User]
+ *     summary: Retrieve account information of logged in account
+ *     description: Gives sertain account information by email based on the token
+ *     tags: [Account]
  *     security:                    
  *       - ApiKeyAuth: []           
  *       - BearerAuth: []
  *     responses:
  *       200:
- *         description: A user object containing user details.
+ *         description: A account object containing account details.
  *         content:
  *           application/json:
  *             schema:
  *               oneOf:
- *                 - $ref: '#/components/schemas/User' 
+ *                 - $ref: '#/components/schemas/Account' 
  *          
  *       404:
- *         description: User not found.
+ *         description: Account not found.
  * 
  *       500:
  *         description: Internal server error
  */
-userRouter.get('/me', async (req: Request, res: Response, next: NextFunction) => {
+accountRouter.get('/me', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const currentuser = await authService.authenticateToken(req.headers);
-        const user = await userService.findUserByEmail( currentuser.getEmail(), currentuser);
-        res.status(200).json(user)
+        const account = await accountService.getCurrentAccount(await authService.authenticateToken(req.headers));
+        res.status(200).json(account)
     } catch (error) {
         next(error);
     }
@@ -211,10 +200,10 @@ userRouter.get('/me', async (req: Request, res: Response, next: NextFunction) =>
 
 /**
  * @swagger
- * /user/interests:
+ * /account/interests:
  *   post:
- *     summary: Add an interest to a user
- *     tags: [User]
+ *     summary: Add an interest to a account
+ *     tags: [Account]
  *     security:
  *       - ApiKeyAuth: []
  *       - BearerAuth: []
@@ -229,24 +218,24 @@ userRouter.get('/me', async (req: Request, res: Response, next: NextFunction) =>
  *               example: "Swimming"
  *     responses:
  *       200:
- *         description: Interest added to user.
+ *         description: Interest added to account.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/Account'
  *       404:
- *         description: User not found.
+ *         description: Account not found.
  *       500:
  *         description: Some server error
  */
-userRouter.post('/interests', async (req: Request, res: Response, next: NextFunction) => {
+accountRouter.post('/interests', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const interestData = req.body;
-        const updatedUser = await userService.changeInterestOfUser(await authService.authenticateToken(req.headers), interestData);
-        res.status(200).json(updatedUser);
+        const updatedAccount = await accountService.changeInterestOfAccount(await authService.authenticateToken(req.headers), interestData);
+        res.status(200).json(updatedAccount);
     } catch (error) {
         next(error);
     }
 });
 
-export { userRouter };
+export { accountRouter };

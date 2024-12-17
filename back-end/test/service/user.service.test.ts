@@ -1,14 +1,14 @@
 import { Interest } from '../../model/interest';
-import { User } from '../../model/user';
-import userDB from '../../repository/user.db';
-import userService from '../../service/user.service';
-import { UserInput } from '../../types';
+import { Account } from '../../model/account';
+import accountDB from '../../repository/account.db';
+import accountService from '../../service/account.service';
+import { AccountInput } from '../../types';
 import bcrypt from 'bcrypt';
 import { anyString } from 'jest-mock-extended';
 
-jest.mock('../../repository/user.db');
+jest.mock('../../repository/account.db');
 
-const validUserInput: UserInput = {
+const validAccountInput: AccountInput = {
     firstName: 'Jane',
     lastName: 'Toe',
     phoneNumber: { countryCode: '32', number: '1244567890' },
@@ -17,7 +17,7 @@ const validUserInput: UserInput = {
     gender: 'female',
 };
 
-const mockUser = new User({
+const mockAccount = new Account({
     firstName: 'John',
     lastName: 'Doe',
     phoneNumber: { countryCode: '32', number: '1234567890' },
@@ -29,18 +29,18 @@ const mockUser = new User({
 
 beforeEach(() => {
     jest.clearAllMocks();
-    (userDB.createUser as jest.Mock).mockResolvedValue(mockUser);
+    (accountDB.createAccount as jest.Mock).mockResolvedValue(mockAccount);
 });
 
 afterEach(() => {
     jest.clearAllMocks();
 });   
 
-test('given a valid user, when user is created, then user is created with those values', async () => {
-    const createdUser = await userService.createUser(validUserInput);
+test('given a valid account, when account is created, then account is created with those values', async () => {
+    const createdAccount = await accountService.createAccount(validAccountInput);
     
-    expect(userDB.createUser).toHaveBeenCalledTimes(1);
-    expect(userDB.createUser).toHaveBeenCalledWith(expect.objectContaining({
+    expect(accountDB.createAccount).toHaveBeenCalledTimes(1);
+    expect(accountDB.createAccount).toHaveBeenCalledWith(expect.objectContaining({
         firstName: 'Jane',
         lastName: 'Toe',
         phoneNumber: { countryCode: '32', number: '1244567890' },
@@ -49,74 +49,74 @@ test('given a valid user, when user is created, then user is created with those 
         gender: 'female',
         interests: []
     }));
-    expect(createdUser).toBeInstanceOf(User);
-    expect(createdUser.getFirstName()).toEqual('John');
-    expect(createdUser.getLastName()).toEqual('Doe');
-    expect(createdUser.getEmail()).toEqual('john.doe@example.com');
+    expect(createdAccount).toBeInstanceOf(Account);
+    expect(createdAccount.getFirstName()).toEqual('John');
+    expect(createdAccount.getLastName()).toEqual('Doe');
+    expect(createdAccount.getEmail()).toEqual('john.doe@example.com');
 });
 
-test('given a user without first name, when user is created, then an error is thrown', async () => {
-    const invalidUserInput = { ...validUserInput, firstName: '' };
+test('given a account without first name, when account is created, then an error is thrown', async () => {
+    const invalidAccountInput = { ...validAccountInput, firstName: '' };
 
-    await expect(userService.createUser(invalidUserInput)).rejects.toThrow('First name is required');
-    expect(userDB.createUser).not.toHaveBeenCalled();
+    await expect(accountService.createAccount(invalidAccountInput)).rejects.toThrow('First name is required');
+    expect(accountDB.createAccount).not.toHaveBeenCalled();
 });
 
-test('given a user without last name, when user is created, then an error is thrown', async () => {
-    const invalidUserInput = { ...validUserInput, lastName: '' };
+test('given a account without last name, when account is created, then an error is thrown', async () => {
+    const invalidAccountInput = { ...validAccountInput, lastName: '' };
 
-    await expect(userService.createUser(invalidUserInput)).rejects.toThrow('Last name is required');
-    expect(userDB.createUser).not.toHaveBeenCalled();
+    await expect(accountService.createAccount(invalidAccountInput)).rejects.toThrow('Last name is required');
+    expect(accountDB.createAccount).not.toHaveBeenCalled();
 });
 
-test('given a user without phone number, when user is created, then an error is thrown', async () => {
-    const invalidUserInput = { ...validUserInput, phoneNumber: { countryCode: '', number: '' } };
+test('given a account without phone number, when account is created, then an error is thrown', async () => {
+    const invalidAccountInput = { ...validAccountInput, phoneNumber: { countryCode: '', number: '' } };
 
-    await expect(userService.createUser(invalidUserInput)).rejects.toThrow('Phone number is required');
-    expect(userDB.createUser).not.toHaveBeenCalled();
+    await expect(accountService.createAccount(invalidAccountInput)).rejects.toThrow('Phone number is required');
+    expect(accountDB.createAccount).not.toHaveBeenCalled();
 });
 
-test('given a user without email, when user is created, then an error is thrown', async () => {
-    const invalidUserInput = { ...validUserInput, email: '' };
+test('given a account without email, when account is created, then an error is thrown', async () => {
+    const invalidAccountInput = { ...validAccountInput, email: '' };
 
-    await expect(userService.createUser(invalidUserInput)).rejects.toThrow('Email is required');
-    expect(userDB.createUser).not.toHaveBeenCalled();
+    await expect(accountService.createAccount(invalidAccountInput)).rejects.toThrow('Email is required');
+    expect(accountDB.createAccount).not.toHaveBeenCalled();
 });
 
-test('given a user without password, when user is created, then an error is thrown', async () => {
-    const invalidUserInput = { ...validUserInput, password: '' };
+test('given a account without password, when account is created, then an error is thrown', async () => {
+    const invalidAccountInput = { ...validAccountInput, password: '' };
 
-    await expect(userService.createUser(invalidUserInput)).rejects.toThrow('Password is required');
-    expect(userDB.createUser).not.toHaveBeenCalled();
+    await expect(accountService.createAccount(invalidAccountInput)).rejects.toThrow('Password is required');
+    expect(accountDB.createAccount).not.toHaveBeenCalled();
 });
 
-test('given a user ID and interest, when interest is added, then user has that interest', async () => {
-    const userId = 1;
+test('given a account ID and interest, when interest is added, then account has that interest', async () => {
+    const accountId = 1;
     const interest = { name: 'Cycling', description: 'Outdoor activity' }; 
-    const UserWithInterest = {
-        ...mockUser,
-        interests: [...mockUser.getInterests(), interest]
+    const AccountWithInterest = {
+        ...mockAccount,
+        interests: [...mockAccount.getInterests(), interest]
     };
-    mockUser.addInterestToUser = jest.fn(interest => {
-        mockUser.getInterests().push(interest);
+    mockAccount.addInterestToAccount = jest.fn(interest => {
+        mockAccount.getInterests().push(interest);
     });
-    (userDB.getUserById as jest.Mock).mockResolvedValue(mockUser);
-    const updatedUser = await userService.addInterestToUser(userId, interest);
+    (accountDB.getAccountById as jest.Mock).mockResolvedValue(mockAccount);
+    const updatedAccount = await accountService.addInterestToAccount(accountId, interest);
     
-    expect(userDB.getUserById).toHaveBeenCalledTimes(1);
-    expect(userDB.getUserById).toHaveBeenCalledWith(userId);
-    expect(mockUser.addInterestToUser).toHaveBeenCalledTimes(1);
-    expect(mockUser.addInterestToUser).toHaveBeenCalledWith(interest);
-    expect(updatedUser.getInterests()).toContainEqual(interest);
+    expect(accountDB.getAccountById).toHaveBeenCalledTimes(1);
+    expect(accountDB.getAccountById).toHaveBeenCalledWith(accountId);
+    expect(mockAccount.addInterestToAccount).toHaveBeenCalledTimes(1);
+    expect(mockAccount.addInterestToAccount).toHaveBeenCalledWith(interest);
+    expect(updatedAccount.getInterests()).toContainEqual(interest);
 }); 
 
-test('given an invalid user ID, when interest is added, then an error is thrown', async () => {
-    const userId = 999;
+test('given an invalid account ID, when interest is added, then an error is thrown', async () => {
+    const accountId = 999;
     const interest = { name: 'Cycling', description: 'Outdoor activity' };
-    (userDB.getUserById as jest.Mock).mockResolvedValue(null);
+    (accountDB.getAccountById as jest.Mock).mockResolvedValue(null);
     
-    await expect(userService.addInterestToUser(userId, interest)).rejects.toThrow('User not found');
-    expect(userDB.getUserById).toHaveBeenCalledTimes(1);
-    expect(userDB.getUserById).toHaveBeenCalledWith(userId);
-    expect(mockUser.addInterestToUser).not.toHaveBeenCalled();
+    await expect(accountService.addInterestToAccount(accountId, interest)).rejects.toThrow('Account not found');
+    expect(accountDB.getAccountById).toHaveBeenCalledTimes(1);
+    expect(accountDB.getAccountById).toHaveBeenCalledWith(accountId);
+    expect(mockAccount.addInterestToAccount).not.toHaveBeenCalled();
 });

@@ -4,10 +4,10 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { userRouter } from './controller/user.routes';
+import { accountRouter } from './controller/account.routes';
 import { authRouter } from './authentication/auth.routes';
 import { activityRouter } from './controller/activity.routes';
-import { postRouter } from './controller/post.routes';
+import { eventRouter } from './controller/event.routes';
 import { interestRouter } from './controller/interest.routes';
 
 const app = express();
@@ -104,9 +104,9 @@ app.get('/status', (_req, res) => {
 });
 
 app.use('/auth', authRouter);
-app.use('/user', userRouter);
+app.use('/account', accountRouter);
 app.use('/activity', activityRouter);
-app.use('/post', postRouter);
+app.use('/event', eventRouter);
 app.use('/interest', interestRouter);
 
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

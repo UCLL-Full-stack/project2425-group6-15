@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Post" (
+CREATE TABLE "Event" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE "Post" (
     "peopleNeeded" INTEGER NOT NULL,
     "preferredGender" TEXT NOT NULL,
 
-    CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Event_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -24,43 +24,43 @@ CREATE TABLE "Activity" (
 );
 
 -- CreateTable
-CREATE TABLE "_UserJoinedPosts" (
+CREATE TABLE "_AccountJoinedEvents" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
 -- CreateTable
-CREATE TABLE "_UserAcceptedPosts" (
+CREATE TABLE "_AccountAcceptedEvents" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_UserJoinedPosts_AB_unique" ON "_UserJoinedPosts"("A", "B");
+CREATE UNIQUE INDEX "_AccountJoinedEvents_AB_unique" ON "_AccountJoinedEvents"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_UserJoinedPosts_B_index" ON "_UserJoinedPosts"("B");
+CREATE INDEX "_AccountJoinedEvents_B_index" ON "_AccountJoinedEvents"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_UserAcceptedPosts_AB_unique" ON "_UserAcceptedPosts"("A", "B");
+CREATE UNIQUE INDEX "_AccountAcceptedEvents_AB_unique" ON "_AccountAcceptedEvents"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_UserAcceptedPosts_B_index" ON "_UserAcceptedPosts"("B");
+CREATE INDEX "_AccountAcceptedEvents_B_index" ON "_AccountAcceptedEvents"("B");
 
 -- AddForeignKey
-ALTER TABLE "Post" ADD CONSTRAINT "Post_activityId_fkey" FOREIGN KEY ("activityId") REFERENCES "Activity"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Event" ADD CONSTRAINT "Event_activityId_fkey" FOREIGN KEY ("activityId") REFERENCES "Activity"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Post" ADD CONSTRAINT "Post_creatorId_fkey" FOREIGN KEY ("creatorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Event" ADD CONSTRAINT "Event_creatorId_fkey" FOREIGN KEY ("creatorId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_UserJoinedPosts" ADD CONSTRAINT "_UserJoinedPosts_A_fkey" FOREIGN KEY ("A") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_AccountJoinedEvents" ADD CONSTRAINT "_AccountJoinedEvents_A_fkey" FOREIGN KEY ("A") REFERENCES "Event"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_UserJoinedPosts" ADD CONSTRAINT "_UserJoinedPosts_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_AccountJoinedEvents" ADD CONSTRAINT "_AccountJoinedEvents_B_fkey" FOREIGN KEY ("B") REFERENCES "Account"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_UserAcceptedPosts" ADD CONSTRAINT "_UserAcceptedPosts_A_fkey" FOREIGN KEY ("A") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_AccountAcceptedEvents" ADD CONSTRAINT "_AccountAcceptedEvents_A_fkey" FOREIGN KEY ("A") REFERENCES "Event"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_UserAcceptedPosts" ADD CONSTRAINT "_UserAcceptedPosts_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_AccountAcceptedEvents" ADD CONSTRAINT "_AccountAcceptedEvents_B_fkey" FOREIGN KEY ("B") REFERENCES "Account"("id") ON DELETE CASCADE ON UPDATE CASCADE;

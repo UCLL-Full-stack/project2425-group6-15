@@ -1,8 +1,7 @@
 import { Activity } from "../model/activity";
 import { Interest } from "../model/interest";
-import { User } from "../model/user";
+import { Account } from "../model/account";
 
-export type Gender = 'male' | 'female';
 export type PhoneNumber = { countryCode: string, number: string };
 export type Role = 'admin' | 'user' | 'organization';
 
@@ -12,45 +11,65 @@ export type Location = {
 };
 
 /**
- * Represents the input data required for registering a user.
+ * Represents the input data required for editing a account.
  * ONLY USE FOR REGISTERING A USER.
  */
-export type UserInput = {
-    
+export type AccountInput = {
+    username: string;
     firstName: string;
     lastName: string;
     phoneNumber: PhoneNumber;
     email: string;
-    password: string;
-    gender: Gender;
 };
 
 /**
- * Represents the input data required for registering a post.
+ * Represents the input data required for registering/editing a event.
  * ONLY USE FOR CREATING A POST.
  */
-export type PostInput = {
+export type EventInput = {
     title: string;
     description: string;
     startDate: Date;
     endDate: Date;
     time: string;
     location: Location;
-    activity: Activity;
-    creator?: User;
+    activityName: string;
+    creator?: Account;
     peopleNeeded: number;
 };
 
-export type UserSummary = {
+
+export type EventPreview = {
+    id?: number,
+    title: string,
+    description: string,
+    startDate: Date,
+    endDate: Date,
+    location: Location,
+    activity: Activity,
+    creator: AccountPreview,
+    peopleNeeded: number,
+    peopleJoined : number,
+    hasJoined : boolean,
+};
+
+export type AccountPreview = {
+    username : string,
+    email : string,
+    fullname: string,
+    type: Role
+}
+
+
+export type AccountSummary = {
+    type: Role;
     firstName: string;
     lastName: string;
     email: string;
     interests: Interest[];
-    gender: Gender | null;
-    role?:Role;
 };
 
-export type PostSummary = {
+export type EventSummary = {
     id?: number,
     title: string,
     description: string,
@@ -59,24 +78,35 @@ export type PostSummary = {
     time: string,
     location: Location,
     activity: Activity,
-    creator: UserSummary,
-    participants: UserSummary[],
+    creator: AccountSummary,
+    participants: AccountSummary[],
     peopleNeeded: number,
 };
 
-export type PostPrevieuw = {
-    id?: number,
+
+export type PublicAccount = {
+    type: Role;
+    id: number;
+    firstName: string;
+    lastName: string;
+    phoneNumber: PhoneNumber;
+    email: string;
+    interests: Interest[];
+    events: PublicEvent[];
+    joinedEvents: PublicEvent[];
+}
+
+export type PublicEvent = {
+    id: number,
     title: string,
     description: string,
     startDate: Date,
     endDate: Date,
     location: Location,
     activity: Activity,
-    creator: UserSummary,
+    creator: AccountSummary,
+    participants: AccountPreview[],
     peopleNeeded: number,
-    peopleJoined : number,
+
     hasJoined : boolean,
-};
-
-
-
+}

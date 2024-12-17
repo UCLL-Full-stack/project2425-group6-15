@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE "Account" (
     "id" SERIAL NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "gender" TEXT NOT NULL,
 
-    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Account_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -21,22 +21,22 @@ CREATE TABLE "Interest" (
 );
 
 -- CreateTable
-CREATE TABLE "_InterestToUser" (
+CREATE TABLE "_InterestToAccount" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "Account_email_key" ON "Account"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_InterestToUser_AB_unique" ON "_InterestToUser"("A", "B");
+CREATE UNIQUE INDEX "_InterestToAccount_AB_unique" ON "_InterestToAccount"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_InterestToUser_B_index" ON "_InterestToUser"("B");
+CREATE INDEX "_InterestToAccount_B_index" ON "_InterestToAccount"("B");
 
 -- AddForeignKey
-ALTER TABLE "_InterestToUser" ADD CONSTRAINT "_InterestToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Interest"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_InterestToAccount" ADD CONSTRAINT "_InterestToAccount_A_fkey" FOREIGN KEY ("A") REFERENCES "Interest"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_InterestToUser" ADD CONSTRAINT "_InterestToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_InterestToAccount" ADD CONSTRAINT "_InterestToAccount_B_fkey" FOREIGN KEY ("B") REFERENCES "Account"("id") ON DELETE CASCADE ON UPDATE CASCADE;

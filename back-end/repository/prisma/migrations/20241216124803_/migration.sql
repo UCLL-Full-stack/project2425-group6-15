@@ -1,8 +1,8 @@
 /*
   Warnings:
 
-  - You are about to drop the column `preferredGender` on the `Post` table. All the data in the column will be lost.
+  - You are about to drop the column `preferredGender` on the `Event` table. All the data in the column will be lost.
 
 */
 -- AlterTable
-ALTER TABLE "Post" DROP COLUMN "preferredGender";
+ALTER TABLE "Event" DROP COLUMN "preferredGender";

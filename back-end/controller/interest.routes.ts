@@ -2,7 +2,7 @@
  * @swagger
  *   components:
  *    schemas:
- *      User:
+ *      Account:
  *          type: object
  *          properties:
  *            id:
@@ -21,22 +21,19 @@
  *                  type: string
  *            email:
  *              type: string
- *            gender:
- *              type: string
- *              enum: [male, female]
  *            interests:
  *              type: array
  *              items:
  *                $ref: '#/components/schemas/Interest'
- *            posts:
+ *            events:
  *              type: array
  *              items:
- *                $ref: '#/components/schemas/Post'
- *            joinedPosts:
+ *                $ref: '#/components/schemas/Event'
+ *            joinedEvents:
  *              type: array
  *              items:
- *                $ref: '#/components/schemas/Post'
- *      UserInput:
+ *                $ref: '#/components/schemas/Event'
+ *      AccountInput:
  *          type: object
  *          properties:
  *            firstName:
@@ -52,10 +49,7 @@
  *                  type: string
  *            email:
  *              type: string
- *            gender:
- *              type: string
- *              enum: [male, female]
- *      UserSummary:
+ *      AccountSummary:
  *          type: object
  *          properties:
  *            firstName:
@@ -71,10 +65,6 @@
  *              type: array
  *              items:
  *                $ref: '#/components/schemas/Interest'
- *            gender:
- *              type: string
- *              enum: [male, female]
- *              example: "female"
  *      Interest:
  *          type: object
  *          properties:
@@ -85,7 +75,7 @@
  *              type: string
  *            description:
  *              type: string
- *      Post:
+ *      Event:
  *          type: object
  *          properties:
  *            id:
@@ -108,11 +98,11 @@
  *            activity:
  *              $ref: '#/components/schemas/Activity'
  *            creator:
- *              $ref: '#/components/schemas/UserSummary'
+ *              $ref: '#/components/schemas/AccountSummary'
  *            participants:
  *              type: array
  *              items:
- *                $ref: '#/components/schemas/UserSummary'
+ *                $ref: '#/components/schemas/AccountSummary'
  *            peopleNeeded:
  *              type: integer
  *            preferredGender:

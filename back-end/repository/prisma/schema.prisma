@@ -8,28 +8,28 @@ datasource db {
 }
 
 model Interest {
-  id          Int    @id @default(autoincrement())
-  name        String @unique
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
   description String
-  users       User[]
+  accounts    Account[]
 }
 
-model User {
-  id          Int        @id @unique @default(autoincrement())
-  firstName   String
-  lastName    String
-  phoneNumber String     @unique
-  email       String     @unique
-  password    String
-  gender      String
-  role        String     @default("user")
-  interests   Interest[]
-  posts       Post[]     @relation("postcreater")
-  joinedPosts Post[]     @relation("participant")
+model Account {
+  id           Int        @id @unique @default(autoincrement())
+  type         String     @default("user")
+  username     String     @unique
+  firstName    String
+  lastName     String
+  phoneNumber  String     @unique
+  email        String     @unique
+  password     String
+  interests    Interest[]
+  events       Event[]    @relation("eventcreater")
+  joinedEvents Event[]    @relation("participant")
 }
 
-model Post {
-  id           Int      @id @default(autoincrement())
+model Event {
+  id           Int       @id @default(autoincrement())
   title        String
   description  String
   startDate    DateTime
@@ -37,16 +37,16 @@ model Post {
   time         String
   location     String
   activityId   Int
-  activity     Activity @relation(fields: [activityId], references: [id])
+  activity     Activity  @relation(fields: [activityId], references: [id])
   creatorId    Int
-  creator      User     @relation("postcreater", fields: [creatorId], references: [id])
-  participants User[]   @relation("participant")
+  creator      Account   @relation("eventcreater", fields: [creatorId], references: [id])
+  participants Account[] @relation("participant")
   peopleNeeded Int
 }
 
 model Activity {
-  id    Int    @id @default(autoincrement())
-  name  String
-  type  String
-  posts Post[]
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  type   String
+  events Event[]
 }

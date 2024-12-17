@@ -11,7 +11,7 @@
  *         number:
  *           type: string
  *           example: "612345678"  
- *     User:
+ *     Account:
  *       type: object
  *       properties:
  *         id:
@@ -32,15 +32,23 @@
  *         password:
  *           type: string
  *           example: "goodpassword.Example"  
- *     UserInput:
+ *     AccountRegistraion:
  *       type: object
- *       required:              
+ *       required:
+ *         - type
+ *         - username   
  *         - firstName
  *         - lastName
  *         - phoneNumber
  *         - email
  *         - password
  *       properties:
+ *         type:
+ *           type: string
+ *           example: "user"
+ *         username:
+ *           type: string
+ *           example: "username22"
  *         firstName:
  *           type: string
  *           example: "John" 
@@ -52,9 +60,6 @@
  *         email:
  *           type: string
  *           example: "john.doe@example.com"  
- *         gender:
- *           type: string
- *           example: "male" 
  *         password:
  *           type: string
  *           example: "goodpassword.Example"  
@@ -76,7 +81,7 @@ const authRouter = express.Router();
  * @swagger
  * /auth/register:
  *   post:
- *     summary: Create a new user
+ *     summary: Create a new account
  *     tags: [authentication]
  *     security:                    
  *       - ApiKeyAuth: []           
@@ -85,17 +90,17 @@ const authRouter = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UserInput'
+ *             $ref: '#/components/schemas/AccountRegistraion'
  *     responses:
  *       200:
- *         description: The created user and JWT token.
+ *         description: The created account and JWT token.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
+ *                 account:
+ *                   $ref: '#/components/schemas/Account'
  *                 token:
  *                   type: string
  *       401:
@@ -106,18 +111,18 @@ const authRouter = express.Router();
  */
 authRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {      
     try {
-        const { email, password, firstName, lastName, phoneNumber, gender } = req.body;
         let response = await register(req.body);
         res.status(200).json({"token":response});
     } catch (error) {        
         next(error);
     }
 });
+
 /**
  * @swagger
  * /auth/login:
  *   post:
- *     summary: Login a user
+ *     summary: Login a account
  *     tags: [authentication]
  *     security:                    
  *       - ApiKeyAuth: []
@@ -157,8 +162,8 @@ authRouter.post('/register', async (req: Request, res: Response, next: NextFunct
  */
 authRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = req.body;
-        let response = await login(user);
+        const account = req.body;
+        let response = await login(account);
         return res.status(200).json({"token":response});
     } catch (error) {
         next(error);
@@ -169,7 +174,7 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  * @swagger
  * /auth/change-password:
  *   post:
- *     summary: Change user password
+ *     summary: Change account password
  *     tags: [authentication]
  *     security:                    
  *       - ApiKeyAuth: []
@@ -211,7 +216,7 @@ authRouter.post('/change-password', async (req: Request, res: Response, next: Ne
  * @swagger
  * /auth/refresh:
  *   post:
- *     summary: Refresh a user token
+ *     summary: Refresh a account token
  *     tags: [authentication]
  *     security:                    
  *       - ApiKeyAuth: []

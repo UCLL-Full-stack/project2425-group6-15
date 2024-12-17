@@ -59,7 +59,7 @@ export class Interest {
         };
     }
 
-    static from(interest: InterestPrisma): Interest {
+    static fromPrisma(interest: InterestPrisma): Interest {
         return new Interest({
             id: interest.id,
             name: interest.name,

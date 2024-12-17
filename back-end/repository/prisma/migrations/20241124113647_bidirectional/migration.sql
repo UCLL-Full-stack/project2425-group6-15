@@ -1,29 +1,29 @@
 /*
   Warnings:
 
-  - You are about to drop the `_postjoiners` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `_eventjoiners` table. If the table is not empty, all the data it contains will be lost.
 
 */
 -- DropForeignKey
-ALTER TABLE "_postjoiners" DROP CONSTRAINT "_postjoiners_A_fkey";
+ALTER TABLE "_eventjoiners" DROP CONSTRAINT "_eventjoiners_A_fkey";
 
 -- DropForeignKey
-ALTER TABLE "_postjoiners" DROP CONSTRAINT "_postjoiners_B_fkey";
+ALTER TABLE "_eventjoiners" DROP CONSTRAINT "_eventjoiners_B_fkey";
 
 -- DropTable
-DROP TABLE "_postjoiners";
+DROP TABLE "_eventjoiners";
 
 -- CreateTable
-CREATE TABLE "PostUser" (
+CREATE TABLE "EventAccount" (
     "id" SERIAL NOT NULL,
-    "postId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "eventId" INTEGER NOT NULL,
+    "accountId" INTEGER NOT NULL,
 
-    CONSTRAINT "PostUser_pkey" PRIMARY KEY ("postId","userId")
+    CONSTRAINT "EventAccount_pkey" PRIMARY KEY ("eventId","accountId")
 );
 
 -- AddForeignKey
-ALTER TABLE "PostUser" ADD CONSTRAINT "PostUser_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "EventAccount" ADD CONSTRAINT "EventAccount_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "Event"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PostUser" ADD CONSTRAINT "PostUser_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "EventAccount" ADD CONSTRAINT "EventAccount_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { authResponse, JWTGivenToken, JWTTOKEN, UserLogin } from './auth.model';
+import { authResponse, JWTGivenToken, JWTTOKEN, AccountLogin, AccountRegistraion } from './auth.model';
 import { AuthError } from './auth.error';
-import userdb from '../repository/user.db';
-import { User } from '../model/user';
-import { UserInput } from '../types';
+import accountdb from '../repository/account.db';
+import { Account } from '../model/account';
+import { AccountInput } from '../types';
 import {Role}from '../types';
 const JWT_ACCES_SECRET = process.env.JWT_ACCES_SECRET || 'secretkey'; 
 const JWT_ACCES_EXPIRATION = process.env.JWT_ACCES_EXPIRATION || '10m';
@@ -13,7 +13,7 @@ const generateAccesToken = (email: string, fullname : string, role:Role) => {
         return jwt.sign({ email, fullname, role }, JWT_ACCES_SECRET, { expiresIn: JWT_ACCES_EXPIRATION });
 }
 
-const authenticateToken = async (headers: { [key: string]: string | string[] | undefined }): Promise<User> => {
+const authenticateToken = async (headers: { [key: string]: string | string[] | undefined }): Promise<Account> => {
     const authHeader = headers['authorization'];
     
     if (!authHeader || Array.isArray(authHeader) || !authHeader.startsWith('Bearer ')) {
@@ -22,11 +22,11 @@ const authenticateToken = async (headers: { [key: string]: string | string[] | u
 
     const token = authHeader.split(' ')[1];
     const email =  verifyToken(token);
-    const user = await userdb.getByEmail(email);
-    if (!user) {
+    const account = await accountdb.getByEmail(email);
+    if (!account) {
         throw new AuthError('Wrong token.', 404);
     }
-    return user;
+    return account;
 };
 
 
@@ -64,47 +64,47 @@ const refreshToken = async (headers: { [key: string]: string | string[] | undefi
 
     const token = authHeader.split(' ')[1];
     const email =  verifyToken(token);
-    const user = await userdb.getByEmail(email);
-    if (!user) {
+    const account = await accountdb.getByEmail(email);
+    if (!account) {
         throw new AuthError('Wrong token.', 404);
     }
-    const newToken = generateAccesToken(user.getEmail(), user.getFullName(),user.getRole());
+    const newToken = generateAccesToken(account.getEmail(), account.getFullName(),account.getType());
     return newToken;
 };
-const login = async (data : UserLogin): Promise<JWTGivenToken> => {
-    const user = await userdb.getByEmail(data.email);
-    if (!user) {
+const login = async (data : AccountLogin): Promise<JWTGivenToken> => {
+    const account = await accountdb.getByEmail(data.email);
+    if (!account) {
         throw new AuthError('Invalid email or password', 404);
     }
-    const isValid = await bcrypt.compare(data.password, user.getPassword());
+    const isValid = await bcrypt.compare(data.password, account.getPassword());
     if (!isValid) {
         throw new AuthError('Invalid password', 401);
     }
-    const token = generateAccesToken(user.getEmail(), user.getFullName(), user.getRole());
+    const token = generateAccesToken(account.getEmail(), account.getFullName(), account.getType());
     return token;
 }
-const register = async (data : UserInput): Promise<JWTGivenToken> => {
-    const user = await userdb.getByEmail(data.email);
-    if (user) {
+const register = async (data : AccountRegistraion): Promise<JWTGivenToken> => {
+    const account = await accountdb.getByEmail(data.email);
+    if (account) {
         throw new AuthError('Email already exists', 409);
     }
     const hash = await bcrypt.hash(data.password, 10);
     data.password = hash;
-    const newUser = User.fromUserinput(data);
-    const savedUser :User = await userdb.create(newUser);
+    const newAccount = Account.fromAccountRegistraion(data);
+    const savedAccount :Account = await accountdb.create(newAccount);
 
-    const token = generateAccesToken(newUser.getEmail(), newUser.getFullName(), newUser.getRole());
+    const token = generateAccesToken(newAccount.getEmail(), newAccount.getFullName(), newAccount.getType());
 
     return token;
 };
-const changePassword = async (oldPassword: string, newPassword: string, loggedinUser: User): Promise<void> => {
-    const isValid = await bcrypt.compare(oldPassword, loggedinUser.getPassword());
+const changePassword = async (oldPassword: string, newPassword: string, loggedinAccount: Account): Promise<void> => {
+    const isValid = await bcrypt.compare(oldPassword, loggedinAccount.getPassword());
     if (!isValid) {
         throw new AuthError('Invalid password', 401);
     }
     const hash = await bcrypt.hash(newPassword, 10);
-    loggedinUser.setPassword(hash);
-    await userdb.update(loggedinUser);
+    loggedinAccount.setPassword(hash);
+    await accountdb.update(loggedinAccount);
 }
 
 

@@ -1,30 +1,30 @@
 /*
   Warnings:
 
-  - You are about to drop the `PostUser` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `EventAccount` table. If the table is not empty, all the data it contains will be lost.
 
 */
 -- DropForeignKey
-ALTER TABLE "PostUser" DROP CONSTRAINT "PostUser_postId_fkey";
+ALTER TABLE "EventAccount" DROP CONSTRAINT "EventAccount_eventId_fkey";
 
 -- DropForeignKey
-ALTER TABLE "PostUser" DROP CONSTRAINT "PostUser_userId_fkey";
+ALTER TABLE "EventAccount" DROP CONSTRAINT "EventAccount_accountId_fkey";
 
 -- DropTable
-DROP TABLE "PostUser";
+DROP TABLE "EventAccount";
 
 -- CreateTable
 CREATE TABLE "Participant" (
     "id" SERIAL NOT NULL,
-    "postId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "eventId" INTEGER NOT NULL,
+    "accountId" INTEGER NOT NULL,
     "accepted" BOOLEAN NOT NULL,
 
     CONSTRAINT "Participant_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey
-ALTER TABLE "Participant" ADD CONSTRAINT "Participant_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Participant" ADD CONSTRAINT "Participant_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "Event"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Participant" ADD CONSTRAINT "Participant_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Participant" ADD CONSTRAINT "Participant_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -1,23 +1,20 @@
-import { Post } from './post';
-import { Activity as ActivityPrisma, Post as PostPrisma} from '@prisma/client';
+import { Event } from './event';
+import { Activity as ActivityPrisma, Event as EventPrisma} from '@prisma/client';
 
 
 export class Activity {
     private id?: number;
     private name: string;
     private type: string;
-    private posts: Post[];
 
     constructor(activity: {
         id?: number;
         name: string;
         type: string;
-        posts: Post[];
     }) {
         this.id = activity.id;
         this.name = activity.name;
         this.type = activity.type;
-        this.posts = activity.posts || [];
     }
 
     getId(): number | undefined {
@@ -32,9 +29,7 @@ export class Activity {
         return this.type;
     }
 
-    getPosts(): Post[] {
-        return this.posts;
-    }
+
 
     toPrisma(): ActivityPrisma {
         return {
@@ -44,12 +39,11 @@ export class Activity {
         };
     }
 
-    static from(activity: ActivityPrisma): Activity {
+    static fromPrisma(activity: ActivityPrisma): Activity {
         return new Activity({
             id: activity.id,
             name: activity.name,
             type: activity.type,
-            posts: [], // Posts should be populated separately if needed
         });
     }
 }

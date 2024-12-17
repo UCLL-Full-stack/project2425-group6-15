@@ -2,9 +2,9 @@
 
 ## Models
 
-### User
+### Account
 
-Represents a user in the system.
+Represents a account in the system.
 
 -   **id**: `number`
 -   **firstName**: `string`
@@ -14,20 +14,20 @@ Represents a user in the system.
 -   **password**: `string:Hashed`
 -   **gender**: `string:Gender`
 -   **interests**: `Interest[]`
--   **posts**: `Post[]`
--   **joinedPosts**: `Post[]`
+-   **events**: `Event[]`
+-   **joinedEvents**: `Event[]`
 
 ### Interest
 
-Represents an interest that a user can have.
+Represents an interest that a account can have.
 
 -   **id**: `number`
 -   **name**: `string`
 -   **description**: `string`
 
-### Post
+### Event
 
-Represents a post for an activity.
+Represents a event for an activity.
 
 -   **id**: `number`
 -   **title**: `string`
@@ -37,14 +37,14 @@ Represents a post for an activity.
 -   **time**: `string`
 -   **location**: `string:Location`
 -   **activity**: `Activity`
--   **creator**: `User` (relation: "UserPosts")
--   **users**: `User[]`
+-   **creator**: `Account` (relation: "AccountEvents")
+-   **accounts**: `Account[]`
 -   **peopleNeeded**: `number`
 -   **preferredGender**: `Creator-Gender|Both-genders`
 
 ### Activity
 
-Represents an activity that a user can participate in.
+Represents an activity that a account can participate in.
 
 -   **id**: `number`
 -   **name**: `string`
@@ -52,9 +52,9 @@ Represents an activity that a user can participate in.
 
 ## Types
 
-### UserInput
+### AccountInput
 
-Input type for creating a user.
+Input type for creating a account.
 
 -   **id?**: `number`
 -   **firstName**: `string`
@@ -64,9 +64,9 @@ Input type for creating a user.
 -   **password**: `string`
 -   **gender**: `Gender`
 
-### UserSummary
+### AccountSummary
 
-Summary type for user information.
+Summary type for account information.
 
 -   **firstName**: `string`
 -   **lastName**: `string`
@@ -76,7 +76,7 @@ Summary type for user information.
 
 ### Gender
 
-Represents the gender of a user.
+Represents the gender of a account.
 
 -   **male**
 -   **female**
@@ -97,22 +97,22 @@ Represents a geographical location.
 
 ## DB Relations
 
-### User
+### Account
 
--   **posts**: One-to-Many with `Post` (relation: "UserPosts")
--   **joinedPosts**: Many-to-Many with `Post` (relation: "UserJoinedPosts")
--   **interests**: Many-to-Many with `Interest` (relation: "UserInterests")
+-   **events**: One-to-Many with `Event` (relation: "AccountEvents")
+-   **joinedEvents**: Many-to-Many with `Event` (relation: "AccountJoinedEvents")
+-   **interests**: Many-to-Many with `Interest` (relation: "AccountInterests")
 
-### Post
+### Event
 
--   **creator**: Many-to-One with `User` (relation: "UserPosts")
--   **users**: Many-to-Many with `User` (relation: "UserJoinedPosts")
--   **activity**: Many-to-One with `Activity` (relation: "ActivityPosts")
+-   **creator**: Many-to-One with `Account` (relation: "AccountEvents")
+-   **accounts**: Many-to-Many with `Account` (relation: "AccountJoinedEvents")
+-   **activity**: Many-to-One with `Activity` (relation: "ActivityEvents")
 
 ### Interest
 
--   **users**: Many-to-Many with `User` (relation: "UserInterests")
+-   **accounts**: Many-to-Many with `Account` (relation: "AccountInterests")
 
 ### Activity
 
--   **posts**: One-to-Many with `Post` (relation: "ActivityPosts")
+-   **events**: One-to-Many with `Event` (relation: "ActivityEvents")

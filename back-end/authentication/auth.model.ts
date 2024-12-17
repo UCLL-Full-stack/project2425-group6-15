@@ -1,4 +1,4 @@
-import { Gender, PhoneNumber } from "../types";
+import { PhoneNumber } from "../types";
 
 type JWTTOKEN = string;
 
@@ -9,19 +9,19 @@ type authResponse = {
 
 type JWTGivenToken = String | Array<String> | undefined ;
 
-type UserLogin = {
+type AccountLogin = {
     email: string;
     password: string;
 };
 
-type UserRegistraion = {
-    id?: number;
-    firstName: string;
-    lastName: string;
+type AccountRegistraion = {
+    type: "user" | "organization";
+    username: string;
+    firstName: string | null;
+    lastName: string | null;
     phoneNumber: PhoneNumber;
     email: string;
     password: string;
-    gender: Gender;
 };
 
-export { JWTTOKEN,JWTGivenToken, UserLogin, UserRegistraion, authResponse};
+export { JWTTOKEN,JWTGivenToken, AccountLogin, AccountRegistraion, authResponse};

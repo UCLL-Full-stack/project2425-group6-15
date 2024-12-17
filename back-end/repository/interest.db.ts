@@ -4,7 +4,7 @@ import database from "./database";
 const getAll = async (): Promise<Interest[]> => {
     try {
         const interests = await database.interest.findMany();
-        return interests.map((interest) => Interest.from(interest));
+        return interests.map((interest) => Interest.fromPrisma(interest));
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details');
@@ -16,7 +16,7 @@ const getById = async (id: number): Promise<Interest | null> => {
         const interest = await database.interest.findUnique({
             where: { id },
         });
-        return interest ? Interest.from(interest) : null;
+        return interest ? Interest.fromPrisma(interest) : null;
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details');
@@ -28,7 +28,7 @@ const getByName = async (name: string): Promise<Interest | null> => {
         const interest = await database.interest.findUnique({
             where: { name },
         });
-        return interest ? Interest.from(interest) : null;
+        return interest ? Interest.fromPrisma(interest) : null;
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details');

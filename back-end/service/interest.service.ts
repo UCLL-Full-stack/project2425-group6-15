@@ -1,19 +1,19 @@
-import { User} from '../model/user'; 
+import { Account} from '../model/account'; 
 import { ServiceError } from './service.error';
 import interestdb from '../repository/interest.db';
 import { Interest } from '../model/interest';
 
-const getAll = async (currentUser : User): Promise<Interest[]> => {
+const getAll = async (currentAccount : Account): Promise<Interest[]> => {
     const interest = await interestdb.getAll();
     if (!interest) {
-        throw new ServiceError('Posts not found', 404);
+        throw new ServiceError('Events not found', 404);
     }
     return interest;
 }; 
 
-const createInterest = async (interest: Interest, currentUser: User): Promise<void> => {
-    if (currentUser.getRole() != 'admin') {
-        throw new ServiceError('Only Admin users can add interests', 403);}
+const createInterest = async (interest: Interest, currentAccount: Account): Promise<void> => {
+    if (currentAccount.getType() != 'admin') {
+        throw new ServiceError('Only Admin accounts can add interests', 403);}
     if (!interest) throw new ServiceError('Interest is required');
     if (await interestdb.getByName(interest.getName())) {
         throw new ServiceError('Dublication of interest is not allowed');
