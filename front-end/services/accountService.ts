@@ -1,11 +1,11 @@
-import { UserRegistration, User, UserSummary } from "@/types";
+import { AccountLogin, AccountInput, AccountSummary } from "@/types";
 import { console } from "inspector";
 
 
 
 
-const addInterestToUser = async (interest: string[]) => {
-  return await fetch(process.env.NEXT_PUBLIC_API_URL + `/user/interests`, {
+const addInterestToAccount = async (interest: string[]) => {
+  return await fetch(process.env.NEXT_PUBLIC_API_URL + `/account/interests`, {
     method: 'POST',
     headers: {
       Accept: "application/json",
@@ -17,8 +17,8 @@ const addInterestToUser = async (interest: string[]) => {
   });
 };
 
-const findUserByEmail = async (email:string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/email/${email}`, {
+const findAccountByEmail = async (email:string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/email/${email}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -28,21 +28,21 @@ const findUserByEmail = async (email:string) => {
     });
 
     if (!response.ok) {
-      throw new Error('User not found');
+      throw new Error('Account not found');
     }
 
-    const user = await response.json();
-    return user;
+    const Account = await response.json();
+    return Account;
   };
 
 
-  const findCurrentUser = async () => {
+  const findCurrentAccount = async () => {
     let token = sessionStorage.getItem("token");
     if (!token) {
       throw new Error("Token not found");
     }
   
-    return fetch(process.env.NEXT_PUBLIC_API_URL + "/user/me", {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/account/me", {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -73,4 +73,4 @@ const findUserByEmail = async (email:string) => {
 
 
 
-export default { addInterestToUser, findUserByEmail, findCurrentUser , changePassword};
+export default { addInterestToAccount, findAccountByEmail, findCurrentAccount , changePassword};

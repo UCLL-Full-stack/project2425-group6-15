@@ -2,6 +2,10 @@ export type PhoneNumber = { countryCode: string, number: string };
 export type JWTTOKEN = string;
 export type JWTGivenToken = String | Array<String> | undefined ;
 export type Role = 'admin' | 'user' | 'organization';
+export type Location = {
+    longitude: String;
+    latitude: String;
+};
 
 export type Activity = {
     id?: number;
@@ -32,7 +36,7 @@ export type AccountRegistraion = {
 
 /**
  * Represents the input data required for editing a account.
- * ONLY USE FOR REGISTERING A USER.
+ * ONLY USE FOR REGISTERING A Account.
  */
 export type AccountInput = {
     username: string;
@@ -100,6 +104,7 @@ export type EventSummary = {
     creator: AccountSummary,
     participants: AccountSummary[],
     peopleNeeded: number,
+    hasJoined : boolean,
 };
 
 

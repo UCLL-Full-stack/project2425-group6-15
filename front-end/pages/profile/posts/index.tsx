@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import UserProfile from "@/components/user/userEditModal";
-import UserPostOverview from "@/components/posts/UserPostOverview";
+import AccountPostOverview from "@/components/event/UserPostOverview";
 import Header from '@/components/header/header';
 import Head from "next/head";
 
@@ -13,7 +12,7 @@ const Posts: React.FC = () => {
         <>
             <Header />
             <div className="flex flex-col items-center justify-center min-h-screen bg-white text-gray-800">
-                <UserPostOverview />
+                <AccountPostOverview />
             </div>
         </>
     );

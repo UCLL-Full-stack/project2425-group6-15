@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Head from "next/head";
 import Link from "next/link";
 import Header from "@/components/header/header";
 import Headerplain from "@/components/header/headerplain";
-import postService from "@/services/postService";
-import { Post } from "@/types/index";
-import { LatLngExpression } from "leaflet";
 
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -18,7 +14,7 @@ import communitiesImg from "@/images/crl/communities.png";
 import momentsImg from "@/images/crl/moments.png";
 import dynamic from "next/dynamic";
 
-const PostOverview = dynamic(() => import("@/components/dashboard/postOverview"), { ssr: false });
+const PostOverview = dynamic(() => import("@/components/dashboard/userDashboard"), { ssr: false });
 
 const Home: React.FC = () => {
   const router = useRouter();

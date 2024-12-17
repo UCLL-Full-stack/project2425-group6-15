@@ -1,11 +1,10 @@
-import userService from "@/services/userService";
-import { Gender } from "@/types";
+import AccountService from "@/services/accountService";
 import React, { useState } from "react";
 import { useRouter } from 'next/router';
 import authService from "@/services/authService";
 import { useTranslation } from "next-i18next";
 
-const UserLoginForm: React.FC = () => {
+const AccountLoginForm: React.FC = () => {
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -35,12 +34,12 @@ const UserLoginForm: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
 
-    const userLogin = {
+    const AccountLogin = {
       email: email,
       password: password,
     };
 
-    const response = await authService.login(userLogin);
+    const response = await authService.login(AccountLogin);
     const data = await response.json();
     if (response.status == 200) {
       sessionStorage.setItem("token", data.token)
@@ -93,4 +92,4 @@ const UserLoginForm: React.FC = () => {
   );
 };
 
-export default UserLoginForm;
+export default AccountLoginForm;

@@ -1,19 +1,12 @@
-import userService from "@/services/userService";
-import { useEffect, useState } from "react";
-import { Gender, User } from "@/types";
+import AccountService from "@/services/accountService";
+import { useState } from "react";
 
-import unselectmaleimage from "@/images/icons/profile/unselectmale.svg";
-import unselectfemaleimage from "@/images/icons/profile/unselectfemale.svg";
-import selectfemaleimage from "@/images/icons/profile/selectfemale.svg";
-import selectmaleimage from "@/images/icons/profile/selectmale.svg";
-import Image from "next/image";
-import { ok } from "assert";
 
-interface UserChangePasswordProps {
+interface AccountChangePasswordProps {
     onClose(): void;
 }
 
-const UserChangePassword: React.FC<UserChangePasswordProps> = ({  onClose }) => {
+const AccountChangePassword: React.FC<AccountChangePasswordProps> = ({ onClose }) => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -44,7 +37,7 @@ const UserChangePassword: React.FC<UserChangePasswordProps> = ({  onClose }) => 
         if (confirmPassword.trim() !== "" && newPassword !== "" && newPassword !== confirmPassword) {
             setConfirmPasswordError("Passwords do not match");
             setNewPasswordError("Passwords do not match");
-            
+
             ok = false;
         }
         return ok;
@@ -53,7 +46,7 @@ const UserChangePassword: React.FC<UserChangePasswordProps> = ({  onClose }) => 
     const handleSubmit = async () => {
         if (!validate()) return;
         try {
-            const response = await userService.changePassword(currentPassword, newPassword);
+            const response = await AccountService.changePassword(currentPassword, newPassword);
             if (!response.ok) {
                 const data = await response.json();
                 setServerError(data.message);
@@ -61,7 +54,7 @@ const UserChangePassword: React.FC<UserChangePasswordProps> = ({  onClose }) => 
             }
             onClose();
         }
-        catch(error) {
+        catch (error) {
             setServerError("Oops.. Somthing went wrong. \n Try again later.")
         }
     }
@@ -72,7 +65,7 @@ const UserChangePassword: React.FC<UserChangePasswordProps> = ({  onClose }) => 
                 <label htmlFor="currentpassword" className="text-base text-slate-600">Current Password</label>
                 <input onChange={(e) => setCurrentPassword(e.target.value)} id="currentpassword" type="password" placeholder="Enter your current password" className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
                 <div className="text-red-500 text-sm">{currentPasswordError}</div>
-                </div>
+            </div>
             <div>
                 <label htmlFor="newpassword" className="text-base text-slate-600">New Password</label>
                 <input onChange={(e) => setNewPassword(e.target.value)} id="newpassword" type="password" placeholder="Enter your new password" className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
@@ -83,7 +76,7 @@ const UserChangePassword: React.FC<UserChangePasswordProps> = ({  onClose }) => 
                 <input onChange={(e) => setConfirmPassword(e.target.value)} id="confirmpassword" type="password" placeholder="Confirm your new password" className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
                 <div className="text-red-500 text-sm">{confirmPasswordError}</div>
             </div>
-            { serverError && <div className="w-full bg-red-500 bg-opacity-10  border-red-500 border rounded-lg py-2 px-2 text-red-500 text-sm">{serverError}</div> }
+            {serverError && <div className="w-full bg-red-500 bg-opacity-10  border-red-500 border rounded-lg py-2 px-2 text-red-500 text-sm">{serverError}</div>}
 
             <div className="flex justify-end gap-4 mt-2">
                 <button onClick={() => onClose()} className="border border-gray-300 px-4 py-2 rounded-lg">Cancel</button>
@@ -93,5 +86,5 @@ const UserChangePassword: React.FC<UserChangePasswordProps> = ({  onClose }) => 
     );
 };
 
-export default UserChangePassword;
+export default AccountChangePassword;
 

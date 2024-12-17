@@ -54,18 +54,24 @@
             "name": "Name",
             "email": "Email",
             "password": "Password",
+            "username": "Username",
+            "no_spaces": "cannot contain spaces.",
+            "no_special_chars": "cannot contain special characters.",
             "submit": "Register",
             "login": "Already have an account? Login here.",
             "required": "is required.",
             "confirm_password": "Confirm Password",
             "first_name": "First Name",
             "last_name": "Last Name",
+            "only_letters": "can only contain letters.",
             "phone": "Phone Number",
             "gender": "Gender",
             "select_gender": "Select Gender",
             "male": "Male",
             "female": "Female",
-            "password_mismatch": "Passwords do not match."
+            "password_mismatch": "Passwords do not match.",
+            "register_as_organization": "Register as Organization",
+            "register_as_user": "Register as User"
         },
         "errors": {
             "invalid_credentials": "Invalid registration details."

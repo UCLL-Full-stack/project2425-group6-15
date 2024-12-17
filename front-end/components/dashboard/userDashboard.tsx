@@ -1,8 +1,8 @@
-import postService from "@/services/postService";
-import { Gender, Post, PostPrevieuw, PostSummary } from "@/types";
+import postService from "@/services/eventService";
+import { EventPreview, EventSummary } from "@/types";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
-import userService from "@/services/userService";
+import AccountService from "@/services/accountService";
 import interestService from "@/services/interestService";
 import dynamic from 'next/dynamic';
 import { LatLngExpression } from "leaflet";
@@ -22,12 +22,12 @@ const MarkerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Marker
 const PopupNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
 const CircleNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Circle), { ssr: false });
 
-const PostOverviewPopup = dynamic(() => import("@/components/posts/postOverviewPopup"), { ssr: false });
+const PostOverviewPopup = dynamic(() => import("@/components/event/postOverviewPopup"), { ssr: false });
 
-const postOverview: React.FC = () => {
+const UserDashboard: React.FC = () => {
   const router = useRouter();
   const [position, setPosition] = useState<[number, number] | null>(null);
-  const [posts, setPosts] = useState<PostPrevieuw[]>([]);
+  const [posts, setPosts] = useState<EventPreview[]>([]);
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
   const [showFilter, setShowFilter] = useState<boolean>(false);
 
@@ -53,7 +53,7 @@ const postOverview: React.FC = () => {
       throw new Error("Failed to load posts");
     }
     let posts = await response.json();
-    posts = posts.filter((post: PostPrevieuw) => post.peopleNeeded > post.peopleJoined);
+    posts = posts.filter((post: EventPreview) => post.peopleNeeded > post.peopleJoined);
 
     setPosts(posts);
   }
@@ -180,7 +180,7 @@ const postOverview: React.FC = () => {
         </div>
         <div className="h-full box-border bg-white shadow-lg rounded-lg p-6 grid grid-rows-[auto_1fr] relative">
           <div className="flex items-center justify-between">
-            <h2 className="text-3xl font-semibold text-slate-700">Posts</h2>
+            <h2 className="text-3xl font-semibold text-slate-700">Events</h2>
             <button onClick={() => setShowFilter(!showFilter)} title="Filteren"><Image src={filterimg.src} alt="Image description" width={30} height={30} /></button>
             {showFilter && (
               <div className="absolute top-16 right-0 bg-white shadow-lg rounded-lg p-6 flex flex-col gap-2">
@@ -305,5 +305,5 @@ const postOverview: React.FC = () => {
   );
 };
 
-export default postOverview;
+export default UserDashboard;
 

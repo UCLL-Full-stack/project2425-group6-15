@@ -45,7 +45,7 @@ const getEventById = async (id: number, currentAccount : Account): Promise<Event
     if (!event) {
         throw new ServiceError('Event not found', 404);
     }
-    return event.toSummary();
+    return event.toSummary(currentAccount.getId() ?? 0);
 };
 const deleteEventById = async (id: number, currentAccount : Account): Promise<void> => {
     const event = await eventdb.getById(id);
@@ -77,7 +77,7 @@ const createEvent = async (event: EventInput, currentAccount : Account): Promise
     event.creator = currentAccount;
     const newevent = Event.fromEventInput(event, acitivity);
     const savedevent = await eventdb.create(newevent);
-    const eventSummary = savedevent.toSummary();
+    const eventSummary = savedevent.toSummary(currentAccount.getId() ?? 0);
     return eventSummary;
 };
 
@@ -104,7 +104,24 @@ const joinEvent = async (id: number, currentAccount: Account): Promise<EventSumm
     log(event);
     const updatedEvent = await eventdb.update(event);
 
-    return updatedEvent.toSummary();
+    return updatedEvent.toSummary(currentAccount.getId() ?? 0);
+};
+
+const exitEvent = async (id: number, currentAccount: Account): Promise<void> => {
+    if (currentAccount.getType() != 'user') {
+        throw new ServiceError('Only accounts can exit events', 403);
+    }
+    const event = await eventdb.getById(id);
+    if (!event) {
+        throw new ServiceError('Event not found', 404);
+    }
+
+    if (!event.getParticipants().some(participant => participant.getId() === currentAccount.getId())) {
+        throw new ServiceError('Account not joined event', 400);
+    }
+
+    event.removeParticipant(currentAccount);
+    const updatedEvent = await eventdb.update(event);
 };
 
 export default {
@@ -113,5 +130,6 @@ export default {
     createEvent,
     joinEvent,
     getEventById,
-    deleteEventById
+    deleteEventById,
+    exitEvent
 };

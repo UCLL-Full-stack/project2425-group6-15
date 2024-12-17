@@ -117,6 +117,10 @@ export class Event {
         this.participants.push(account);
     }
 
+    removeParticipant(account: Account): void {
+        this.participants = this.participants.filter((participant) => participant.getId() !== account.getId());
+    }
+
     getPlacesLeft(): number{
         return (this.peopleNeeded - this.participants.length)
     }
@@ -137,7 +141,7 @@ export class Event {
         }
     }
 
-    toSummary(): EventSummary {
+    toSummary(accountid : number): EventSummary {
         return {
             id: this.getId(),
             title: this.getTitle(),
@@ -150,6 +154,7 @@ export class Event {
             creator: this.getCreator().toSummary(),
             participants: this.participants.map((account) => account.toSummary()),
             peopleNeeded: this.getPeopleNeeded(),
+            hasJoined : this.getParticipants().some(participant => participant.getId() === accountid),
         };
     }
 

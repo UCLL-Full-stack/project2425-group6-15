@@ -1,6 +1,6 @@
-import { UserRegistration } from "@/types";
+import { AccountLogin, AccountRegistraion } from "@/types";
 
-const register = (user: UserRegistration) => {
+const register = (Account: AccountRegistraion) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/register", {
       method: "POST",
       headers: {
@@ -8,11 +8,11 @@ const register = (user: UserRegistration) => {
         "Content-Type": "application/json",
         ...(process.env.NEXT_PUBLIC_API_KEY && { "x-api-key": process.env.NEXT_PUBLIC_API_KEY }),
       },
-      body: JSON.stringify(user),
+      body: JSON.stringify(Account),
     });
   };
   
-const login = (user: { email: string; password: string }) => {
+const login = (Account: AccountLogin) => {
       return fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/login", {
           method: "POST",
           headers: {
@@ -20,7 +20,7 @@ const login = (user: { email: string; password: string }) => {
             "Content-Type": "application/json",
             ...(process.env.NEXT_PUBLIC_API_KEY && { "x-api-key": process.env.NEXT_PUBLIC_API_KEY }),
           },
-          body: JSON.stringify(user),
+          body: JSON.stringify(Account),
         });
 
     

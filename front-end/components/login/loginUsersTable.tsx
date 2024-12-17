@@ -1,34 +1,34 @@
 import React from 'react';
 
-interface User {
+interface Account {
     id: number;
     email: string;
     password: string;
     role: string;
 }
 
-const users: User[] = [
-    { id: 1, email: 'user@gmail.com',password:'user123', role: 'user' },
-    { id: 2,  email: 'admin@gmail.com', password:'admin123', role: 'admin' },
-    { id: 3,  email: 'guest@gmail.com',password:'guest', role: 'guest' },
+const Accounts: Account[] = [
+    { id: 1, email: 'Account@gmail.com', password: 'Account123', role: 'Account' },
+    { id: 2, email: 'admin@gmail.com', password: 'admin123', role: 'admin' },
+    { id: 3, email: 'guest@gmail.com', password: 'guest', role: 'guest' },
 ];
 
-const LoginUsersTable: React.FC = () => {
+const LoginAccountsTable: React.FC = () => {
     return (
         <table>
             <thead>
                 <tr>
-                    <th>Username</th>
+                    <th>Accountname</th>
                     <th>Password</th>
                     <th>Role</th>
                 </tr>
             </thead>
             <tbody>
-                {users.map(user => (
-                    <tr key={user.id}>
-                        <td className='p-3'>{user.email}</td>
-                        <td className='p-3'>{user.password}</td>
-                        <td className='p-3'>{user.role}</td>
+                {Accounts.map(Account => (
+                    <tr key={Account.id}>
+                        <td className='p-3'>{Account.email}</td>
+                        <td className='p-3'>{Account.password}</td>
+                        <td className='p-3'>{Account.role}</td>
                     </tr>
                 ))}
             </tbody>
@@ -36,4 +36,4 @@ const LoginUsersTable: React.FC = () => {
     );
 };
 
-export default LoginUsersTable;
+export default LoginAccountsTable;

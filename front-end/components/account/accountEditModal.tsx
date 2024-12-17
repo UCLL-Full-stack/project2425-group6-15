@@ -1,6 +1,6 @@
-import userService from "@/services/userService";
+import AccountService from "@/services/accountService";
 import { useEffect, useState } from "react";
-import { Gender, User } from "@/types";
+import { Gender, Account } from "@/types";
 
 import unselectmaleimage from "@/images/icons/profile/unselectmale.svg";
 import unselectfemaleimage from "@/images/icons/profile/unselectfemale.svg";
@@ -9,21 +9,21 @@ import selectmaleimage from "@/images/icons/profile/selectmale.svg";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
 
-interface UserProfileProps {
-    user: User;
+interface AccountProfileProps {
+    Account: Account;
     onclose(): void;
 }
 
-const UserEditProfile: React.FC<UserProfileProps> = ({ user, onclose }) => {
+const AccountEditProfile: React.FC<AccountProfileProps> = ({ Account, onclose }) => {
     const { t } = useTranslation();
-    const [firstName, setFirstName] = useState(user.firstName);
-    const [lastName, setLastName] = useState(user.lastName);
-    const [email, setEmail] = useState(user.email);
+    const [firstName, setFirstName] = useState(Account.firstName);
+    const [lastName, setLastName] = useState(Account.lastName);
+    const [email, setEmail] = useState(Account.email);
     const [emailError, setEmailError] = useState("");
-    const [phone, setPhone] = useState<number | null>(user.phoneNumber.number ? Number(user.phoneNumber.number) : 0);
+    const [phone, setPhone] = useState<number | null>(Account.phoneNumber.number ? Number(Account.phoneNumber.number) : 0);
     const [phoneError, setPhoneError] = useState("");
-    const [countryCode, setCountryCode] = useState(user.phoneNumber.countryCode || "+32");
-    const [gender, setGender] = useState<Gender | "">(user.gender || "");
+    const [countryCode, setCountryCode] = useState(Account.phoneNumber.countryCode || "+32");
+    const [gender, setGender] = useState<Gender | "">(Account.gender || "");
     const [genderError, setGenderError] = useState("");
     const [password, setPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
@@ -102,4 +102,4 @@ const UserEditProfile: React.FC<UserProfileProps> = ({ user, onclose }) => {
     );
 };
 
-export default UserEditProfile;
+export default AccountEditProfile;

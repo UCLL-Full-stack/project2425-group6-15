@@ -1,25 +1,25 @@
 import { PostPrevieuw } from "@/types";
 import { GetStaticProps } from "next";
 import React, { useState, useEffect } from "react";
-import userService from "@/services/userService";
+import AccountService from "@/services/accountService";
 import { useTranslation } from "next-i18next";
 
-const UserPostOverview: React.FC = () => {
+const AccountPostOverview: React.FC = () => {
   const [posts, setPosts] = useState<PostPrevieuw[]>([]);
   const [joinedPosts, setJoinedPosts] = useState<PostPrevieuw[]>([]);
   const { t, i18n } = useTranslation(); // Add this line
   useEffect(() => {
-    loadUserPosts();
+    loadAccountPosts();
   }, []);
 
-  const loadUserPosts = async () => {
-    const response = await userService.findCurrentUser();
+  const loadAccountPosts = async () => {
+    const response = await AccountService.findCurrentAccount();
     if (!response.ok) {
-      throw new Error("Failed to load user posts");
+      throw new Error("Failed to load Account posts");
     }
-    const userData = await response.json();
-    setPosts(userData.posts);
-    setJoinedPosts(userData.joinedPosts);
+    const AccountData = await response.json();
+    setPosts(AccountData.posts);
+    setJoinedPosts(AccountData.joinedPosts);
   };
 
   return (
@@ -92,4 +92,4 @@ const UserPostOverview: React.FC = () => {
   );
 };
 
-export default UserPostOverview;
+export default AccountPostOverview;

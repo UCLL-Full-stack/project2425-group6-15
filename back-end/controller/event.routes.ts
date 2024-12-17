@@ -350,6 +350,39 @@ eventRouter.put('/:id/join', async (req: Request, res: Response, next: NextFunct
 
 /**
  * @swagger
+ * /event/{id}/exit:
+ *  put:
+ *    summary: Join a event
+ *    tags: [Events]
+ *    security:
+ *      - ApiKeyAuth: []
+ *      - BearerAuth: []
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        description: ID of the event to join
+ *        schema:
+ *          type: integer
+ *    responses:
+ *      200:
+ *        description: Successfully joined the event
+ *      404:
+ *        description: Event not found
+ */
+eventRouter.put('/:id/exit', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const eventId = parseInt(req.params.id);
+        await eventService.exitEvent(eventId, await authService.authenticateToken(req.headers));
+        res.status(200).json({ message: 'Successfully joined the event' });
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+/**
+ * @swagger
  * /event:
  *  post:
  *    summary: Create a new event

@@ -4,10 +4,11 @@ import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
 
 import checkmarkImg from "@/images/icons/createpost/check.svg";
+import exitImg from "@/images/icons/createpost/exit.svg";
 
-import { Location, Post, PostSummary } from "@/types/index";
+import { PublicEvent, EventSummary } from "@/types/index";
 import Image from "next/image";
-import postService from "@/services/postService";
+import postService from "@/services/eventService";
 import { Use } from "@svgdotjs/svg.js";
 
 interface CreateNewPostPopupProps {
@@ -40,24 +41,11 @@ const fetchNearestAddress = async (latitude: number, longitude: number) => {
   return data.display_name;
 };
 
-const joinpost = async (postId: number) => {
-  try {
-    const response = await postService.joinPost(postId);
-    if (response.ok) {
-      alert("Successfully joined the post!");
-    } else {
-      console.error("Failed to join the post");
-    }
-  } catch (error) {
-    console.error("An error occurred while joining the post", error);
-  }
-};
-
 const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
   onClose,
   postId,
 }) => {
-  const [post, setPost] = useState<PostSummary | null>(null);
+  const [post, setPost] = useState<EventSummary | null>(null);
   const [address, setAddress] = useState<string | null>(null);
 
   const fetchPost = async () => {
@@ -79,6 +67,34 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
   useEffect(() => {
     fetchPost();
   }, []);
+
+  const joinpost = async (postId: number) => {
+    try {
+      const response = await postService.joinPost(postId);
+      if (response.ok) {
+        fetchPost();
+        alert("Successfully joined the post!");
+      } else {
+        console.error("Failed to join the post");
+      }
+    } catch (error) {
+      console.error("An error occurred while joining the post", error);
+    }
+  };
+  const exitpost = async (postId: number) => {
+    try {
+      const response = await postService.exitPost(postId);
+      if (response.ok) {
+        fetchPost();
+        alert("Successfully exited the post!");
+      } else {
+        console.error("Failed to exit the post");
+      }
+    } catch (error) {
+      console.error("An error occurred while exiting the post", error);
+    }
+  }
+
 
   return (
     <div className="bg-black bg-opacity-50 z-[999] fixed top-0 left-0 w-full h-full flex justify-center items-center">
@@ -157,18 +173,34 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
               </div>
             </div>
             <div className="w-full flex items-center justify-end">
-              <button
-                className="flex items-center justify-center gap-2 bg-blue-500 text-white rounded-full px-4 py-2 transition-all duration-300 ease-in-out hover:bg-blue-600"
-                onClick={() => joinpost(postId)}
-              >
-                <Image
-                  src={checkmarkImg}
-                  alt="Checkmark Icon"
-                  width={20}
-                  height={20}
-                />
-                Join
-              </button>
+              {!post.hasJoined && (
+                <button
+                  className="flex items-center justify-center gap-1.5 border-blue-500 border-2 text-blue-500 rounded-full px-4 py-2 transition-all duration-300 ease-in-out "
+                  onClick={() => joinpost(postId)}
+                >
+                  <Image
+                    src={checkmarkImg}
+                    alt="Checkmark Icon"
+                    width={20}
+                    height={20}
+                  />
+                  schrijf in
+                </button>
+              )}
+              {post.hasJoined && (
+                <button
+                  className="flex items-center justify-center gap-1.5 border-red-500 border-2 text-red-500 rounded-full px-4 py-2 transition-all duration-300 ease-in-out "
+                  onClick={() => exitpost(postId)}
+                >
+                  <Image
+                    src={exitImg}
+                    alt="cros Icon"
+                    width={20}
+                    height={20}
+                  />
+                  schrijf uit
+                </button>
+              )}
             </div>
           </>
         )}

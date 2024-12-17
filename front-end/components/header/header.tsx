@@ -4,21 +4,14 @@ import Link from "next/link";
 import Router from "next/router";
 import jwt from 'jsonwebtoken';
 import dynamic from 'next/dynamic';
-import unselectedMoon from "@/images/icons/header/unselectMoon.svg";
-import selectedMoon from "@/images/icons/header/selectMoon.svg";
-import unselectedSun from "@/images/icons/header/unselectSun.svg";
-import selectedSun from "@/images/icons/header/selectSun.svg";
-import unselectPc from "@/images/icons/header/unselectPc.svg";
-import selectedPc from "@/images/icons/header/selectPc.svg";
 import unselectedLogout from "@/images/icons/header/unselectLogout.svg";
 import selectedLogout from "@/images/icons/header/selectLogout.svg";
 import interestIcon from "@/images/icons/header/interests.svg"
 import postIcon from "@/images/icons/header/posts.svg"
-import Language from "../language/Language";
 import LanguageSide from "../language/Language_side";
 import { useTranslation } from "next-i18next";
 
-const CreateNewPostPopup = dynamic(() => import("../posts/createNewPostPopup"), { ssr: false });
+const CreateNewPostPopup = dynamic(() => import("../event/createNewPostPopup"), { ssr: false });
 
 const Header: React.FC = () => {
   const { t } = useTranslation();

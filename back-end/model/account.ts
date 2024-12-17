@@ -180,8 +180,6 @@ export class Account {
     }
 
     setJoinedEvents(joinedEvents: Event[]): void {
-        console.log(this.type)
-        console.log(joinedEvents)
         if (this.type !== 'user' && joinedEvents.length > 0) {
             throw new Error('Only users can join events');
         }

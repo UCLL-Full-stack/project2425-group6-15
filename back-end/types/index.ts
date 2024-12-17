@@ -81,6 +81,7 @@ export type EventSummary = {
     creator: AccountSummary,
     participants: AccountSummary[],
     peopleNeeded: number,
+    hasJoined : boolean,
 };
 
 

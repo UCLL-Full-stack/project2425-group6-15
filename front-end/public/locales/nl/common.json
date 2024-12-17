@@ -54,6 +54,9 @@
             "name": "Naam",
             "email": "E-mail",
             "password": "Wachtwoord",
+            "username": "Gebruikersnaam",
+            "no_spaces": "mag geen spaties bevatten.",
+            "no_special_chars": "mag geen speciale tekens bevatten.",
             "submit": "Registreren",
             "login": "Heb je al een account? Log hier in.",
             "required": "is verplicht.",
@@ -65,7 +68,10 @@
             "select_gender": "Selecteer Geslacht",
             "male": "Man",
             "female": "Vrouw",
-            "password_mismatch": "Wachtwoorden komen niet overeen."
+            "only_letters": "mag alleen letters bevatten.",
+            "password_mismatch": "Wachtwoorden komen niet overeen.",
+            "register_as_organization": "Registreer als Organisatie",
+            "register_as_user": "Registreer als Gebruiker"
         },
         "errors": {
             "invalid_credentials": "Ongeldige registratiegegevens."
