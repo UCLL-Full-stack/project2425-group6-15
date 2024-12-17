@@ -1,20 +1,20 @@
 import { PhoneNumber } from "../types";
 
-type JWTTOKEN = string;
+export type JWTTOKEN = string;
 
-type authResponse = {
+export type authResponse = {
     token: JWTTOKEN;
     refreshToken: JWTTOKEN;
 };
 
-type JWTGivenToken = String | Array<String> | undefined ;
+export type JWTGivenToken = String | Array<String> | undefined ;
 
-type AccountLogin = {
+export type AccountLogin = {
     email: string;
     password: string;
 };
 
-type AccountRegistraion = {
+export type AccountRegistraion = {
     type: "user" | "organization";
     username: string;
     firstName: string | null;
@@ -24,4 +24,3 @@ type AccountRegistraion = {
     password: string;
 };
 
-export { JWTTOKEN,JWTGivenToken, AccountLogin, AccountRegistraion, authResponse};
