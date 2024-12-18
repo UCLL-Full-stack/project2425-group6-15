@@ -55,7 +55,6 @@ export type EventInput = {
     description: string;
     startDate: Date;
     endDate: Date;
-    time: string;
     location: Location;
     activityName: string;
     peopleNeeded: number;

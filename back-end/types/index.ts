@@ -31,7 +31,6 @@ export type EventInput = {
     description: string;
     startDate: Date;
     endDate: Date;
-    time: string;
     location: Location;
     activityName: string;
     creator?: Account;
@@ -75,7 +74,6 @@ export type EventSummary = {
     description: string,
     startDate: Date,
     endDate: Date,
-    time: string,
     location: Location,
     activity: Activity,
     creator: AccountSummary,

@@ -11,7 +11,7 @@ import postIcon from "@/images/icons/header/posts.svg"
 import LanguageSide from "../language/Language_side";
 import { useTranslation } from "next-i18next";
 
-const CreateNewPostPopup = dynamic(() => import("../event/createNewPostPopup"), { ssr: false });
+const CreateNewPostPopup = dynamic(() => import("../event/createNewEventPopup"), { ssr: false });
 
 const Header: React.FC = () => {
   const { t } = useTranslation();

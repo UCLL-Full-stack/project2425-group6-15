@@ -30,7 +30,6 @@ const validEvent = {
     description: 'description',
     startDate: new Date(),
     endDate: new Date(),
-    time: 'time',
     location: { longitude: 'longitude', latitude: 'latitude' },
     activity: new Activity(validActivity),
     creator: new Account(validAccount),

@@ -34,7 +34,6 @@ model Event {
   description  String
   startDate    DateTime
   endDate      DateTime
-  time         String
   location     String
   activityId   Int
   activity     Activity  @relation(fields: [activityId], references: [id])

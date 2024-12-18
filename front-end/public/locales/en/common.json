@@ -86,7 +86,7 @@
         "search_placeholder": "Search here...",
         "save": "Save"
     },
-    "posts": {
+    "events": {
         "title": "Your Events",
         "create_post": "Create Event",
         "joined": "Events you joined",
@@ -111,7 +111,8 @@
             "required": "is required.",
             "next": "Next Step",
             "previous": "Previous Step",
-            "participants": "Participants"
+            "participants": "Participants",
+            "overview": "view overview"
         }
     },
     "profile": {

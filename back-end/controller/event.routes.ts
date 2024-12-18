@@ -45,8 +45,6 @@
  *         endDate:
  *           type: string
  *           format: date-time
- *         time:
- *           type: string
  *         location:
  *           $ref: '#/components/schemas/Location'
  *         activityName:

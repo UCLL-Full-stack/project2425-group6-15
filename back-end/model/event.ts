@@ -10,7 +10,6 @@ export class Event {
     private description: string;
     private startDate: Date;
     private endDate: Date;
-    private time: string;
     private location: Location;
     private activity: Activity;
     private participants: Account[];
@@ -23,7 +22,6 @@ export class Event {
         description: string;
         startDate: Date;
         endDate: Date;
-        time: string;
         location: Location;
         activity: Activity;
         creator: Account;
@@ -35,7 +33,6 @@ export class Event {
         this.description = event.description;
         this.startDate = event.startDate;
         this.endDate = event.endDate;
-        this.time = event.time;
         this.location = event.location;
         this.activity = event.activity;
         this.creator = event.creator;
@@ -50,9 +47,6 @@ export class Event {
         }
         if (!this.description.trim()) {
             throw new Error('Description is required');
-        }
-        if (!this.time.trim()) {
-            throw new Error('Time is required');
         }
         if (this.getPeopleNeeded() <= 0) {
             throw new Error('People needed must be greater than 0');
@@ -82,9 +76,7 @@ export class Event {
         return this.endDate;
     }
 
-    getTime(): string {
-        return this.time;
-    }
+
 
     getLocation(): Location {
         return this.location;
@@ -148,7 +140,6 @@ export class Event {
             description: this.getDescription(),
             startDate: this.getStartDate(),
             endDate: this.getEndDate(),
-            time: this.getTime(),
             location: this.getLocation(),
             activity: this.getActivity(),
             creator: this.getCreator().toSummary(),
@@ -185,7 +176,6 @@ export class Event {
             description: event.description,
             startDate: event.startDate,
             endDate: event.endDate,
-            time: event.time,
             location: event.location,
             activity: eventActivity,
             creator: event.creator,
@@ -202,7 +192,6 @@ export class Event {
             description: this.description,
             startDate: this.startDate,
             endDate: this.endDate,
-            time: this.time,
             location: `${this.location.longitude}|&|${this.location.latitude}`,
             activityId: this.activity.getId() ?? 0,
             creatorId: this.creator.getId() ?? 0,
@@ -220,7 +209,6 @@ export class Event {
         description,
         startDate,
         endDate,
-        time,
         location,
         activity,
         participants,
@@ -233,7 +221,6 @@ export class Event {
             description,
             startDate,
             endDate,
-            time,
             location: { longitude: location.split('|&|')[0], latitude: location.split('|&|')[1] } as Location,
             activity: Activity.fromPrisma(activity),
             creator: Account.fromPrisma({ ...creator, interests: [] }),

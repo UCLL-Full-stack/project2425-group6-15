@@ -86,7 +86,7 @@
         "search_placeholder": "Zoek hier...",
         "save": "Opslaan"
     },
-    "posts": {
+    "events": {
         "title": "Jouw Evenementen",
         "create_post": "Maak Evenement",
         "joined": "Evenementen waar je aan deelneemt",
@@ -111,7 +111,8 @@
             "required": "is verplicht.",
             "next": "Volgende Stap",
             "previous": "Vorige Stap",
-            "participants": "Deelnemers"
+            "participants": "Deelnemers",
+            "overview": "bekijk overzicht"
         }
         
     },
