@@ -61,12 +61,15 @@ export type AccountPreview = {
 
 
 export type AccountSummary = {
+    id: number;
     type: Role;
+    username: string;
     firstName: string;
     lastName: string;
     email: string;
     interests: Interest[];
 };
+
 
 export type EventSummary = {
     id?: number,

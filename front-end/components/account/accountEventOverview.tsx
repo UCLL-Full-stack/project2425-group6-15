@@ -81,7 +81,7 @@ const AccountEventOverview: React.FC = () => {
             {selectedEventId && <PostOverviewPopup postId={selectedEventId} onClose={closePopup} />}
             <div className="w-full h-fit flex flex-col gap-x-2 gap-y-4 bg-white border border-gray-200 rounded-xl px-4 py-2">
                 <div className="grid grid-cols-[max-content,1fr] gap-2 items-center">
-                    <h1 className="text-2xl font-bold text-slate-700">Jouw Toekomstige Events</h1>
+                    <h1 className="text-2xl font-bold text-slate-700">{t('events.upcoming_events')}</h1>
                     <div className='w-full h-0.5 bg-slate-300 rounded' />
                 </div>
                 <div className="flex flex-row items-center justify-start flex-wrap gap-2">
@@ -130,12 +130,12 @@ const AccountEventOverview: React.FC = () => {
             </div>
             <div className="w-full h-fit flex flex-col gap-x-2 gap-y-4 bg-white border border-gray-200 rounded-xl px-4 py-2">
                 <div className="grid grid-cols-[max-content,1fr] gap-2 items-center">
-                    <h1 className="text-2xl font-bold text-slate-700">Jouw achterliggende Events</h1>
+                    <h1 className="text-2xl font-bold text-slate-700">{t('events.past_events')}</h1>
                     <div className='w-full h-0.5 bg-slate-300 rounded' />
                 </div>
                 <div className="flex flex-row items-center justify-start flex-wrap gap-2">
                     {accountData.events.filter(event => new Date(event.endDate) < new Date()).map((event) => (
-                        <div key={event.id} className="flex border-gray-200 border rounded-lg flex-col gap-2 w-64 h-64">
+                        <button onClick={(e) => setSelectedEventId(event.id)} key={event.id} className="flex border-gray-200 border rounded-lg flex-col gap-2 w-64 h-64">
                             <div className="w-full h-fit relative rounded-lg">
                                 <MapContainerNoSSR
                                     center={[
@@ -173,18 +173,18 @@ const AccountEventOverview: React.FC = () => {
                                 </div>
                                 <p className="text-xs text-gray-400 truncate">{event.description}</p>
                             </div>
-                        </div>
+                        </button>
                     ))}
                 </div>
             </div>
             <div className="w-full h-fit flex flex-col gap-x-2 gap-y-4 bg-white border border-gray-200 rounded-xl px-4 py-2">
                 <div className="grid grid-cols-[max-content,1fr] gap-2 items-center">
-                    <h1 className="text-2xl font-bold text-slate-700">Jouw gejoinede Events</h1>
+                    <h1 className="text-2xl font-bold text-slate-700">{t('events.your_joined_events')}</h1>
                     <div className='w-full h-0.5 bg-slate-300 rounded' />
                 </div>
                 <div className="flex flex-row items-center justify-start flex-wrap gap-2">
                     {accountData.joinedEvents.filter(event => new Date(event.endDate) > new Date()).map((event) => (
-                        <div key={event.id} className="flex border-gray-200 border rounded-lg flex-col gap-2 w-64 h-64">
+                        <button onClick={(e) => setSelectedEventId(event.id)} key={event.id} className="flex border-gray-200 border rounded-lg flex-col gap-2 w-64 h-64">
                             <div className="w-full h-fit relative rounded-lg">
                                 <MapContainerNoSSR
                                     center={[
@@ -222,12 +222,12 @@ const AccountEventOverview: React.FC = () => {
                                 </div>
                                 <p className="text-xs text-gray-400 truncate">{event.description}</p>
                             </div>
-                        </div>
+                        </button>
                     ))}
                 </div>
                 <div className="flex flex-row items-center justify-start flex-wrap gap-2">
                     {accountData.joinedEvents.filter(event => new Date(event.endDate) < new Date()).map((event) => (
-                        <div key={event.id} className="flex border-gray-200 border opacity-50 rounded-lg flex-col gap-2 w-64 h-64">
+                        <button onClick={(e) => setSelectedEventId(event.id)} key={event.id} className="flex border-gray-200 border rounded-lg flex-col gap-2 w-64 h-64 opacity-50">
                             <div className="w-full h-fit relative rounded-lg">
                                 <MapContainerNoSSR
                                     center={[
@@ -265,7 +265,7 @@ const AccountEventOverview: React.FC = () => {
                                 </div>
                                 <p className="text-xs text-gray-400 truncate">{event.description}</p>
                             </div>
-                        </div>
+                        </button>
                     ))}
                 </div>
             </div>

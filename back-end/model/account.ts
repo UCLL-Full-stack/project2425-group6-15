@@ -220,6 +220,8 @@ export class Account {
 
     toSummary(): AccountSummary {
         return {
+            id: this.getId() ?? 0,
+            username: this.getUsername(),
             type: this.getType(),
             firstName: this.getFirstName(),
             lastName: this.getLastName(),

@@ -5,11 +5,14 @@ import "leaflet/dist/leaflet.css";
 
 import checkmarkImg from "@/images/icons/createpost/check.svg";
 import exitImg from "@/images/icons/createpost/exit.svg";
+import removeImg from "@/images/icons/createpost/remove.svg";
+import editImg from "@/images/icons/createpost/edit.svg";
 
-import { PublicEvent, EventSummary } from "@/types/index";
+import { PublicEvent, EventSummary, PublicAccount } from "@/types/index";
 import Image from "next/image";
-import postService from "@/services/eventService";
+import eventService from "@/services/eventService";
 import { Use } from "@svgdotjs/svg.js";
+import accountService from "@/services/accountService";
 
 interface CreateNewPostPopupProps {
   postId: number;
@@ -47,9 +50,34 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
 }) => {
   const [post, setPost] = useState<EventSummary | null>(null);
   const [address, setAddress] = useState<string | null>(null);
+  const [currentAccount, setcurrentAccount] = useState<PublicAccount | null>(null);
 
+  const fetchAccount = async () => {
+    const response = await accountService.findCurrentAccount();
+    if (!response.ok) {
+      console.error("Failed to fetch account");
+    }
+    const data = await response.json();
+    setcurrentAccount(data);
+  }
+
+  const removeEvent = async (eventId: number) => {
+    const confirmRemoval = confirm("Are you sure you want to remove this event?");
+    if (!confirmRemoval) return;
+    try {
+      const response = await eventService.removeEvent(eventId);
+      if (response.ok) {
+        alert("Successfully removed the event!");
+        onClose();
+      } else {
+        console.error("Failed to remove the event");
+      }
+    } catch (error) {
+      console.error("An error occurred while removing the event", error);
+    }
+  };
   const fetchPost = async () => {
-    const response = await postService.getPostById(postId);
+    const response = await eventService.getPostById(postId);
     if (!response.ok) {
       console.error("Failed to fetch post");
     }
@@ -65,12 +93,13 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
   };
 
   useEffect(() => {
+    fetchAccount();
     fetchPost();
   }, []);
 
   const joinpost = async (postId: number) => {
     try {
-      const response = await postService.joinPost(postId);
+      const response = await eventService.joinPost(postId);
       if (response.ok) {
         fetchPost();
         alert("Successfully joined the post!");
@@ -83,7 +112,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
   };
   const exitpost = async (postId: number) => {
     try {
-      const response = await postService.exitPost(postId);
+      const response = await eventService.exitPost(postId);
       if (response.ok) {
         fetchPost();
         alert("Successfully exited the post!");
@@ -105,7 +134,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
         >
           &#9587;
         </button>
-        {post && (
+        {post && currentAccount && (
           <>
             <h3 className="text-xl font-medium text-slate-700">
               {post?.title}
@@ -119,7 +148,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
                   <h4 className="text-sm font-medium text-slate-700">
                     Address
                   </h4>
-                  <p className="text-sm text-gray-400">{address}</p>
+                  <p className="text-sm text-gray-400 flex">{address}</p>
                 </div>
                 <div>
                   <MapContainerNoSSR
@@ -158,50 +187,96 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
               <div className="flex flex-col gap-2">
                 <div className="flex flex-col">
                   <h4 className="text-sm font-medium text-slate-700">
+                    Hour
+                  </h4>
+                  <div className="flex flex-col">
+                    <div className="grid grid-cols-[max-content_1fr_max-content] items-center">
+                      <div className="w-4 h-4 rounded-full bg-gray-300" />
+                      <div className="w-full h-1 bg-gray-300" />
+                      <div className="w-4 h-4 rounded-full bg-gray-300" />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="text-sm text-gray-400 text-start">
+                        <p>{new Date(post.startDate).toLocaleTimeString()}</p>
+                        <p>{new Date(post.startDate).toLocaleDateString()}</p>
+                      </div>
+                      <div className="text-sm text-gray-400 text-end">
+                        <p>{new Date(post.endDate).toLocaleTimeString()}</p>
+                        <p>{new Date(post.endDate).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col">
+                  <h4 className="text-sm font-medium text-slate-700">
                     Description
                   </h4>
                   <p className="text-sm text-gray-400">{post?.description}</p>
                 </div>
-                <div className="flex flex-col">
-                  <p className="text-sm text-gray-400">
-                    {post?.location
-                      ? `${post.location.latitude}, ${post.location.longitude}`
-                      : ""}
-                  </p>
-                  <p className="text-sm text-gray-400"></p>
-                </div>
+
               </div>
             </div>
-            <div className="w-full flex items-center justify-end">
-              {!post.hasJoined && (
-                <button
-                  className="flex items-center justify-center gap-1.5 border-blue-500 border-2 text-blue-500 rounded-full px-4 py-2 transition-all duration-300 ease-in-out "
-                  onClick={() => joinpost(postId)}
-                >
-                  <Image
-                    src={checkmarkImg}
-                    alt="Checkmark Icon"
-                    width={20}
-                    height={20}
-                  />
-                  schrijf in
-                </button>
-              )}
-              {post.hasJoined && (
+            {(post.creator.id != currentAccount.id && new Date(post.startDate) > new Date()) && (
+              <div className="w-full flex items-center justify-end">
+                {!post.hasJoined && (
+                  <button
+                    className="flex items-center justify-center gap-1.5 border-blue-500 border-2 text-blue-500 rounded-full px-4 py-2 transition-all duration-300 ease-in-out "
+                    onClick={() => joinpost(postId)}
+                  >
+                    <Image
+                      src={checkmarkImg}
+                      alt="Checkmark Icon"
+                      width={20}
+                      height={20}
+                    />
+                    schrijf in
+                  </button>
+                )}
+                {post.hasJoined && (
+                  <button
+                    className="flex items-center justify-center gap-1.5 border-red-500 border-2 text-red-500 rounded-full px-4 py-2 transition-all duration-300 ease-in-out "
+                    onClick={() => exitpost(postId)}
+                  >
+                    <Image
+                      src={exitImg}
+                      alt="cros Icon"
+                      width={20}
+                      height={20}
+                    />
+                    schrijf uit
+                  </button>
+                )}
+              </div>
+            )}
+
+            {(post.creator.id == currentAccount.id && new Date(post.startDate) > new Date(new Date().setHours(new Date().getHours() + 12))) && (
+              <div className="w-full flex items-center justify-end gap-2">
                 <button
                   className="flex items-center justify-center gap-1.5 border-red-500 border-2 text-red-500 rounded-full px-4 py-2 transition-all duration-300 ease-in-out "
-                  onClick={() => exitpost(postId)}
+                  onClick={() => removeEvent(postId)}
                 >
                   <Image
-                    src={exitImg}
+                    src={removeImg}
                     alt="cros Icon"
                     width={20}
                     height={20}
                   />
-                  schrijf uit
+                  verwijder
                 </button>
-              )}
-            </div>
+                <button
+                  className="flex items-center justify-center gap-1.5 border-blue-500 border-2 text-blue-500 rounded-full px-4 py-2 transition-all duration-300 ease-in-out "
+                  onClick={() => (postId)}
+                >
+                  <Image
+                    src={editImg}
+                    alt="Checkmark Icon"
+                    width={20}
+                    height={20}
+                  />
+                  bewerk
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>

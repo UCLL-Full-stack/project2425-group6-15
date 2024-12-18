@@ -97,6 +97,9 @@
         "confirm_delete": "Are you sure you want to delete this event?",
         "cancel": "Cancel",
         "confirm": "Confirm",
+        "upcoming_events": "Your Upcoming Events",
+        "past_events": "Your Past Events",
+        "your_joined_events": "Your Joined Events",
         "create": {
             "title": "Create Event",
             "name": "Name",

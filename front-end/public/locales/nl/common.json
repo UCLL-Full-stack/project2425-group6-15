@@ -97,6 +97,9 @@
         "confirm_delete": "Weet je zeker dat je dit evenement wilt verwijderen?",
         "cancel": "Annuleren",
         "confirm": "Bevestigen",
+        "upcoming_events": "Jouw Toekomstige Evenementen",
+        "past_events": "Jouw Voorbije Evenementen",
+        "your_joined_events": "Jouw Deelgenomen Evenementen",
         "create": {
             "title": "Maak Evenement",
             "name": "Naam",
