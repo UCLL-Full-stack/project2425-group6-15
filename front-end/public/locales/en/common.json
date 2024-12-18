@@ -106,13 +106,16 @@
             "endDate":"End Date",
             "time": "Time",
             "interests": "Interests",
+            "activity": "Activity",
+            "period": "Period",
             "create": "Create Event",
             "cancel": "Cancel",
             "required": "is required.",
             "next": "Next Step",
             "previous": "Previous Step",
             "participants": "Participants",
-            "overview": "view overview"
+            "overview": "view overview",
+            "edit": "Back to Edit"
         }
     },
     "profile": {

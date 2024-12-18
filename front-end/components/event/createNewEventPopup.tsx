@@ -453,7 +453,7 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
           )}
           {currentStep === 3 && (
             <div className="flex flex-col gap-2">
-              <label htmlFor="">Periode</label>
+              <label htmlFor="eventPeriod">{t("events.create.period")}</label>
               <DateRange
                 ranges={dateRange}
                 onChange={handleSelect}

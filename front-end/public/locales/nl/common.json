@@ -112,7 +112,10 @@
             "next": "Volgende Stap",
             "previous": "Vorige Stap",
             "participants": "Deelnemers",
-            "overview": "bekijk overzicht"
+            "overview": "bekijk overzicht",
+            "activity": "Activiteit",
+            "period": "Periode",
+            "edit": "terug naar bewerken"
         }
         
     },
