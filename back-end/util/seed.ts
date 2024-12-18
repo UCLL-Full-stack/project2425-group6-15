@@ -3,6 +3,17 @@ import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
+const addDays = (date: Date, days: number): Date => {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+};
+const addHours = (date: Date, hours: number): Date => {
+    const result = new Date(date);
+    result.setHours(result.getDate() + hours);
+    return result;
+};
+
 const main = async () => {
     await prisma.event.deleteMany();
     await prisma.account.deleteMany();
@@ -307,6 +318,27 @@ const main = async () => {
         },
     });
 
+    const activity13 = await prisma.activity.create({
+        data: {
+            name: 'Basketball',
+            type: 'Sport',
+        },
+    });
+
+    const activity14 = await prisma.activity.create({
+        data: {
+            name: 'Tennis',
+            type: 'Sport',
+        },
+    });
+
+    const activity15 = await prisma.activity.create({
+        data: {
+            name: 'Soccer',
+            type: 'Sport',
+        },
+    });
+
 
     const account1 = await prisma.account.create({
         data: {
@@ -473,7 +505,7 @@ const main = async () => {
             peopleNeeded: 5,
             location: "6.8503|&|50.3517",
             participants: {
-                connect: [{ id: account3.id }, { id: account4.id }]
+                connect: [{ id: account3.id }, { id: account4.id }, { id: account1.id }]
             }
         },
     });
@@ -725,7 +757,7 @@ const main = async () => {
             activityId: activity4.id,
             creatorId: account7.id,
             peopleNeeded: 8,
-            location: "50.8503|&|4.3517",
+            location: "50.8503|&|4.3517"
         },
     });
 
@@ -855,10 +887,52 @@ const main = async () => {
             activityId: activity10.id,
             creatorId: account7.id,
             peopleNeeded: 4,
-            location: "50.8503|&|4.3517",
+            location: "4.3517|&|50.8503",
         },
     });
 
+    const event31 = await prisma.event.create({
+        data: {
+            title: 'Fishing Trip',
+            description: 'Join us for a relaxing fishing trip.',
+            startDate: addDays(new Date(), (1)) ,
+            endDate: addDays(new Date(), (3)),
+            activityId: activity10.id,
+            creatorId: account7.id,
+            peopleNeeded: 4,
+            location: "50.82325052825633|&|4.656242066808763",
+        },
+    });
+
+    const event32 = await prisma.event.create({
+        data: {
+            title: 'Basketball Game',
+            description: 'Join us for a friendly basketball game.',
+            startDate: addDays(new Date(), 5),
+            endDate: addHours(addDays(new Date(), 5), 3),
+            activityId: activity13.id, 
+            creatorId: account2.id,
+            peopleNeeded: 10,
+            location: "50.875190887038|&|4.703072739455819",
+            participants: {
+                connect: [{ id: account1.id }, { id: account4.id }, { id: account3.id }, { id: account5.id }, { id: account6.id }, { id: account7.id }, { id: account8.id }, { id: account9.id }, { id: account10.id }]
+            }
+            
+        },
+    });
+
+    const event33 = await prisma.event.create({
+        data: {
+            title: 'Hiking',
+            description: 'Join us for an exciting hiking day Tour.',
+            startDate: addDays(new Date(), 10),
+            endDate: addHours(addDays(new Date(), 10), 8),
+            activityId: activity1.id, 
+            creatorId: account1.id,
+            peopleNeeded: 10,
+            location: "50.333830549980384|&|5.530140633037061",
+        },
+    });
 
 
     

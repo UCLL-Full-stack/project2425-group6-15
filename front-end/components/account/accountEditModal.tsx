@@ -1,6 +1,5 @@
 import AccountService from "@/services/accountService";
 import { useEffect, useState } from "react";
-import { Gender, Account } from "@/types";
 
 import unselectmaleimage from "@/images/icons/profile/unselectmale.svg";
 import unselectfemaleimage from "@/images/icons/profile/unselectfemale.svg";
@@ -8,9 +7,10 @@ import selectfemaleimage from "@/images/icons/profile/selectfemale.svg";
 import selectmaleimage from "@/images/icons/profile/selectmale.svg";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
+import { AccountInput } from "@/types";
 
 interface AccountProfileProps {
-    Account: Account;
+    Account: AccountInput;
     onclose(): void;
 }
 
@@ -23,7 +23,6 @@ const AccountEditProfile: React.FC<AccountProfileProps> = ({ Account, onclose })
     const [phone, setPhone] = useState<number | null>(Account.phoneNumber.number ? Number(Account.phoneNumber.number) : 0);
     const [phoneError, setPhoneError] = useState("");
     const [countryCode, setCountryCode] = useState(Account.phoneNumber.countryCode || "+32");
-    const [gender, setGender] = useState<Gender | "">(Account.gender || "");
     const [genderError, setGenderError] = useState("");
     const [password, setPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");

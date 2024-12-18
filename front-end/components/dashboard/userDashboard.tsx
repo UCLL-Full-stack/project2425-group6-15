@@ -52,10 +52,9 @@ const UserDashboard: React.FC = () => {
     if (!response.ok) {
       throw new Error("Failed to load posts");
     }
-    let posts = await response.json();
-    posts = posts.filter((post: EventPreview) => post.peopleNeeded > post.peopleJoined);
-
-    setPosts(posts);
+    let events = await response.json();
+    events = events.filter((event: EventPreview) => new Date(event.startDate) > new Date())
+    setPosts(events);
   }
 
   useEffect(() => {

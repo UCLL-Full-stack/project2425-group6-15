@@ -1,11 +1,8 @@
 import AccountService from "@/services/accountService";
 import { useEffect, useState } from "react";
-import { AccountSummary, PublicAccount } from "@/types";
+import { PublicAccount } from "@/types";
 
-import maleimage from "@/images/icons/profile/unselectmale.svg";
-import femaleimage from "@/images/icons/profile/unselectfemale.svg";
 
-import Image from "next/image";
 
 
 import { useTranslation } from "next-i18next";
