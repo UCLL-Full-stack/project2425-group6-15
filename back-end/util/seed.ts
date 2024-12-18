@@ -931,6 +931,9 @@ const main = async () => {
             creatorId: account1.id,
             peopleNeeded: 10,
             location: "50.333830549980384|&|5.530140633037061",
+            participants: {
+                connect: [{ id: account4.id }, { id: account5.id }, { id: account6.id }, { id: account9.id }, { id: account10.id }]
+            }
         },
     });
 

@@ -1,9 +1,5 @@
-import { useState } from 'react';
-import AccountPostOverview from "@/components/event/UserPostOverview";
 import Header from '@/components/header/header';
-import Head from "next/head";
 
-import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticProps } from "next";
 import dynamic from 'next/dynamic';

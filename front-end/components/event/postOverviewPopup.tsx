@@ -13,6 +13,8 @@ import Image from "next/image";
 import eventService from "@/services/eventService";
 import { Use } from "@svgdotjs/svg.js";
 import accountService from "@/services/accountService";
+import EditEventPopup from "./editEventPopup";
+import { set } from "date-fns";
 
 interface CreateNewPostPopupProps {
   postId: number;
@@ -51,6 +53,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
   const [post, setPost] = useState<EventSummary | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [currentAccount, setcurrentAccount] = useState<PublicAccount | null>(null);
+  const [showedit, setShowedit] = useState<boolean>(false);
 
   const fetchAccount = async () => {
     const response = await accountService.findCurrentAccount();
@@ -124,6 +127,13 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
     }
   }
 
+  const closeEdit = () => {
+    setShowedit(false);
+    fetchPost();
+  }
+  if (showedit) {
+    return <EditEventPopup eventId={postId} onClose={closeEdit} />;
+  }
 
   return (
     <div className="bg-black bg-opacity-50 z-[999] fixed top-0 left-0 w-full h-full flex justify-center items-center">
@@ -213,7 +223,18 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
                   </h4>
                   <p className="text-sm text-gray-400">{post?.description}</p>
                 </div>
-
+                {currentAccount.id === post.creator.id && (
+                  <div className="flex flex-col">
+                    <h4 className="text-sm font-medium text-slate-700">
+                      Deelnemers
+                    </h4>
+                    <div className="flex flex-col gap-1">
+                      {post?.participants?.map((participant) => (
+                        <p className="text-sm text-gray-400">{participant.firstName} {participant.lastName}</p>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             {(post.creator.id != currentAccount.id && new Date(post.startDate) > new Date()) && (
@@ -265,7 +286,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
                 </button>
                 <button
                   className="flex items-center justify-center gap-1.5 border-blue-500 border-2 text-blue-500 rounded-full px-4 py-2 transition-all duration-300 ease-in-out "
-                  onClick={() => (postId)}
+                  onClick={() => (setShowedit(true))}
                 >
                   <Image
                     src={editImg}
