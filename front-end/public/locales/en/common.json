@@ -97,6 +97,11 @@
         "upcoming_events": "Your Upcoming Events",
         "past_events": "Your Past Events",
         "your_joined_events": "Your Joined Events",
+        "by": "By",
+        "address": "Address",
+        "timespan": "Timespan",
+        "startTime": "Starttime",
+        "endTime": "Endtime",
         "create": {
             "title": "Create Event",
             "name": "Name",
@@ -116,7 +121,9 @@
             "participants": "Participants",
             "overview": "view overview",
             "edit": "Back to Edit",
-            "overviewTitle": "Event Overview"
+            "overviewTitle": "Event Overview",
+             "join":"Join",
+            "leave":"Leave"
         }
     },
     "profile": {

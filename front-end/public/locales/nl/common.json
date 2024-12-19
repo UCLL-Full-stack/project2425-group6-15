@@ -97,6 +97,11 @@
         "upcoming_events": "Jouw Toekomstige Evenementen",
         "past_events": "Jouw Voorbije Evenementen",
         "your_joined_events": "Jouw Deelgenomen Evenementen",
+        "by": "Door",
+        "address": "Adres",
+        "timespan": "Tijdsduur",
+        "startTime": "Starttijd",
+        "endTime": "Eindtijd",
         "create": {
             "title": "Maak Evenement",
             "name": "Naam",
@@ -116,7 +121,9 @@
             "activity": "Activiteit",
             "period": "Periode",
             "edit": "terug naar bewerken",
-            "overviewTitle": "Overzicht van Evenement"
+            "overviewTitle": "Overzicht van Evenement",
+            "join":"Schrijf in",
+            "leave":"Schrijf uit"
         }
         
     },

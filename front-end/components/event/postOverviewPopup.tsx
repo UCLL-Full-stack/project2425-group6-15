@@ -7,7 +7,7 @@ import checkmarkImg from "@/images/icons/createpost/check.svg";
 import exitImg from "@/images/icons/createpost/exit.svg";
 import removeImg from "@/images/icons/createpost/remove.svg";
 import editImg from "@/images/icons/createpost/edit.svg";
-
+import { useTranslation } from "next-i18next";
 import { PublicEvent, EventSummary, PublicAccount } from "@/types/index";
 import Image from "next/image";
 import eventService from "@/services/eventService";
@@ -47,9 +47,11 @@ const fetchNearestAddress = async (latitude: number, longitude: number) => {
 };
 
 const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
+  
   onClose,
   postId,
 }) => {
+  const { t } = useTranslation();
   const [post, setPost] = useState<EventSummary | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [currentAccount, setcurrentAccount] = useState<PublicAccount | null>(null);
@@ -150,13 +152,13 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
               {post?.title}
             </h3>
             <p className="text-sm text-gray-400">
-              By @{post?.creator?.firstName} {post?.creator?.lastName}
+            {t("events.by")} @{post?.creator?.firstName} {post?.creator?.lastName}
             </p>
             <div className="pt-4 grid grid-cols-2 gap-2">
               <div>
                 <div>
                   <h4 className="text-sm font-medium text-slate-700">
-                    Address
+                  {t("events.address")}
                   </h4>
                   <p className="text-sm text-gray-400 flex">{address}</p>
                 </div>
@@ -197,7 +199,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
               <div className="flex flex-col gap-2">
                 <div className="flex flex-col">
                   <h4 className="text-sm font-medium text-slate-700">
-                    Hour
+                  {t("events.timespan")}
                   </h4>
                   <div className="flex flex-col">
                     <div className="grid grid-cols-[max-content_1fr_max-content] items-center">
@@ -219,14 +221,14 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
                 </div>
                 <div className="flex flex-col">
                   <h4 className="text-sm font-medium text-slate-700">
-                    Description
+                  {t("events.create.description")}
                   </h4>
                   <p className="text-sm text-gray-400">{post?.description}</p>
                 </div>
                 {currentAccount.id === post.creator.id && (
                   <div className="flex flex-col">
                     <h4 className="text-sm font-medium text-slate-700">
-                      Deelnemers
+                    {t("events.create.participants")}
                     </h4>
                     <div className="flex flex-col gap-1">
                       {post?.participants?.map((participant) => (
@@ -250,7 +252,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
                       width={20}
                       height={20}
                     />
-                    schrijf in
+                    {t("events.create.join")}
                   </button>
                 )}
                 {post.hasJoined && (
@@ -264,7 +266,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
                       width={20}
                       height={20}
                     />
-                    schrijf uit
+                    {t("events.create.leave")}
                   </button>
                 )}
               </div>
@@ -282,7 +284,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
                     width={20}
                     height={20}
                   />
-                  verwijder
+                  {t("events.delete")}
                 </button>
                 <button
                   className="flex items-center justify-center gap-1.5 border-blue-500 border-2 text-blue-500 rounded-full px-4 py-2 transition-all duration-300 ease-in-out "
@@ -294,7 +296,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
                     width={20}
                     height={20}
                   />
-                  bewerk
+                  {t("events.edit")}
                 </button>
               </div>
             )}
