@@ -84,6 +84,8 @@
         "save": "Save"
     },
     "events": {
+        "view": "View event",
+        "events": "Events",
         "title": "Your Events",
         "create_post": "Create Event",
         "joined": "Events you joined",
@@ -140,5 +142,14 @@
         "manage_profile": "Manage Profile",
         "save": "Save",
         "cancel":"Cancel"
+    },
+    "filter": {
+        "between": "Between:",
+        "radius": "Radius",
+        "date1": "Date 1",
+        "all": "All",
+        "date2": "Date 2",
+        "pinned": "Pinned Location"
+        
     }
 }

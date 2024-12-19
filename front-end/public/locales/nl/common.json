@@ -84,6 +84,8 @@
         "save": "Opslaan"
     },
     "events": {
+        "view": "Bekijk evenement",
+        "events": "Evenementen",
         "title": "Jouw Evenementen",
         "create_post": "Maak Evenement",
         "joined": "Evenementen waar je aan deelneemt",
@@ -141,5 +143,15 @@
         "manage_profile": "Profiel beheren",
         "save": "opslaan",
         "cancel":"annuleren"
+    },
+    "filter": {
+        "between": "Tussen:",
+        "radius": "straal",
+        "date1": "Datum 1",
+        "all": "Alle",
+        "date2": "Datum 2",
+        "pinned": "Vastgezette Locatie"
+        
     }
+
 }
