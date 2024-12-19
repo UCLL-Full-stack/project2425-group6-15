@@ -314,7 +314,7 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
                         &#9587;
                     </button>
                     <h3 className="text-xl font-medium text-slate-600">
-                        {t("events.edit.title")}
+                        {t("events.edit")}
                     </h3>
                     <div className="flex flex-col gap-4 overflow-y-auto">
                         <div className="w-full flex flex-col gap-0">
@@ -443,7 +443,7 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
                             />
                             <div className="grid grid-cols-2 gap-2 mt-4">
                                 <div className="flex flex-col gap-0">
-                                    <label htmlFor="startTime">Starttijd</label>
+                                    <label htmlFor="startTime">{t("events.startTime")}</label>
                                     <input
                                         type="time"
                                         id="startTime"
@@ -454,7 +454,7 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
                                     />
                                 </div>
                                 <div className="flex flex-col gap-0">
-                                    <label htmlFor="endTime">Eindtijd</label>
+                                    <label htmlFor="endTime">{t("events.endTime")}</label>
                                     <input
                                         type="time"
                                         id="endTime"

@@ -464,7 +464,7 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
               />
               <div className="grid grid-cols-2 gap-2 mt-4">
                 <div className="flex flex-col gap-0">
-                  <label htmlFor="startTime">Starttijd</label>
+                  <label htmlFor="startTime">{t("events.startTime")}</label>
                   <input
                     type="time"
                     id="startTime"
@@ -474,7 +474,7 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
                   />
                 </div>
                 <div className="flex flex-col gap-0">
-                  <label htmlFor="endTime">Eindtijd</label>
+                  <label htmlFor="endTime">{t("events.endTime")}</label>
                   <input
                     type="time"
                     id="endTime"
