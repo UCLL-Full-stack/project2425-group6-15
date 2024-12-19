@@ -504,11 +504,11 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
         </div>
       )}
       {currentStep === 4 && (
-        <div className="bg-white px-4 py-2 flex flex-col gap-2 relative rounded-xl max-w-xl min-w-96">
-          <h2 className="text-2xl font-semibold mb-4">{t("events.create.overviewTitle")}</h2>
-          <div className="flex flex-col gap-4">
+        <div className="bg-white px-3 py-2 flex flex-col gap-2 relative rounded-xl max-w-xl min-w-96">
+          <h2 className="text-lg font-semibold mb-2">{t("events.create.overviewTitle")}</h2>
+          <div className="flex flex-col gap-2">
             <div>
-              <label htmlFor="eventTitle" className="text-lg font-medium text-slate-600">
+              <label htmlFor="eventTitle" className="text-base font-medium text-slate-600">
                 {t("events.create.name")}
               </label>
               <p className="text-base text-slate-800">{title}</p>
@@ -516,20 +516,20 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
             <div>
               <label
                 htmlFor="eventDescription"
-                className="text-lg font-medium text-slate-600"
+                className="text-base font-medium text-slate-600"
               >
                 {t("events.create.description")}
               </label>
               <p className="text-base text-slate-800">{description}</p>
             </div>
             <div>
-              <label htmlFor="eventParticipants" className="text-lg font-medium text-slate-600">
+              <label htmlFor="eventParticipants" className="text-base font-medium text-slate-600">
                 {t("events.create.participants")}
               </label>
               <p className="text-base text-slate-800">{participants}</p>
             </div>
             <div>
-              <label htmlFor="eventActivity" className="text-lg font-medium text-slate-600">
+              <label htmlFor="eventActivity" className="text-base font-medium text-slate-600">
                 {t("events.create.activity")}
               </label>
               <p className="text-base text-slate-800">{activity}</p>
@@ -537,42 +537,42 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
             <div>
               <label
                 htmlFor="eventLocation"
-                className="text-lg font-medium text-slate-600"
+                className="text-base font-medium text-slate-600"
               >
                 {t("events.create.location")}
               </label>
-              <p className="text-base text-slate-800">{address}</p>
-              <div className="h-64 mt-2">
+                <p className="text-base text-slate-800">{address}</p>
+                <div className="h-56 mt-2">
                 {typeof window !== "undefined" && cordlocation && (
                   <MapContainerNoSSR
-                    center={[cordlocation.latitude, cordlocation.longitude]}
-                    zoom={13}
-                    className="h-full rounded-lg"
+                  center={[cordlocation.latitude, cordlocation.longitude]}
+                  zoom={13}
+                  className="h-full rounded-lg"
                   >
-                    <TileLayerNoSSR url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <MarkerNoSSR position={[cordlocation.latitude, cordlocation.longitude]} />
+                  <TileLayerNoSSR url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <MarkerNoSSR position={[cordlocation.latitude, cordlocation.longitude]} />
                   </MapContainerNoSSR>
                 )}
+                </div>
               </div>
-            </div>
-            <div>
-              <label htmlFor="eventPeriod" className="text-lg font-medium text-slate-600">
+              <div>
+                <label htmlFor="eventPeriod" className="text-base font-medium text-slate-600">
                 {t("events.create.period")}
               </label>
               <p className="text-base text-slate-800">{startDateTime}</p>
               <p className="text-base text-slate-800">{endDateTime}</p>
             </div>
           </div>
-          <div className="flex justify-end gap-4 mt-4">
+          <div className="flex justify-end gap-3 mt-3">
             <button
               onClick={handlePreviousStep}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-base text-gray-700 hover:border-gray-600"
+              className="px-3 py-1 border border-gray-300 rounded-lg text-base text-gray-700 hover:border-gray-600"
             >
               {t("events.create.edit")}
             </button>
             <button
               onClick={handleCreateEvent}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg text-base hover:bg-blue-600"
+              className="px-3 py-1 bg-blue-500 text-white rounded-lg text-base hover:bg-blue-600"
             >
               {t("events.create.create")}
             </button>
