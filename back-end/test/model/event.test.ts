@@ -6,6 +6,8 @@ import { Activity } from "../../model/activity";
 
 const validAccount = {
     id: 2,
+    type: 'account' as Role,
+    username: 'janedoe',
     firstName: 'Jane',
     lastName: 'Doe',
     phoneNumber: { countryCode: '+1', number: '123456789' },
@@ -29,7 +31,7 @@ const validEvent = {
     title: 'title',
     description: 'description',
     startDate: new Date(),
-    endDate: new Date(),
+    endDate: new Date(+new Date() + 100000),
     location: { longitude: 'longitude', latitude: 'latitude' },
     activity: new Activity(validActivity),
     creator: new Account(validAccount),
@@ -39,14 +41,12 @@ const validEvent = {
 
 
 test('given:valid values for event, when:event is created, then:event is created with those values', () => {
-    const account = new Account(validAccount);
     const event = new Event(validEvent);
     expect(validEvent.id).toEqual(event.getId());
     expect(validEvent.title).toEqual(event.getTitle());
     expect(validEvent.description).toEqual(event.getDescription());
     expect(validEvent.startDate).toEqual(event.getStartDate());
     expect(validEvent.endDate).toEqual(event.getEndDate());
-    expect(validEvent.time).toEqual(event.getTime());
     expect(validEvent.location).toEqual(event.getLocation());
     expect(validEvent.activity).toEqual(event.getActivity());
     expect(validEvent.creator).toEqual(event.getCreator());
@@ -75,12 +75,12 @@ test('given:valid values, when:isFull is called, then:returns correct boolean', 
 
 test('given:valid values, when:getPlacesLeft is called, then:returns correct number', () => {
     const event = new Event(validEvent);
-    expect(event.getPlacesLeft()).toBe(1);
+    expect(event.getPlacesLeft()).toBe(0);
     const newEvent = new Event({ ...validEvent, participants: [], peopleNeeded: 3 });
     expect(newEvent.getPlacesLeft()).toBe(3);
 });
 
-test('given:valid values, when:toPrevieuw is called, then:returns correct preview object', () => {
+test('given:valid values, when:toPreview is called, then:returns correct preview object', () => {
     const event = new Event(validEvent);
     const preview = event.toPrevieuw(validAccount.id);
     expect(preview).toEqual({
@@ -100,14 +100,13 @@ test('given:valid values, when:toPrevieuw is called, then:returns correct previe
 
 test('given:valid values, when:toSummary is called, then:returns correct summary object', () => {
     const event = new Event(validEvent);
-    const summary = event.toSummary();
+    const summary = event.toSummary(validAccount.id);
     expect(summary).toEqual({
         id: validEvent.id,
         title: validEvent.title,
         description: validEvent.description,
         startDate: validEvent.startDate,
         endDate: validEvent.endDate,
-        time: validEvent.time,
         location: validEvent.location,
         activity: validEvent.activity,
         creator: validEvent.creator.toSummary(),
@@ -115,3 +114,87 @@ test('given:valid values, when:toSummary is called, then:returns correct summary
         peopleNeeded: validEvent.peopleNeeded,
     });
 });
+
+test('given:valid values, when:setTitle is called, then:title is updated', () => {
+    const event = new Event(validEvent);
+    event.setTitle('new title');
+    expect(event.getTitle()).toEqual('new title');
+});
+
+test('given:empty title, when:setTitle is called, then:error is thrown', () => {
+    const event = new Event(validEvent);
+    expect(() => event.setTitle('')).toThrow('Title is required');
+});
+
+test('given:valid values, when:setDescription is called, then:description is updated', () => {
+    const event = new Event(validEvent);
+    event.setDescription('new description');
+    expect(event.getDescription()).toEqual('new description');
+});
+
+test('given:empty description, when:setDescription is called, then:error is thrown', () => {
+    const event = new Event(validEvent);
+    expect(() => event.setDescription('')).toThrow('Description is required');
+});
+
+test('given:valid values, when:setStartDate is called, then:startDate is updated', () => {
+    const event = new Event(validEvent);
+    const newStartDate = new Date(validEvent.endDate.getTime() - 100000);
+    event.setStartDate(newStartDate);
+    expect(event.getStartDate()).toEqual(newStartDate);
+});
+
+test('given:startDate after endDate, when:setStartDate is called, then:error is thrown', () => {
+    const event = new Event(validEvent);
+    const invalidStartDate = new Date(validEvent.endDate.getTime() + 100000);
+    expect(() => event.setStartDate(invalidStartDate)).toThrow('Start date must be before end date');
+});
+
+test('given:valid values, when:setEndDate is called, then:endDate is updated', () => {
+    const event = new Event(validEvent);
+    const newEndDate = new Date(validEvent.startDate.getTime() + 200000);
+    event.setEndDate(newEndDate);
+    expect(event.getEndDate()).toEqual(newEndDate);
+});
+
+test('given:endDate before startDate, when:setEndDate is called, then:error is thrown', () => {
+    const event = new Event(validEvent);
+    const invalidEndDate = new Date(validEvent.startDate.getTime() - 100000);
+    expect(() => event.setEndDate(invalidEndDate)).toThrow('End date must be after start date');
+});
+
+test('given:valid values, when:setPeopleNeeded is called, then:peopleNeeded is updated', () => {
+    const event = new Event(validEvent);
+    event.setPeopleNeeded(3);
+    expect(event.getPeopleNeeded()).toEqual(3);
+});
+
+test('given:peopleNeeded less than participants, when:setPeopleNeeded is called, then:error is thrown', () => {
+    const event = new Event(validEvent);
+    expect(() => event.setPeopleNeeded(1)).toThrow('People needed must be greater than or equal to number of participants');
+});
+
+// test('given:valid values, when:removeParticipant is called, then:participant is removed', () => {
+//     const event = new Event(validEvent);
+//     event.removeParticipant(validAccount);
+//     expect(event.getParticipants().length).toEqual(0);
+// });
+
+test('given:valid values, when:toPublic is called, then:returns correct public object', () => {
+    const event = new Event(validEvent);
+    const publicEvent = event.toPublic(validAccount.id);
+    expect(publicEvent).toEqual({
+        id: validEvent.id,
+        title: validEvent.title,
+        description: validEvent.description,
+        startDate: validEvent.startDate,
+        endDate: validEvent.endDate,
+        location: validEvent.location,
+        activity: validEvent.activity,
+        creator: validEvent.creator.toSummary(),
+        participants: validEvent.participants.map(participant => participant.toSummary()),
+        peopleNeeded: validEvent.peopleNeeded,
+        hasJoined: true,
+    });
+});
+
