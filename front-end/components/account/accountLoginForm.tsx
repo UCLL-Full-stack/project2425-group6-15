@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from 'next/router';
 import authService from "@/services/authService";
 import { useTranslation } from "next-i18next";
+import { jwtDecode } from "jwt-decode";
 
 const AccountLoginForm: React.FC = () => {
   const { t } = useTranslation();
@@ -43,6 +44,10 @@ const AccountLoginForm: React.FC = () => {
     const data = await response.json();
     if (response.status == 200) {
       sessionStorage.setItem("token", data.token)
+      const tokenAccountType = jwtDecode<{ accountType: string }>(data.token).accountType;
+      if (tokenAccountType == "admin") {
+        router.push('/admin');
+      }
       router.push('/');
     }
     else {

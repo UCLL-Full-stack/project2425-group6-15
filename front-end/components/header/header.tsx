@@ -72,7 +72,8 @@ const Header: React.FC = () => {
   return (
     <header className="fixed z-40 left-0 top-0 bg-white p-2 w-full h-30 font-sans grid grid-cols-[max-content,1fr,max-content,max-content,max-content] grid-rows-1 gap-x-2">
       <Link href={"/"} className="text-3xl w-fit font- font-normal text-blue-950"><strong className="font-bold">Join</strong>Me</Link>
-      <input type="search" className="outline-none border border-gray-300 rounded-full px-4 max-w-xl" placeholder={t("header.search_placeholder")} />
+      <div></div>
+      {/* <input type="search" className="outline-none border border-gray-300 rounded-full px-4 max-w-xl" placeholder={t("header.search_placeholder")} /> */}
       <button onClick={() => setCreateNewPostPopupOpen(true)} className="text-blue-600 border-2 border-blue-600 rounded-full px-2 transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white">{t("header.create_meetup")}</button>
       <button onClick={() => setAccountMenuOpen(true)} className="h-full bg-blue-200 aspect-square rounded-full" title={t("header.profile")}></button>
       {accountMenuOpen && (

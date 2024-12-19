@@ -26,6 +26,11 @@ const App = ({ Component, pageProps }: AppProps) => {
           router.push('/');
         }
       }
+      if (tokenAccountType == "admin") {
+        if (!router.pathname.includes('/admin')) {
+          router.push('/admin');
+        }
+      }
     }
   })
 

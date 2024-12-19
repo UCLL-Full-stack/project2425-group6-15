@@ -17,7 +17,7 @@ import Sidebar from "@/components/admin/sidebar";
 
 const Overview = dynamic(() => import("@/components/dashboard/userDashboard"), { ssr: false });
 
-const AdminOverview: React.FC = () => {
+const AdminUsersOverview: React.FC = () => {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { t } = useTranslation();
@@ -32,6 +32,7 @@ const AdminOverview: React.FC = () => {
     <>
       <Sidebar />
 
+
     </>
   );
 };
@@ -42,4 +43,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default AdminOverview;
+export default AdminUsersOverview;
