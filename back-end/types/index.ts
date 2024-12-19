@@ -113,3 +113,17 @@ export type PublicEvent = {
 
     hasJoined : boolean,
 }
+
+export type InterestSummary = {
+    id?: number;
+    name: string;
+    description: string;
+    accounts: number;
+};
+
+export type ActivitySummary = {
+    id?: number;
+    name: string;
+    type: string;
+    events: number;
+};

@@ -151,12 +151,38 @@ const remove = async (id: number): Promise<void> => {
     }
 }
 
+const getAllWithInterest = async (interestId: number): Promise<Account[]> => {
+    try {
+        const AccountPrisma = await database.account.findMany({
+            where: {
+                interests: {
+                    some: {
+                        id: interestId,
+                    },
+                },
+            },
+            include:  { interests: true, events: true},
+        });
+        const accounts = await Promise.all(AccountPrisma.map(async (accountPrisma) => {
+            const account = Account.fromPrisma(accountPrisma);
+            const joinedEvents = await eventdb.getByJoinedAccountId(accountPrisma.id);
+            account.setJoinedEvents(joinedEvents);
+            return account;
+        }));
+        return accounts;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details');
+    }
+};
+
 export default {
     getAll,
     getById,
     getByEmail,
     getByUsername,
     getByPhoneNumber,
+    getAllWithInterest,
     create,
     update,
     remove,

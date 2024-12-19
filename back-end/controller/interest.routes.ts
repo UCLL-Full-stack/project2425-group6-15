@@ -203,4 +203,21 @@ interestRouter.post('/create', async (req: Request, res: Response, next: NextFun
     }
 });
     
+interestRouter.get('/admin', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const activities = await interestService.getAllInterestsForAdmin(await authService.authenticateToken(req.headers));  
+        res.status(200).json(activities);  
+    } catch (error) {
+        next(error);  
+    }
+});
+
+interestRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await interestService.deleteInterest(parseInt(req.params.id), await authService.authenticateToken(req.headers));  
+        res.status(200).send();  
+    } catch (error) {
+        next(error);  
+    }
+});
 export { interestRouter };
