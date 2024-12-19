@@ -2,15 +2,33 @@ import { AccountLogin, AccountInput, AccountSummary } from "@/types";
 import { console } from "inspector";
 
 
-
+const getAllAccounts = async () => {
+  let token = sessionStorage.getItem("token");
+  if (!token) {
+    throw new Error("Token not found");
+  }
+  return await fetch(process.env.NEXT_PUBLIC_API_URL + "/account", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      ...(process.env.NEXT_PUBLIC_API_KEY && { "x-api-key": process.env.NEXT_PUBLIC_API_KEY }),
+    },
+  });
+}
 
 const addInterestToAccount = async (interest: string[]) => {
+  let token = sessionStorage.getItem("token");
+  if (!token) {
+    throw new Error("Token not found");
+  }
   return await fetch(process.env.NEXT_PUBLIC_API_URL + `/account/interests`, {
     method: 'POST',
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      Authorization: `Bearer ${token}`,
       ...(process.env.NEXT_PUBLIC_API_KEY && { "x-api-key": process.env.NEXT_PUBLIC_API_KEY }),
     },
     body: JSON.stringify(interest),
@@ -88,5 +106,20 @@ const updateAccount = async (accountInput: AccountInput) => {
     body: JSON.stringify(accountInput),
   });
 };
+const deleteUser = async (id: number) => {
+  let token = sessionStorage.getItem("token");
+  if (!token) {
+    throw new Error("Token not found");
+  }
 
-export default { addInterestToAccount, findAccountByEmail, findCurrentAccount , changePassword , updateAccount };
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/account/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      ...(process.env.NEXT_PUBLIC_API_KEY && { "x-api-key": process.env.NEXT_PUBLIC_API_KEY }),
+    },
+  });
+};
+export default {getAllAccounts, addInterestToAccount, findAccountByEmail, findCurrentAccount , changePassword , updateAccount , deleteUser};

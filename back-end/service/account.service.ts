@@ -9,7 +9,13 @@ import { add } from 'date-fns';
 import eventDb from '../repository/event.db';
 
 
-const getAllAccounts = async (): Promise<Account[]> => accountDB.getAll();
+const getAllAccounts = async (currentAccount: Account): Promise<AccountSummary[]> => {
+    if (currentAccount.getType() !== 'admin') {
+        throw new ServiceError('Only admins can view all accounts', 403);
+    }
+    const accounts = await accountDB.getAll();
+    return accounts.map(account => account.toSummary());
+};
 
 const getCurrentAccount = async (currentAccount: Account): Promise<PublicAccount> => {
     currentAccount.setJoinedEvents(await eventDb.getByJoinedAccountId(currentAccount.getId() ?? 0));
