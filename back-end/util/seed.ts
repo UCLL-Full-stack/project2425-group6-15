@@ -22,6 +22,7 @@ const main = async () => {
         
     const hashedPassword = bcrypt.hashSync('user123', 10);
     const hashedAdminPassword = bcrypt.hashSync('admin123', 10);
+    const hashedOrganizationPassword = bcrypt.hashSync('organization123', 10);
 
     const interest1 = await prisma.interest.create({
         data: {
@@ -493,7 +494,19 @@ const main = async () => {
                 connect: [],
             },
         }});
-
+    const accountOrganization = await prisma.account.create({
+        data: {
+            username: 'Appoloon',
+            phoneNumber: '+32 1234567771',
+            firstName: '',
+            lastName: '',
+            password: hashedOrganizationPassword,
+            email: 'organization@gmail.com',
+            type: 'organization',
+            interests: {
+                connect: [],
+            },
+        }});
     const event1 = await prisma.event.create({
         data: {
             title: 'Morning Hike',

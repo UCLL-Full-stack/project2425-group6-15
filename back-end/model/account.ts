@@ -79,10 +79,10 @@ export class Account {
         if (!this.username.match(usernameRegex)) {
             throw new Error('Invalid username');
         }
-        if (!this.firstName.match(nameRegex)) {
+        if (!this.firstName.match(nameRegex) && this.type !== "organization") {
             throw new Error('Invalid first name');
         }
-        if (!this.lastName.match(nameRegex)) {
+        if (!this.lastName.match(nameRegex) && this.type !== "organization") {
             throw new Error('Invalid last name');
         }
         if (!this.email.match(emailRegex)) {
