@@ -234,6 +234,7 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
       return;
     }
     onClose();
+    window.location.reload(); // Refresh the profile posts index page
   }
 
   useEffect(() => {
