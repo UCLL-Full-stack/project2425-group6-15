@@ -115,7 +115,8 @@
             "previous": "Previous Step",
             "participants": "Participants",
             "overview": "view overview",
-            "edit": "Back to Edit"
+            "edit": "Back to Edit",
+            "overviewTitle": "Event Overview"
         }
     },
     "profile": {

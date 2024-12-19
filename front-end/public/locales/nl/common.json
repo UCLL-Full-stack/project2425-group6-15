@@ -115,7 +115,8 @@
             "overview": "bekijk overzicht",
             "activity": "Activiteit",
             "period": "Periode",
-            "edit": "terug naar bewerken"
+            "edit": "terug naar bewerken",
+            "overviewTitle": "Overzicht van Evenement"
         }
         
     },
