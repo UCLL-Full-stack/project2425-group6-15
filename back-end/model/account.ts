@@ -76,7 +76,6 @@ export class Account {
         if (this.type !== 'user' && this.interests.length > 0) {
             throw new Error('Only accounts can have interests');
         }
-
         if (!this.username.match(usernameRegex)) {
             throw new Error('Invalid username');
         }

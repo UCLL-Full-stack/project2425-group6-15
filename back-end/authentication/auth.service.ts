@@ -9,8 +9,8 @@ import {Role}from '../types';
 const JWT_ACCES_SECRET = process.env.JWT_ACCES_SECRET || 'secretkey'; 
 const JWT_ACCES_EXPIRATION = process.env.JWT_ACCES_EXPIRATION || '10m';
 
-const generateAccesToken = (email: string, fullname : string, role:Role) => {
-        return jwt.sign({ email, fullname, role }, JWT_ACCES_SECRET, { expiresIn: JWT_ACCES_EXPIRATION });
+const generateAccesToken = (email: string, fullname : string, accountType:Role) => {
+        return jwt.sign({ email, fullname, accountType }, JWT_ACCES_SECRET, { expiresIn: JWT_ACCES_EXPIRATION });
 }
 
 const authenticateToken = async (headers: { [key: string]: string | string[] | undefined }): Promise<Account> => {

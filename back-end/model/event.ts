@@ -56,6 +56,64 @@ export class Event {
         }
     }
 
+    setId(id: number): void {
+        this.id = id;
+    }
+
+    setTitle(title: string): void {
+        if (!title.trim()) {
+            throw new Error('Title is required');
+        }
+        this.title = title;
+    }
+
+    setDescription(description: string): void {
+        if (!description.trim()) {
+            throw new Error('Description is required');
+        }
+        this.description = description;
+    }
+
+    setStartDate(startDate: Date): void {
+        if (startDate >= this.endDate) {
+            throw new Error('Start date must be before end date');
+        }
+        this.startDate = startDate;
+    }
+
+    setEndDate(endDate: Date): void {
+        if (endDate <= this.startDate) {
+            throw new Error('End date must be after start date');
+        }
+        this.endDate = endDate;
+    }
+
+    setLocation(location: Location): void {
+        this.location = location;
+    }
+
+    setActivity(activity: Activity): void {
+        this.activity = activity;
+    }
+
+    setCreator(creator: Account): void {
+        this.creator = creator;
+    }
+
+    setParticipants(participants: Account[]): void {
+        this.participants = participants;
+    }
+
+    setPeopleNeeded(peopleNeeded: number): void {
+        if (peopleNeeded <= 0) {
+            throw new Error('People needed must be greater than 0');
+        }
+        if (peopleNeeded < this.participants.length) {
+            throw new Error('People needed must be greater than or equal to number of participants');
+        }
+        this.peopleNeeded = peopleNeeded;
+    }
+
     getId(): number | undefined {
         return this.id;
     }
