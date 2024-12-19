@@ -155,7 +155,7 @@ const accountRouter = express.Router();
  */
 accountRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const accounts = await accountService.getAllAccounts();  
+        const accounts = await accountService.getAllAccounts(await authService.authenticateToken(req.headers));  
         res.status(200).json(accounts);  
     } catch (error) {
         next(error);  

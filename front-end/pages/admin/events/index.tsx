@@ -15,10 +15,11 @@ import momentsImg from "@/images/crl/moments.png";
 import dynamic from "next/dynamic";
 import Sidebar from "@/components/admin/sidebar";
 import UsersAdminTable from "@/components/admin/overviews/uersAdmin";
+import EventsAdminTable from "@/components/admin/overviews/eventsAdmin";
 
 const Overview = dynamic(() => import("@/components/dashboard/userDashboard"), { ssr: false });
 
-const AdminUsersOverview: React.FC = () => {
+const AdminEventsOverview: React.FC = () => {
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -26,7 +27,7 @@ const AdminUsersOverview: React.FC = () => {
     <>
       <Sidebar />
       <div className="w-full pl-64 bg-slate-100">
-        <UsersAdminTable />
+        <EventsAdminTable />
       </div>
 
     </>
@@ -39,4 +40,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default AdminUsersOverview;
+export default AdminEventsOverview;

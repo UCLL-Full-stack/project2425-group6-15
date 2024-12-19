@@ -60,8 +60,15 @@ const deleteEventById = async (id: number, currentAccount : Account): Promise<vo
     const currentDate = new Date();
     const timeDiff = event.getStartDate().getTime() - currentDate.getTime();
     const hoursDiff = timeDiff / (1000 * 60 * 60);
+    if (currentDate > event.getStartDate() && currentDate < event.getEndDate()) {
+        throw new ServiceError('Cannot delete event that has already started', 400);
+    }
 
-    if (hoursDiff < 8) {
+    if (currentDate > event.getEndDate() && currentAccount.getType() != 'admin') {
+        throw new ServiceError('Cannot delete event that has already ended', 400);
+    }
+
+    if (hoursDiff < 8 && currentDate < event.getStartDate()) {
         throw new ServiceError('Cannot delete event that starts in less than 8 hours', 400);
     }
 
@@ -200,5 +207,6 @@ export default {
     joinEvent,
     getEventById,
     deleteEventById,
-    exitEvent
+    exitEvent,
+    updateEvent
 };
