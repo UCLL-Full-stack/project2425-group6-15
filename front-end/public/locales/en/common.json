@@ -57,6 +57,7 @@
             "username": "Username",
             "no_spaces": "cannot contain spaces.",
             "no_special_chars": "cannot contain special characters.",
+            "invalid_email": "Invalid email address.",
             "submit": "Register",
             "login": "Already have an account? Login here.",
             "required": "is required.",
@@ -65,10 +66,6 @@
             "last_name": "Last Name",
             "only_letters": "can only contain letters.",
             "phone": "Phone Number",
-            "gender": "Gender",
-            "select_gender": "Select Gender",
-            "male": "Male",
-            "female": "Female",
             "password_mismatch": "Passwords do not match.",
             "register_as_organization": "Register as Organization",
             "register_as_user": "Register as User"
@@ -124,13 +121,15 @@
     "profile": {
         "title": "Your Profile!",
         "edit": "Edit",
+        "username": "Username",
         "full_name": "Full name",
-        "gender": "Gender",
         "email": "Email",
         "phone": "Phone",
         "password": "Password",
         "change_password": "Change password",
         "interests": "Interests",
+        "edit_account_details": "Edit Account Details",
+        "manage_profile": "Manage Profile",
         "save": "Save",
         "cancel":"Cancel"
     }

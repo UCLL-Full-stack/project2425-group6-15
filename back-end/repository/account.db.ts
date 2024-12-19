@@ -60,6 +60,46 @@ const getByEmail = async (email: string): Promise<Account | null> => {
     }
 }
 
+const getByUsername = async (username: string): Promise<Account | null> => {
+    try {
+        const accountPrisma = await database.account.findUnique({
+            where: { username },
+            include: { interests: true, events: true },
+        });
+        if (accountPrisma) {
+            const account = Account.fromPrisma(accountPrisma);
+            const joinedEvents = await eventdb.getByJoinedAccountId(accountPrisma.id);
+            account.setJoinedEvents(joinedEvents);
+            return account;
+        }else{
+            return null;
+        }
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details');
+    }
+}
+
+const getByPhoneNumber = async (phoneNumber: string): Promise<Account | null> => {
+    try {
+        const accountPrisma = await database.account.findFirst({
+            where: { phoneNumber },
+            include: { interests: true, events: true },
+        });
+        if (accountPrisma) {
+            const account = Account.fromPrisma(accountPrisma);
+            const joinedEvents = await eventdb.getByJoinedAccountId(accountPrisma.id);
+            account.setJoinedEvents(joinedEvents);
+            return account;
+        }else{
+            return null;
+        }
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details');
+    }
+}
+
 const create = async (account: Account): Promise<Account> => {
     try {
         const prismaaccount = account.toPrisma();
@@ -115,6 +155,8 @@ export default {
     getAll,
     getById,
     getByEmail,
+    getByUsername,
+    getByPhoneNumber,
     create,
     update,
     remove,

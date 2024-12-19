@@ -162,6 +162,17 @@ accountRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
+accountRouter.put('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const accountData = req.body;
+        const updatedAccount = await accountService.updateAccount(accountData, await authService.authenticateToken(req.headers));
+        res.status(200).json(updatedAccount);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 /**
  * @swagger
  * /account/me:

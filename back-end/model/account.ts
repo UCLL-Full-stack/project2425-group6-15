@@ -51,28 +51,45 @@ export class Account {
     }
 
     private validate() {
-    if (!this.firstName?.trim() && this.type !== "organization") {
-        throw new Error('First name is required');
+        const usernameRegex = /^[a-zA-Z0-9@.]+$/;
+        const nameRegex = /^[a-zA-Z]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!this.firstName?.trim() && this.type !== "organization") {
+            throw new Error('First name is required');
+        }
+        if (!this.lastName?.trim() && this.type !== "organization") {
+            throw new Error('Last name is required');
+        }
+        if (!this.email?.trim()) {
+            throw new Error('Email is required');
+        }
+        if (!this.phoneNumber.countryCode.trim()) {
+            throw new Error('country code is required');
+        }
+        if (!this.phoneNumber.number.trim()) {
+            throw new Error('phone number is required');
+        }
+        if (!this.password?.trim()) {
+            throw new Error('Password is required');
+        }
+        if (this.type !== 'user' && this.interests.length > 0) {
+            throw new Error('Only accounts can have interests');
+        }
+
+        if (!this.username.match(usernameRegex)) {
+            throw new Error('Invalid username');
+        }
+        if (!this.firstName.match(nameRegex)) {
+            throw new Error('Invalid first name');
+        }
+        if (!this.lastName.match(nameRegex)) {
+            throw new Error('Invalid last name');
+        }
+        if (!this.email.match(emailRegex)) {
+            throw new Error('Invalid email');
+        }   
     }
-    if (!this.lastName?.trim() && this.type !== "organization") {
-        throw new Error('Last name is required');
-    }
-    if (!this.email?.trim()) {
-        throw new Error('Email is required');
-    }
-    if (!this.phoneNumber.countryCode.trim()) {
-        throw new Error('country code is required');
-    }
-    if (!this.phoneNumber.number.trim()) {
-        throw new Error('phone number is required');
-    }
-    if (!this.password?.trim()) {
-        throw new Error('Password is required');
-    }
-    if (this.type !== 'user' && this.interests.length > 0) {
-        throw new Error('Only accounts can have interests');
-    }
-}
 
 
     getId(): number | undefined {
@@ -234,6 +251,7 @@ export class Account {
         return {
             type: this.getType(),
             id: this.getId() ?? 0,
+            username: this.getUsername(),
             firstName: this.getFirstName(),
             lastName: this.getLastName(),
             phoneNumber: this.getPhoneNumber(),

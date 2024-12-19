@@ -51,10 +51,43 @@ const changeInterestOfAccount = async (currentAccount: Account, newInterests : s
     return account;
 };
 
+const updateAccount = async (accountInput: AccountInput, currentAccount: Account): Promise<Account> => {
+    const account = await accountDB.getByEmail(currentAccount.getEmail());
+    if (!account) {
+        throw new ServiceError('Account not found', 404);
+    }
+
+    // Check if username is already used
+    const existingUsernameAccount = await accountDB.getByUsername(accountInput.username);
+    if (existingUsernameAccount && existingUsernameAccount.getId() !== account.getId()) {
+        throw new ServiceError('Username already in use', 409);
+    }
+
+    // Check if email is already used
+    const existingEmailAccount = await accountDB.getByEmail(accountInput.email);
+    if (existingEmailAccount && existingEmailAccount.getId() !== account.getId()) {
+        throw new ServiceError('Email already in use', 409);
+    }
+
+    // Check if phone number is already used
+    const existingPhoneNumberAccount = await accountDB.getByPhoneNumber(`${accountInput.phoneNumber.countryCode} ${accountInput.phoneNumber.number}`);
+    if (existingPhoneNumberAccount && existingPhoneNumberAccount.getId() !== account.getId()) {
+        throw new ServiceError('Phone number already in use', 409);
+    }
+
+    account.setFirstName(accountInput.firstName);
+    account.setLastName(accountInput.lastName);
+    account.setPhoneNumber(accountInput.phoneNumber);
+    account.setUsername(accountInput.username);
+    account.setEmail(accountInput.email);
+    await accountDB.update(account);
+    return account;
+}
 
 export default {
     getAllAccounts,
     findAccountByEmail,
     changeInterestOfAccount,
-    getCurrentAccount
+    getCurrentAccount,
+    updateAccount
 };

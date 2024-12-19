@@ -112,6 +112,7 @@ export type EventSummary = {
 export type PublicAccount = {
     type: Role;
     id: number;
+    username: string;
     firstName: string;
     lastName: string;
     phoneNumber: PhoneNumber;
