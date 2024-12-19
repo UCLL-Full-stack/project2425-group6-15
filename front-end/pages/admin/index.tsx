@@ -14,6 +14,8 @@ import communitiesImg from "@/images/crl/communities.png";
 import momentsImg from "@/images/crl/moments.png";
 import dynamic from "next/dynamic";
 import Sidebar from "@/components/admin/sidebar";
+import AdminScoreBoard from "@/components/admin/dashboard/scoreboard";
+import AdminEventsChart from "@/components/admin/dashboard/eventschart";
 
 const Overview = dynamic(() => import("@/components/dashboard/userDashboard"), { ssr: false });
 
@@ -31,7 +33,10 @@ const AdminOverview: React.FC = () => {
   return (
     <>
       <Sidebar />
-
+      <div className="w-full pl-64 pt-10 bg-slate-100 min-h-screen flex flex-col gap-5 justify-start items-center">
+        <AdminScoreBoard />
+        <AdminEventsChart />
+      </div>
     </>
   );
 };
