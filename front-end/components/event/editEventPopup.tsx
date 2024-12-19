@@ -302,13 +302,17 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
         }
     }, [startTime, endTime, dateRange]);
 
+    const handleClose = () => {
+        document.body.style.overflow = "auto";
+        onClose();
+    };
 
     return (
         <div className="bg-black bg-opacity-50 z-[999] fixed top-0 left-0 w-full h-full flex justify-center items-center">
             {currentEventData && (
                 <div className="bg-white px-4 py-2 flex flex-col gap-2 relative rounded-xl max-w-2xl w-9/12 min-w-96 max-h-[80vh] overflow-x-hidden">
                     <button
-                        onClick={onClose}
+                        onClick={handleClose}
                         className="absolute top-1 right-3 text-xl text-gray-500"
                     >
                         &#9587;
