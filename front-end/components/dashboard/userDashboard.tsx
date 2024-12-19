@@ -10,6 +10,7 @@ import L from 'leaflet';
 import { useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import Image from 'next/image';
+import { useTranslation } from "next-i18next";
 
 
 import filterimg from "@/images/icons/dashboard/filter.svg";
@@ -25,6 +26,7 @@ const CircleNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Circle
 const PostOverviewPopup = dynamic(() => import("@/components/event/postOverviewPopup"), { ssr: false });
 
 const UserDashboard: React.FC = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const [position, setPosition] = useState<[number, number] | null>(null);
   const [posts, setPosts] = useState<EventPreview[]>([]);
@@ -135,6 +137,11 @@ const UserDashboard: React.FC = () => {
     setFilterEndDate(new Date(e.target.value));
   };
 
+  const handleFilterRadiusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setFilterRadius(value === "all" ? null : Number(value));
+  };
+
   const MapClickHandler: React.FC<{ setFilterLocation: (location: [number, number]) => void }> = ({ setFilterLocation }) => {
     useMapEvents({
       click(e) {
@@ -142,6 +149,18 @@ const UserDashboard: React.FC = () => {
       },
     });
     return null;
+  };
+
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in kilometers
   };
 
   return (
@@ -160,31 +179,28 @@ const UserDashboard: React.FC = () => {
                   <PopupNoSSR>
                     <h2>{post.title}</h2>
                     <p>{post.description}</p>
-                    <button onClick={() => post.id !== undefined && handlePostClick(post.id)}>View Post</button>
+                    <button onClick={() => post.id !== undefined && handlePostClick(post.id)}>{t("events.view")}</button>
                   </PopupNoSSR>
                 </MarkerNoSSR>
               ))}
               {filterLocation && (
-                <MarkerNoSSR position={filterLocation} icon={new L.Icon({
-                  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-red.png',
-                  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-                })}>
+                <CircleNoSSR center={filterLocation} radius={50} pathOptions={{ color: 'red', fillColor: 'white', fillOpacity: 1 }}>
                   <PopupNoSSR>
-                    <span>Pinned Location</span>
+                    <span>{t("filter.pinned")}</span>
                   </PopupNoSSR>
-                </MarkerNoSSR>
+                </CircleNoSSR>
               )}
             </MapContainerNoSSR>
           )}
         </div>
         <div className="h-full box-border bg-white shadow-lg rounded-lg p-6 grid grid-rows-[auto_1fr] relative">
           <div className="flex items-center justify-between">
-            <h2 className="text-3xl font-semibold text-slate-700">Events</h2>
+            <h2 className="text-3xl font-semibold text-slate-700">{t("events.events")}</h2>
             <button onClick={() => setShowFilter(!showFilter)} title="Filteren"><Image src={filterimg.src} alt="Image description" width={30} height={30} /></button>
             {showFilter && (
               <div className="absolute top-16 right-0 bg-white shadow-lg rounded-lg p-6 flex flex-col gap-2">
                 <div>
-                  <p className="text-base text-gray-600">location</p>
+                  <p className="text-base text-gray-600">{t("events.create.location")}</p>
                   <div className="flex items-center">
                     <button title="current location" className={`w-28 h-7 border border-gray-300 rounded-l-lg flex items-center justify-center ${filterLocationType === "current" ? "shadow-inner" : ""}`} onClick={() => setFilterLocationType("current")}>
                       <Image src={CurrentlocImg} alt="Image description" width={20} height={20} />
@@ -219,32 +235,34 @@ const UserDashboard: React.FC = () => {
                     )}
                   </div>
                 )}
-                <p className="text-base text-gray-600">radius</p>
-                <select className="w-full h-7 border border-gray-300 rounded-lg py-1 px-2" title="Select a radius" onChange={(e) => setFilterRadius(Number(e.target.value))}>
+                <p className="text-base text-gray-600">{t("filter.radius")}</p>
+                <select className="w-full h-7 border border-gray-300 rounded-lg py-1 px-2" title="Select a radius" onChange={handleFilterRadiusChange}>
                   <option value="5">5km</option>
                   <option value="7">7km</option>
                   <option value="8">8km</option>
                   <option value="10">10km</option>
                   <option value="20">20km</option>
-                  <option value="all">all</option>
+                  <option value="all">{t("filter.all")}</option>
                 </select>
-                <p className="text-base text-gray-600">start date</p>
+                <p className="text-lg text-gray-600">{t("filter.between")}</p>
+                <p className="text-base text-gray-600">{t("filter.date1")}</p>
                 <input type="date" className="w-full h-7 border border-gray-300 rounded-lg py-1 px-2" title="Select a start date" onChange={handleFilterStartDateChange} />
-                <p className="text-base text-gray-600">end date</p>
+                <p className="text-base text-gray-600">{t("filter.date2")}</p>
                 <input type="date" className="w-full h-7 border border-gray-300 rounded-lg py-1 px-2" title="Select an end date" onChange={handleFilterEndDateChange} />
               </div>
             )}
           </div>
           <div className="border-t-2 border-slate-600 w-full h-0 min-h-full max-h-full flex flex-col overflow-y-auto">
-            {posts.length === 0 && <p className="text-slate-500">No posts available</p>}
+            {posts.length === 0 && <p className="text-slate-500">{t("events.no_posts")}</p>}
             {position ? posts
               .filter(post => {
-                if (filterLocationType === "pin" && filterLocation) {
-                  const distance = Math.sqrt(
-                    Math.pow(Number(post.location.latitude) - filterLocation[0], 2) +
-                    Math.pow(Number(post.location.longitude) - filterLocation[1], 2)
+                if (filterRadius !== null) {
+                  const location = filterLocationType === "pin" && filterLocation ? filterLocation : position;
+                  const distance = calculateDistance(
+                    Number(post.location.latitude), Number(post.location.longitude),
+                    location[0], location[1]
                   );
-                  return filterRadius === null || distance <= filterRadius;
+                  return distance <= filterRadius;
                 }
                 return true;
               })
@@ -257,13 +275,13 @@ const UserDashboard: React.FC = () => {
                 return true;
               })
               .sort((a, b) => {
-                const distanceA = Math.sqrt(
-                  Math.pow(Number(a.location.latitude) - position[0], 2) +
-                  Math.pow(Number(a.location.longitude) - position[1], 2)
+                const distanceA = calculateDistance(
+                  Number(a.location.latitude), Number(a.location.longitude),
+                  position[0], position[1]
                 );
-                const distanceB = Math.sqrt(
-                  Math.pow(Number(b.location.latitude) - position[0], 2) +
-                  Math.pow(Number(b.location.longitude) - position[1], 2)
+                const distanceB = calculateDistance(
+                  Number(b.location.latitude), Number(b.location.longitude),
+                  position[0], position[1]
                 );
                 return distanceA - distanceB;
               })
