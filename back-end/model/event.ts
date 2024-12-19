@@ -1,8 +1,19 @@
-import { Activity } from "./activity";
-import { Account } from "./account";
-import { Location, EventInput, EventSummary, AccountSummary, EventPreview, PublicEvent } from "../types";
+import { Activity } from './activity';
+import { Account } from './account';
+import {
+    Location,
+    EventInput,
+    EventSummary,
+    AccountSummary,
+    EventPreview,
+    PublicEvent,
+} from '../types';
 
-import { Event as EventPrisma, Activity as ActivityPrisma, Account as AccountPrisma } from '@prisma/client';
+import {
+    Event as EventPrisma,
+    Activity as ActivityPrisma,
+    Account as AccountPrisma,
+} from '@prisma/client';
 
 export class Event {
     private id?: number;
@@ -109,7 +120,9 @@ export class Event {
             throw new Error('People needed must be greater than 0');
         }
         if (peopleNeeded < this.participants.length) {
-            throw new Error('People needed must be greater than or equal to number of participants');
+            throw new Error(
+                'People needed must be greater than or equal to number of participants'
+            );
         }
         this.peopleNeeded = peopleNeeded;
     }
@@ -133,8 +146,6 @@ export class Event {
     getEndDate(): Date {
         return this.endDate;
     }
-
-
 
     getLocation(): Location {
         return this.location;
@@ -161,21 +172,23 @@ export class Event {
     }
 
     addParticipant(account: Account): void {
-        if (this.participants.length >= this.peopleNeeded){
-            throw new Error('max participants.')
-        } 
+        if (this.participants.length >= this.peopleNeeded) {
+            throw new Error('max participants.');
+        }
         this.participants.push(account);
     }
 
     removeParticipant(account: Account): void {
-        this.participants = this.participants.filter((participant) => participant.getId() !== account.getId());
+        this.participants = this.participants.filter(
+            (participant) => participant.getId() !== account.getId()
+        );
     }
 
-    getPlacesLeft(): number{
-        return (this.peopleNeeded - this.participants.length)
+    getPlacesLeft(): number {
+        return this.peopleNeeded - this.participants.length;
     }
 
-    toPrevieuw( accountid : number ): EventPreview{
+    toPrevieuw(accountid: number): EventPreview {
         return {
             id: this.getId(),
             title: this.getTitle(),
@@ -186,12 +199,14 @@ export class Event {
             activity: this.getActivity(),
             creator: this.getCreator().toPrevieuw(),
             peopleNeeded: this.getPeopleNeeded(),
-            peopleJoined : this.getParticipants().length,
-            hasJoined : this.getParticipants().some(participant => participant.getId() === accountid),
-        }
+            peopleJoined: this.getParticipants().length,
+            hasJoined: this.getParticipants().some(
+                (participant) => participant.getId() === accountid
+            ),
+        };
     }
 
-    toSummary(accountid : number): EventSummary {
+    toSummary(accountid: number): EventSummary {
         return {
             id: this.getId(),
             title: this.getTitle(),
@@ -203,11 +218,13 @@ export class Event {
             creator: this.getCreator().toSummary(),
             participants: this.participants.map((account) => account.toSummary()),
             peopleNeeded: this.getPeopleNeeded(),
-            hasJoined : this.getParticipants().some(participant => participant.getId() === accountid),
+            hasJoined: this.getParticipants().some(
+                (participant) => participant.getId() === accountid
+            ),
         };
     }
 
-    toPublic(accountid : number): PublicEvent {
+    toPublic(accountid: number): PublicEvent {
         return {
             id: this.getId() ?? 0,
             title: this.getTitle(),
@@ -219,9 +236,11 @@ export class Event {
             creator: this.getCreator().toSummary(),
             participants: this.getParticipants().map((account) => account.toPrevieuw()),
             peopleNeeded: this.getPeopleNeeded(),
-        
-            hasJoined : this.getParticipants().some(participant => participant.getId() === accountid),
-        }
+
+            hasJoined: this.getParticipants().some(
+                (participant) => participant.getId() === accountid
+            ),
+        };
     }
 
     static fromEventInput(event: EventInput, eventActivity: Activity): Event {
@@ -243,7 +262,11 @@ export class Event {
     }
 
     // event to prisma
-    toPrisma(): EventPrisma & { activity: ActivityPrisma, creator: AccountPrisma, participants: AccountPrisma[] } {
+    toPrisma(): EventPrisma & {
+        activity: ActivityPrisma;
+        creator: AccountPrisma;
+        participants: AccountPrisma[];
+    } {
         return {
             id: this.id ?? 0,
             title: this.title,
@@ -255,7 +278,7 @@ export class Event {
             creatorId: this.creator.getId() ?? 0,
             activity: this.activity.toPrisma(),
             creator: this.creator.toPrisma(),
-            participants: this.participants.map(participant => participant.toPrisma()),
+            participants: this.participants.map((participant) => participant.toPrisma()),
             peopleNeeded: this.peopleNeeded,
         };
     }
@@ -272,20 +295,27 @@ export class Event {
         participants,
         peopleNeeded,
         creator,
-    }: EventPrisma & { activity: ActivityPrisma, creator: AccountPrisma, participants: AccountPrisma[]}): Event {
+    }: EventPrisma & {
+        activity: ActivityPrisma;
+        creator: AccountPrisma;
+        participants: AccountPrisma[];
+    }): Event {
         return new Event({
             id,
             title,
             description,
             startDate,
             endDate,
-            location: { latitude: location.split('|&|')[0], longitude: location.split('|&|')[1] } as Location,
+            location: {
+                latitude: location.split('|&|')[0],
+                longitude: location.split('|&|')[1],
+            } as Location,
             activity: Activity.fromPrisma(activity),
             creator: Account.fromPrisma({ ...creator, interests: [] }),
-            participants: participants.map((participant: AccountPrisma) => Account.fromPrisma({ ...participant, interests: [] })),
+            participants: participants.map((participant: AccountPrisma) =>
+                Account.fromPrisma({ ...participant, interests: [] })
+            ),
             peopleNeeded,
         });
     }
-
-
 }

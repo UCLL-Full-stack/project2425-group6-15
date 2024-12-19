@@ -56,9 +56,7 @@ const AccountProfileOverview: React.FC = () => {
                     <p className="text-base text-gray-300">{t("profile.full_name")}</p>
                     <p className="text-xl font-semibold">{Account?.firstName} {Account?.lastName} </p>
                 </div>
-                <div className="flex flex-col">
-                    <p className="text-base text-gray-300">{t("profile.gender")}</p>
-                </div>
+                
                 <div className="flex flex-col">
                     <p className="text-base text-gray-300">{t("profile.email")}</p>
                     <p className="text-xl font-semibold">{Account?.email}</p>

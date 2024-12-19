@@ -1,12 +1,12 @@
-import { Account } from "../../model/account";
-import { PhoneNumber, Role } from "../../types";
-import { Interest } from "../../model/interest";
-import { Event } from "../../model/event";
-import { Activity } from "../../model/activity";
+import { Account } from '../../model/account';
+import { PhoneNumber, Role } from '../../types';
+import { Interest } from '../../model/interest';
+import { Event } from '../../model/event';
+import { Activity } from '../../model/activity';
 
 const validAccount = {
     id: 2,
-    type: 'account' as Role,
+    type: 'user' as Role,
     username: 'janedoe',
     firstName: 'Jane',
     lastName: 'Doe',
@@ -14,7 +14,7 @@ const validAccount = {
     email: 'jane.doe@example.com',
     password: 'securepassword',
     interests: [],
-    role: 'account' as Role,
+    role: 'user' as Role,
     events: [],
     joinedEvents: [],
 };
@@ -36,9 +36,20 @@ const validEvent = {
     activity: new Activity(validActivity),
     creator: new Account(validAccount),
     participants: [new Account(validAccount)],
+    peopleNeeded: 1,
+};
+const validEvent2 = {
+    id: 2,
+    title: 'title',
+    description: 'description',
+    startDate: new Date(),
+    endDate: new Date(+new Date() + 100000),
+    location: { longitude: 'longitude', latitude: 'latitude' },
+    activity: new Activity(validActivity),
+    creator: new Account(validAccount),
+    participants: [new Account(validAccount), new Account({ ...validAccount, id: 3 })],
     peopleNeeded: 2,
 };
-
 
 test('given:valid values for event, when:event is created, then:event is created with those values', () => {
     const event = new Event(validEvent);
@@ -62,7 +73,6 @@ test('given:missing title, when:event is created, then:error is thrown', () => {
 test('given:participants exceed peopleNeeded, when:addParticipant is called, then:error is thrown', () => {
     const event = new Event(validEvent);
     const newAccount = new Account({ ...validAccount, id: 3 });
-    event.addParticipant(newAccount);
     expect(() => event.addParticipant(newAccount)).toThrow('max participants.');
 });
 
@@ -91,7 +101,7 @@ test('given:valid values, when:toPreview is called, then:returns correct preview
         endDate: validEvent.endDate,
         location: validEvent.location,
         activity: validEvent.activity,
-        creator: validEvent.creator.toSummary(),
+        creator: validEvent.creator.toPrevieuw(),
         peopleNeeded: validEvent.peopleNeeded,
         peopleJoined: validEvent.participants.length,
         hasJoined: true,
@@ -110,8 +120,9 @@ test('given:valid values, when:toSummary is called, then:returns correct summary
         location: validEvent.location,
         activity: validEvent.activity,
         creator: validEvent.creator.toSummary(),
-        participants: validEvent.participants.map(participant => participant.toSummary()),
+        participants: validEvent.participants.map((participant) => participant.toSummary()),
         peopleNeeded: validEvent.peopleNeeded,
+        hasJoined: true,
     });
 });
 
@@ -147,7 +158,9 @@ test('given:valid values, when:setStartDate is called, then:startDate is updated
 test('given:startDate after endDate, when:setStartDate is called, then:error is thrown', () => {
     const event = new Event(validEvent);
     const invalidStartDate = new Date(validEvent.endDate.getTime() + 100000);
-    expect(() => event.setStartDate(invalidStartDate)).toThrow('Start date must be before end date');
+    expect(() => event.setStartDate(invalidStartDate)).toThrow(
+        'Start date must be before end date'
+    );
 });
 
 test('given:valid values, when:setEndDate is called, then:endDate is updated', () => {
@@ -170,15 +183,18 @@ test('given:valid values, when:setPeopleNeeded is called, then:peopleNeeded is u
 });
 
 test('given:peopleNeeded less than participants, when:setPeopleNeeded is called, then:error is thrown', () => {
-    const event = new Event(validEvent);
-    expect(() => event.setPeopleNeeded(1)).toThrow('People needed must be greater than or equal to number of participants');
+    const event = new Event(validEvent2);
+    expect(() => event.setPeopleNeeded(1)).toThrow(
+        'People needed must be greater than or equal to number of participants'
+    );
 });
 
-// test('given:valid values, when:removeParticipant is called, then:participant is removed', () => {
-//     const event = new Event(validEvent);
-//     event.removeParticipant(validAccount);
-//     expect(event.getParticipants().length).toEqual(0);
-// });
+test('given:valid values, when:removeParticipant is called, then:participant is removed', () => {
+    const event = new Event(validEvent);
+    const account = new Account(validAccount);
+    event.removeParticipant(account);
+    expect(event.getParticipants().length).toEqual(0);
+});
 
 test('given:valid values, when:toPublic is called, then:returns correct public object', () => {
     const event = new Event(validEvent);
@@ -192,9 +208,8 @@ test('given:valid values, when:toPublic is called, then:returns correct public o
         location: validEvent.location,
         activity: validEvent.activity,
         creator: validEvent.creator.toSummary(),
-        participants: validEvent.participants.map(participant => participant.toSummary()),
+        participants: validEvent.participants.map((participant) => participant.toPrevieuw()),
         peopleNeeded: validEvent.peopleNeeded,
         hasJoined: true,
     });
 });
-
