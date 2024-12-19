@@ -1,4 +1,4 @@
-import postService from "@/services/eventService";
+import eventService from "@/services/eventService";
 import { EventPreview, EventSummary } from "@/types";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
@@ -23,13 +23,13 @@ const MarkerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Marker
 const PopupNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
 const CircleNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Circle), { ssr: false });
 
-const PostOverviewPopup = dynamic(() => import("@/components/event/postOverviewPopup"), { ssr: false });
+const PostOverviewPopup = dynamic(() => import("@/components/event/eventOverviewPopup"), { ssr: false });
 
 const UserDashboard: React.FC = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const [position, setPosition] = useState<[number, number] | null>(null);
-  const [posts, setPosts] = useState<EventPreview[]>([]);
+  const [events, setEvents] = useState<EventPreview[]>([]);
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
   const [showFilter, setShowFilter] = useState<boolean>(false);
 
@@ -50,13 +50,13 @@ const UserDashboard: React.FC = () => {
   }, []);
 
   const loadPosts = async () => {
-    const response = await postService.getAllPosts();
+    const response = await eventService.getAllEvents();
     if (!response.ok) {
-      throw new Error("Failed to load posts");
+      throw new Error("Failed to load events");
     }
     let events = await response.json();
     events = events.filter((event: EventPreview) => new Date(event.startDate) > new Date())
-    setPosts(events);
+    setEvents(events);
   }
 
   useEffect(() => {
@@ -80,9 +80,9 @@ const UserDashboard: React.FC = () => {
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
-    const postId = query.get("event");
-    if (postId) {
-      setSelectedPostId(Number(postId));
+    const eventId = query.get("event");
+    if (eventId) {
+      setSelectedPostId(Number(eventId));
     }
   }, []);
 
@@ -90,9 +90,9 @@ const UserDashboard: React.FC = () => {
     loadPosts();
   }, [filterLocation, filterRadius, filterStartDate, filterEndDate]);
 
-  const handlePostClick = (postId: number) => {
-    router.push(`?event=${postId}`, undefined, { shallow: true });
-    setSelectedPostId(postId);
+  const handlePostClick = (eventId: number) => {
+    router.push(`?event=${eventId}`, undefined, { shallow: true });
+    setSelectedPostId(eventId);
   };
 
   const closePopup = () => {
@@ -165,21 +165,21 @@ const UserDashboard: React.FC = () => {
 
   return (
     <>
-      {selectedPostId && <PostOverviewPopup postId={selectedPostId} onClose={closePopup} />}
+      {selectedPostId && <PostOverviewPopup eventId={selectedPostId} onClose={closePopup} />}
       <div className="container grid grid-cols-[1fr_370px] gap-4 h-screen max-h-screen min-w-full text-gray-800 box-border pt-24 pb-5 px-3">
         <div className="w-full h-full bg-white rounded-lg">
           {position && (
-            <MapContainerNoSSR center={position} zoom={13} style={{ height: "100%", width: "100%", zIndex: 1 }}>
+            <MapContainerNoSSR center={position} zoom={13} className="w-full h-full rounded-lg shadow-lg">
               <TileLayerNoSSR
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
               <CircleNoSSR center={position} radius={50} pathOptions={{ color: 'white', fillColor: 'blue', fillOpacity: 1 }} />
-              {posts.map(post => (
-                <MarkerNoSSR key={post.id} position={[Number(post.location.latitude), Number(post.location.longitude)]}>
+              {events.map(event => (
+                <MarkerNoSSR key={event.id} position={[Number(event.location.latitude), Number(event.location.longitude)]}>
                   <PopupNoSSR>
-                    <h2>{post.title}</h2>
-                    <p>{post.description}</p>
-                    <button onClick={() => post.id !== undefined && handlePostClick(post.id)}>{t("events.view")}</button>
+                    <h2>{event.title}</h2>
+                    <p>{event.description}</p>
+                    <button onClick={() => event.id !== undefined && handlePostClick(event.id)}>{t("events.view")}</button>
                   </PopupNoSSR>
                 </MarkerNoSSR>
               ))}
@@ -253,24 +253,24 @@ const UserDashboard: React.FC = () => {
             )}
           </div>
           <div className="border-t-2 border-slate-600 w-full h-0 min-h-full max-h-full flex flex-col overflow-y-auto">
-            {posts.length === 0 && <p className="text-slate-500">{t("events.no_posts")}</p>}
-            {position ? posts
-              .filter(post => {
+            {events.length === 0 && <p className="text-slate-500">{t("events.no_events")}</p>}
+            {position ? events
+              .filter(event => {
                 if (filterRadius !== null) {
                   const location = filterLocationType === "pin" && filterLocation ? filterLocation : position;
                   const distance = calculateDistance(
-                    Number(post.location.latitude), Number(post.location.longitude),
+                    Number(event.location.latitude), Number(event.location.longitude),
                     location[0], location[1]
                   );
                   return distance <= filterRadius;
                 }
                 return true;
               })
-              .filter(post => {
+              .filter(event => {
                 if (filterStartDate && filterEndDate) {
-                  const postStartDate = new Date(post.startDate);
-                  const postEndDate = new Date(post.endDate);
-                  return postStartDate >= filterStartDate && postEndDate <= filterEndDate;
+                  const eventStartDate = new Date(event.startDate);
+                  const eventEndDate = new Date(event.endDate);
+                  return eventStartDate >= filterStartDate && eventEndDate <= filterEndDate;
                 }
                 return true;
               })
@@ -285,33 +285,33 @@ const UserDashboard: React.FC = () => {
                 );
                 return distanceA - distanceB;
               })
-              .map((post, index) => (
+              .map((event, index) => (
                 <div
-                  key={post.id}
+                  key={event.id}
                   className={`w-full h-20 ${index !== 0 ? 'border-t-2 border-slate-400' : ''} p-2 cursor-pointer `}
-                  onClick={() => post.id !== undefined && handlePostClick(post.id)}
+                  onClick={() => event.id !== undefined && handlePostClick(event.id)}
                 >
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-slate-700">{post.title}</h3>
-                    <p className={`text-sm ${post.hasJoined ? "text-green-400" : "text-slate-500"}`}>({post.peopleJoined}/{post.peopleNeeded})</p>
+                    <h3 className="text-lg font-semibold text-slate-700">{event.title}</h3>
+                    <p className={`text-sm ${event.hasJoined ? "text-green-400" : "text-slate-500"}`}>({event.peopleJoined}/{event.peopleNeeded})</p>
                   </div>
                   <div>
-                    <p className="text-sm text-slate-500">{post.description}</p>
+                    <p className="text-sm text-slate-500">{event.description}</p>
                   </div>
                 </div>
               ))
-              : posts.map((post, index) => (
+              : events.map((event, index) => (
                 <div
-                  key={post.id}
+                  key={event.id}
                   className={`w-full h-20 ${index !== 0 ? 'border-t-2 border-slate-400' : ''} p-2 cursor-pointer `}
-                  onClick={() => post.id !== undefined && handlePostClick(post.id)}
+                  onClick={() => event.id !== undefined && handlePostClick(event.id)}
                 >
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-slate-700">{post.title}</h3>
-                    <p className="text-sm text-slate-500">({post.peopleJoined}/{post.peopleNeeded})</p>
+                    <h3 className="text-lg font-semibold text-slate-700">{event.title}</h3>
+                    <p className="text-sm text-slate-500">({event.peopleJoined}/{event.peopleNeeded})</p>
                   </div>
                   <div>
-                    <p className="text-sm text-slate-500">{post.description}</p>
+                    <p className="text-sm text-slate-500">{event.description}</p>
                   </div>
                 </div>
               ))}

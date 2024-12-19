@@ -12,7 +12,7 @@ const MarkerNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Marker
 const PopupNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
 const CircleNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.Circle), { ssr: false });
 
-const PostOverviewPopup = dynamic(() => import("@/components/event/postOverviewPopup"), { ssr: false });
+const PostOverviewPopup = dynamic(() => import("@/components/event/eventOverviewPopup"), { ssr: false });
 
 
 const AccountEventOverview: React.FC = () => {
@@ -78,7 +78,7 @@ const AccountEventOverview: React.FC = () => {
     }
     return (
         <div className="w-full h-full flex flex-col gap-4">
-            {selectedEventId && <PostOverviewPopup postId={selectedEventId} onClose={closePopup} />}
+            {selectedEventId && <PostOverviewPopup eventId={selectedEventId} onClose={closePopup} />}
             <div className="w-full h-fit flex flex-col gap-x-2 gap-y-4 bg-white border border-gray-200 rounded-xl px-4 py-2">
                 <div className="grid grid-cols-[max-content,1fr] gap-2 items-center">
                     <h1 className="text-2xl font-bold text-slate-700">{t('events.upcoming_events')}</h1>
@@ -177,98 +177,100 @@ const AccountEventOverview: React.FC = () => {
                     ))}
                 </div>
             </div>
-            <div className="w-full h-fit flex flex-col gap-x-2 gap-y-4 bg-white border border-gray-200 rounded-xl px-4 py-2">
-                <div className="grid grid-cols-[max-content,1fr] gap-2 items-center">
-                    <h1 className="text-2xl font-bold text-slate-700">{t('events.your_joined_events')}</h1>
-                    <div className='w-full h-0.5 bg-slate-300 rounded' />
-                </div>
-                <div className="flex flex-row items-center justify-start flex-wrap gap-2">
-                    {accountData.joinedEvents.filter(event => new Date(event.endDate) > new Date()).map((event) => (
-                        <button onClick={(e) => setSelectedEventId(event.id)} key={event.id} className="flex border-gray-200 border rounded-lg flex-col gap-2 w-64 h-64">
-                            <div className="w-full h-fit relative rounded-lg">
-                                <MapContainerNoSSR
-                                    center={[
-                                        Number(event.location.latitude),
-                                        Number(event.location.longitude),
-                                    ]}
-                                    zoom={7}
-                                    style={{ height: "200px", width: "100%" }}
-                                    className="rounded-lg z-0"
-                                >
-                                    <TileLayerNoSSR
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                    />
-                                    {event?.location && (
-                                        <MarkerNoSSR position={[
+            {accountData.type !== 'organization' && (
+                <div className="w-full h-fit flex flex-col gap-x-2 gap-y-4 bg-white border border-gray-200 rounded-xl px-4 py-2">
+                    <div className="grid grid-cols-[max-content,1fr] gap-2 items-center">
+                        <h1 className="text-2xl font-bold text-slate-700">{t('events.your_joined_events')}</h1>
+                        <div className='w-full h-0.5 bg-slate-300 rounded' />
+                    </div>
+                    <div className="flex flex-row items-center justify-start flex-wrap gap-2">
+                        {accountData.joinedEvents.filter(event => new Date(event.endDate) > new Date()).map((event) => (
+                            <button onClick={(e) => setSelectedEventId(event.id)} key={event.id} className="flex border-gray-200 border rounded-lg flex-col gap-2 w-64 h-64">
+                                <div className="w-full h-fit relative rounded-lg">
+                                    <MapContainerNoSSR
+                                        center={[
                                             Number(event.location.latitude),
                                             Number(event.location.longitude),
                                         ]}
-                                            icon={new L.Icon({
-                                                iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-                                                shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-                                            })}>
-                                            <PopupNoSSR>
-                                                <span className="text-xs">{addresses[event.id]}</span>
-                                            </PopupNoSSR>
-                                        </MarkerNoSSR>
-                                    )}
-                                </MapContainerNoSSR>
-                            </div>
-                            <div className="flex flex-col gap-2 px-2 overflow-hidden">
-                                <div className="flex flex-row items-center justify-between overflow-hidden">
-                                    <p className="text-sm font-semibold text-slate-700 truncate">{event.title}</p>
-                                    <p className="text-sm text-slate-300">({event.participants.length}/{event.peopleNeeded})</p>
+                                        zoom={7}
+                                        style={{ height: "200px", width: "100%" }}
+                                        className="rounded-lg z-0"
+                                    >
+                                        <TileLayerNoSSR
+                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        />
+                                        {event?.location && (
+                                            <MarkerNoSSR position={[
+                                                Number(event.location.latitude),
+                                                Number(event.location.longitude),
+                                            ]}
+                                                icon={new L.Icon({
+                                                    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+                                                    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+                                                })}>
+                                                <PopupNoSSR>
+                                                    <span className="text-xs">{addresses[event.id]}</span>
+                                                </PopupNoSSR>
+                                            </MarkerNoSSR>
+                                        )}
+                                    </MapContainerNoSSR>
                                 </div>
-                                <p className="text-xs text-gray-400 truncate">{event.description}</p>
-                            </div>
-                        </button>
-                    ))}
-                </div>
-                <div className="flex flex-row items-center justify-start flex-wrap gap-2">
-                    {accountData.joinedEvents.filter(event => new Date(event.endDate) < new Date()).map((event) => (
-                        <button onClick={(e) => setSelectedEventId(event.id)} key={event.id} className="flex border-gray-200 border rounded-lg flex-col gap-2 w-64 h-64 opacity-50">
-                            <div className="w-full h-fit relative rounded-lg">
-                                <MapContainerNoSSR
-                                    center={[
-                                        Number(event.location.latitude),
-                                        Number(event.location.longitude),
-                                    ]}
-                                    zoom={7}
-                                    style={{ height: "200px", width: "100%" }}
-                                    className="rounded-lg z-0"
-                                >
-                                    <TileLayerNoSSR
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                    />
-                                    {event?.location && (
-                                        <MarkerNoSSR position={[
+                                <div className="flex flex-col gap-2 px-2 overflow-hidden">
+                                    <div className="flex flex-row items-center justify-between overflow-hidden">
+                                        <p className="text-sm font-semibold text-slate-700 truncate">{event.title}</p>
+                                        <p className="text-sm text-slate-300">({event.participants.length}/{event.peopleNeeded})</p>
+                                    </div>
+                                    <p className="text-xs text-gray-400 truncate">{event.description}</p>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                    <div className="flex flex-row items-center justify-start flex-wrap gap-2">
+                        {accountData.joinedEvents.filter(event => new Date(event.endDate) < new Date()).map((event) => (
+                            <button onClick={(e) => setSelectedEventId(event.id)} key={event.id} className="flex border-gray-200 border rounded-lg flex-col gap-2 w-64 h-64 opacity-50">
+                                <div className="w-full h-fit relative rounded-lg">
+                                    <MapContainerNoSSR
+                                        center={[
                                             Number(event.location.latitude),
                                             Number(event.location.longitude),
                                         ]}
-                                            icon={new L.Icon({
-                                                iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-                                                shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-                                            })}>
-                                            <PopupNoSSR>
-                                                <span className="text-xs">{addresses[event.id]}</span>
-                                            </PopupNoSSR>
-                                        </MarkerNoSSR>
-                                    )}
-                                </MapContainerNoSSR>
-                            </div>
-                            <div className="flex flex-col gap-2 px-2 overflow-hidden">
-                                <div className="flex flex-row items-center justify-between overflow-hidden">
-                                    <p className="text-sm font-semibold text-slate-700 truncate">{event.title}</p>
-                                    <p className="text-sm text-slate-300">({event.participants.length}/{event.peopleNeeded})</p>
+                                        zoom={7}
+                                        style={{ height: "200px", width: "100%" }}
+                                        className="rounded-lg z-0"
+                                    >
+                                        <TileLayerNoSSR
+                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        />
+                                        {event?.location && (
+                                            <MarkerNoSSR position={[
+                                                Number(event.location.latitude),
+                                                Number(event.location.longitude),
+                                            ]}
+                                                icon={new L.Icon({
+                                                    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+                                                    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+                                                })}>
+                                                <PopupNoSSR>
+                                                    <span className="text-xs">{addresses[event.id]}</span>
+                                                </PopupNoSSR>
+                                            </MarkerNoSSR>
+                                        )}
+                                    </MapContainerNoSSR>
                                 </div>
-                                <p className="text-xs text-gray-400 truncate">{event.description}</p>
-                            </div>
-                        </button>
-                    ))}
+                                <div className="flex flex-col gap-2 px-2 overflow-hidden">
+                                    <div className="flex flex-row items-center justify-between overflow-hidden">
+                                        <p className="text-sm font-semibold text-slate-700 truncate">{event.title}</p>
+                                        <p className="text-sm text-slate-300">({event.participants.length}/{event.peopleNeeded})</p>
+                                    </div>
+                                    <p className="text-xs text-gray-400 truncate">{event.description}</p>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

@@ -96,7 +96,7 @@ const Header: React.FC = () => {
 
             <div className="bg-gray-300 w-full h-0.5 rounded-xl" />
 
-            <Link href="/profile/posts" className="w-full flex gap-2 items-center justify-start px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-lg">
+            <Link href="/profile/events" className="w-full flex gap-2 items-center justify-start px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-lg">
               <Image src={postIcon.src} alt="Sun Icon" width={20} height={20} />
               {t("header.your_posts")}
             </Link>

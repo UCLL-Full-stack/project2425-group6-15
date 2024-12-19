@@ -7,12 +7,15 @@ import activityDb from '../repository/activity.db';
 import { log } from 'console';
 
 const getAllEvents = async (currentAccount : Account): Promise<EventPreview[]> => {
-    if (currentAccount.getType() == 'organization') {
-        throw new ServiceError('You dont have permission.', 403);
-    }
     const events = await eventdb.getAll();
     if (!events) {
         throw new ServiceError('Events not found', 404);
+    }
+    if (currentAccount.getType() == 'admin') {
+        return events.map((event) => event.toPrevieuw(currentAccount.getId() ?? 0));
+    }
+    if (currentAccount.getType() == 'organization') {
+        return events.filter((event) => event.getCreator().getId() === currentAccount.getId()).map((event) => event.toPrevieuw(currentAccount.getId() ?? 0));
     }
     const eventSummaries: EventPreview[] = events.map((event) => {
         if (event.getCreator().getId() != currentAccount.getId()) {

@@ -39,7 +39,7 @@ const AdminEventsChart = () => {
 
     const fetchEvents = async () => {
         try {
-            const response = await eventService.getAllPosts();
+            const response = await eventService.getAllEvents();
             if (!response.ok) {
                 throw new Error('Something went wrong');
             }

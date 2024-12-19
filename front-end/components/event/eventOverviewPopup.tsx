@@ -17,7 +17,7 @@ import EditEventPopup from "./editEventPopup";
 import { set } from "date-fns";
 
 interface CreateNewPostPopupProps {
-  postId: number;
+  eventId: number;
   onClose(): void;
 }
 
@@ -47,12 +47,12 @@ const fetchNearestAddress = async (latitude: number, longitude: number) => {
 };
 
 const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
-  
+
   onClose,
-  postId,
+  eventId,
 }) => {
   const { t } = useTranslation();
-  const [post, setPost] = useState<EventSummary | null>(null);
+  const [event, setEvent] = useState<EventSummary | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [currentAccount, setcurrentAccount] = useState<PublicAccount | null>(null);
   const [showedit, setShowedit] = useState<boolean>(false);
@@ -82,12 +82,12 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
     }
   };
   const fetchPost = async () => {
-    const response = await eventService.getPostById(postId);
+    const response = await eventService.getPostById(eventId);
     if (!response.ok) {
-      console.error("Failed to fetch post");
+      console.error("Failed to fetch event");
     }
     const data = await response.json();
-    setPost(data);
+    setEvent(data);
     if (data.location) {
       const nearestAddress = await fetchNearestAddress(
         data.location.latitude,
@@ -102,30 +102,30 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
     fetchPost();
   }, []);
 
-  const joinpost = async (postId: number) => {
+  const joinEvent = async (eventId: number) => {
     try {
-      const response = await eventService.joinPost(postId);
+      const response = await eventService.joinPost(eventId);
       if (response.ok) {
         fetchPost();
-        alert("Successfully joined the post!");
+        alert("Successfully joined the event!");
       } else {
-        console.error("Failed to join the post");
+        console.error("Failed to join the event");
       }
     } catch (error) {
-      console.error("An error occurred while joining the post", error);
+      console.error("An error occurred while joining the event", error);
     }
   };
-  const exitpost = async (postId: number) => {
+  const exitEvent = async (eventId: number) => {
     try {
-      const response = await eventService.exitPost(postId);
+      const response = await eventService.exitPost(eventId);
       if (response.ok) {
         fetchPost();
-        alert("Successfully exited the post!");
+        alert("Successfully exited the event!");
       } else {
-        console.error("Failed to exit the post");
+        console.error("Failed to exit the event");
       }
     } catch (error) {
-      console.error("An error occurred while exiting the post", error);
+      console.error("An error occurred while exiting the event", error);
     }
   }
 
@@ -134,7 +134,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
     fetchPost();
   }
   if (showedit) {
-    return <EditEventPopup eventId={postId} onClose={closeEdit} />;
+    return <EditEventPopup eventId={eventId} onClose={closeEdit} />;
   }
 
   return (
@@ -146,27 +146,27 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
         >
           &#9587;
         </button>
-        {post && currentAccount && (
+        {event && currentAccount && (
           <>
             <h3 className="text-xl font-medium text-slate-700">
-              {post?.title}
+              {event?.title}
             </h3>
             <p className="text-sm text-gray-400">
-            {t("events.by")} @{post?.creator?.firstName} {post?.creator?.lastName}
+              {t("events.by")} @{event?.creator?.firstName} {event?.creator?.lastName}
             </p>
             <div className="pt-4 grid grid-cols-2 gap-2">
               <div>
                 <div>
                   <h4 className="text-sm font-medium text-slate-700">
-                  {t("events.address")}
+                    {t("events.address")}
                   </h4>
                   <p className="text-sm text-gray-400 flex">{address}</p>
                 </div>
                 <div>
                   <MapContainerNoSSR
                     center={[
-                      Number(post.location.latitude),
-                      Number(post.location.longitude),
+                      Number(event.location.latitude),
+                      Number(event.location.longitude),
                     ]}
                     zoom={7}
                     style={{ height: "200px", width: "100%" }}
@@ -175,19 +175,19 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
-                    {post?.location && (
+                    {event?.location && (
                       <MarkerNoSSR
                         position={[
-                          Number(post.location.latitude),
-                          Number(post.location.longitude),
+                          Number(event.location.latitude),
+                          Number(event.location.longitude),
                         ]}
                       />
                     )}
                   </MapContainerNoSSR>
                 </div>
-                {post?.location && (
+                {event?.location && (
                   <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${post.location.latitude},${post.location.longitude}`}
+                    href={`https://www.google.com/maps/search/?api=1&query=${event.location.latitude},${event.location.longitude}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-blue-500 text-center"
@@ -199,7 +199,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
               <div className="flex flex-col gap-2">
                 <div className="flex flex-col">
                   <h4 className="text-sm font-medium text-slate-700">
-                  {t("events.timespan")}
+                    {t("events.timespan")}
                   </h4>
                   <div className="flex flex-col">
                     <div className="grid grid-cols-[max-content_1fr_max-content] items-center">
@@ -209,29 +209,29 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
                     </div>
                     <div className="flex justify-between items-center">
                       <div className="text-sm text-gray-400 text-start">
-                        <p>{new Date(post.startDate).toLocaleTimeString()}</p>
-                        <p>{new Date(post.startDate).toLocaleDateString()}</p>
+                        <p>{new Date(event.startDate).toLocaleTimeString()}</p>
+                        <p>{new Date(event.startDate).toLocaleDateString()}</p>
                       </div>
                       <div className="text-sm text-gray-400 text-end">
-                        <p>{new Date(post.endDate).toLocaleTimeString()}</p>
-                        <p>{new Date(post.endDate).toLocaleDateString()}</p>
+                        <p>{new Date(event.endDate).toLocaleTimeString()}</p>
+                        <p>{new Date(event.endDate).toLocaleDateString()}</p>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="flex flex-col">
                   <h4 className="text-sm font-medium text-slate-700">
-                  {t("events.create.description")}
+                    {t("events.create.description")}
                   </h4>
-                  <p className="text-sm text-gray-400">{post?.description}</p>
+                  <p className="text-sm text-gray-400">{event?.description}</p>
                 </div>
-                {currentAccount.id === post.creator.id && (
+                {currentAccount.id === event.creator.id && (
                   <div className="flex flex-col">
                     <h4 className="text-sm font-medium text-slate-700">
-                    {t("events.create.participants")}
+                      {t("events.create.participants")}
                     </h4>
                     <div className="flex flex-col gap-1">
-                      {post?.participants?.map((participant) => (
+                      {event?.participants?.map((participant) => (
                         <p className="text-sm text-gray-400">{participant.firstName} {participant.lastName}</p>
                       ))}
                     </div>
@@ -239,12 +239,12 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
                 )}
               </div>
             </div>
-            {(post.creator.id != currentAccount.id && new Date(post.startDate) > new Date()) && (
+            {(event.creator.id != currentAccount.id && new Date(event.startDate) > new Date()) && (
               <div className="w-full flex items-center justify-end">
-                {!post.hasJoined && (
+                {!event.hasJoined && (
                   <button
                     className="flex items-center justify-center gap-1.5 border-blue-500 border-2 text-blue-500 rounded-full px-4 py-2 transition-all duration-300 ease-in-out "
-                    onClick={() => joinpost(postId)}
+                    onClick={() => joinEvent(eventId)}
                   >
                     <Image
                       src={checkmarkImg}
@@ -255,10 +255,10 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
                     {t("events.create.join")}
                   </button>
                 )}
-                {post.hasJoined && (
+                {event.hasJoined && (
                   <button
                     className="flex items-center justify-center gap-1.5 border-red-500 border-2 text-red-500 rounded-full px-4 py-2 transition-all duration-300 ease-in-out "
-                    onClick={() => exitpost(postId)}
+                    onClick={() => exitEvent(eventId)}
                   >
                     <Image
                       src={exitImg}
@@ -272,11 +272,11 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
               </div>
             )}
 
-            {(post.creator.id == currentAccount.id && new Date(post.startDate) > new Date(new Date().setHours(new Date().getHours() + 12))) && (
+            {(event.creator.id == currentAccount.id && new Date(event.startDate) > new Date(new Date().setHours(new Date().getHours() + 12))) && (
               <div className="w-full flex items-center justify-end gap-2">
                 <button
                   className="flex items-center justify-center gap-1.5 border-red-500 border-2 text-red-500 rounded-full px-4 py-2 transition-all duration-300 ease-in-out "
-                  onClick={() => removeEvent(postId)}
+                  onClick={() => removeEvent(eventId)}
                 >
                   <Image
                     src={removeImg}

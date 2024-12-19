@@ -1,7 +1,7 @@
 import { EventInput } from "@/types";
 import { create } from "domain";
 
-const getAllPosts = async () => {
+const getAllEvents = async () => {
     let token = sessionStorage.getItem("token");
     if (!token) {
       throw new Error("Token not found");
@@ -102,7 +102,7 @@ const getAllPosts = async () => {
     });
   }
   export default {
-    getAllPosts,
+    getAllEvents,
     getPostById,
     joinPost,
     exitPost,

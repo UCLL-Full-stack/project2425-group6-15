@@ -30,10 +30,10 @@ const Home: React.FC = () => {
 
   if (isLoggedIn) {
     return (
-      <>
+      <div className="bg-slate-100 w-full min-h-screen">
         <Header />
         <PostOverview />
-      </>
+      </div>
     );
   }
   return (

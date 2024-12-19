@@ -234,7 +234,7 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
       return;
     }
     onClose();
-    window.location.reload(); // Refresh the profile posts index page
+    window.location.reload();
   }
 
   useEffect(() => {
@@ -542,22 +542,22 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
               >
                 {t("events.create.location")}
               </label>
-                <p className="text-base text-slate-800">{address}</p>
-                <div className="h-56 mt-2">
+              <p className="text-base text-slate-800">{address}</p>
+              <div className="h-56 mt-2">
                 {typeof window !== "undefined" && cordlocation && (
                   <MapContainerNoSSR
-                  center={[cordlocation.latitude, cordlocation.longitude]}
-                  zoom={13}
-                  className="h-full rounded-lg"
+                    center={[cordlocation.latitude, cordlocation.longitude]}
+                    zoom={13}
+                    className="h-full rounded-lg"
                   >
-                  <TileLayerNoSSR url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                  <MarkerNoSSR position={[cordlocation.latitude, cordlocation.longitude]} />
+                    <TileLayerNoSSR url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                    <MarkerNoSSR position={[cordlocation.latitude, cordlocation.longitude]} />
                   </MapContainerNoSSR>
                 )}
-                </div>
               </div>
-              <div>
-                <label htmlFor="eventPeriod" className="text-base font-medium text-slate-600">
+            </div>
+            <div>
+              <label htmlFor="eventPeriod" className="text-base font-medium text-slate-600">
                 {t("events.create.period")}
               </label>
               <p className="text-base text-slate-800">{startDateTime}</p>
