@@ -97,6 +97,18 @@ const deleteEvent = async (id: number): Promise<void> => {
         throw new Error('Database error. See server log for details');
     }
 }
+const getBySelectedActivity = async (activityId: number): Promise<Event[]> => {
+    try {
+        const events = await database.event.findMany({
+            where: { activityId },
+            include: { activity: true, creator: true, participants: true },
+        });
+        return events.map((event) => Event.fromPrisma(event));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details');
+    }
+}
 
 export default{
     getAll,
@@ -105,5 +117,6 @@ export default{
     getByJoinedAccountId,
     update,
     getByCreatorId,
-    deleteEvent
+    deleteEvent,
+    getBySelectedActivity
 };

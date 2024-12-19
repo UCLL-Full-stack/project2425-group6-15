@@ -13,10 +13,24 @@ export type Activity = {
     type: string;
 };
 
+export type ActivitySummary = {
+    id?: number;
+    name: string;
+    type: string;
+    events: number;
+};
+
 export type Interest = {
     id?: number;
     name: string;
     description: string;
+};
+
+export type InterestSummary = {
+    id?: number;
+    name: string;
+    description: string;
+    accounts: number;
 };
 
 export type AccountLogin = {

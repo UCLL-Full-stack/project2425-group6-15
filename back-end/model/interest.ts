@@ -1,4 +1,5 @@
 import { Interest as InterestPrisma } from '@prisma/client';
+import { InterestSummary } from '../types';
 export class Interest {
     private id?: number;
     private name: string;
@@ -49,6 +50,15 @@ export class Interest {
 
     equals(interest: Interest): boolean {
         return this.name === interest.getName(), this.description === interest.getDescription();
+    }
+
+    toSummary(): InterestSummary {
+        return {
+            id: this.id,
+            name: this.name,
+            description: this.description,
+            accounts: 0,
+        };
     }
 
     toPrisma(): InterestPrisma {

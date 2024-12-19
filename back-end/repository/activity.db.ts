@@ -38,4 +38,15 @@ const getByName = async (name: string): Promise<Activity | null> => {
         throw new Error('Database error. See server log for details');
     }
 }
-export default { getAll, getById, getByName };
+
+const deleteById = async (id: number): Promise<void> => {
+    try {
+        await database.activity.delete({
+            where: { id },
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details');
+    }
+}
+export default { getAll, getById, getByName, deleteById };

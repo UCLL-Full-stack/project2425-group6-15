@@ -1,3 +1,4 @@
+import { ActivitySummary } from '../types';
 import { Event } from './event';
 import { Activity as ActivityPrisma, Event as EventPrisma} from '@prisma/client';
 
@@ -27,6 +28,15 @@ export class Activity {
 
     getType(): string {
         return this.type;
+    }
+
+    toSummary(): ActivitySummary {
+        return {
+            id: this.id,
+            name: this.name,
+            type: this.type,
+            events: 0, 
+        };
     }
 
 

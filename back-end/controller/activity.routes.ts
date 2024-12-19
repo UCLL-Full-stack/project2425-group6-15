@@ -127,6 +127,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import activityService from '../service/activity.service';
+import authService from '../authentication/auth.service';
 
 const activityRouter = express.Router();
 
@@ -152,10 +153,29 @@ const activityRouter = express.Router();
  */
 activityRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const activities = await activityService.getAllActivities();  
+        const activities = await activityService.getAllActivities(await authService.authenticateToken(req.headers));  
         res.status(200).json(activities);  
     } catch (error) {
         next(error);  
     }
 });
+
+activityRouter.get('/admin', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const activities = await activityService.getAllActivitiesForAdmin(await authService.authenticateToken(req.headers));  
+        res.status(200).json(activities);  
+    } catch (error) {
+        next(error);  
+    }
+});
+
+activityRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await activityService.deleteActivity(parseInt(req.params.id), await authService.authenticateToken(req.headers));  
+        res.status(200).send();  
+    } catch (error) {
+        next(error);  
+    }
+});
+
 export { activityRouter };

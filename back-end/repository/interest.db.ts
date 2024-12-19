@@ -48,9 +48,22 @@ const create = async (interest: Interest): Promise<void> => {
         throw new Error('Database error. See server log for details');
     }
 };
+
+const deleteById = async (id: number): Promise<void> => {
+    try {
+        await database.interest.delete({
+            where: { id },
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details');
+    }
+}
+
 export default{
     getAll,
     getById,
     getByName,
     create,
+    deleteById
 };
