@@ -20,3 +20,44 @@ body {
   -moz-appearance: textfield;
   appearance: textfield;
 }
+
+.messagePopup {
+  position: fixed;
+  top: 2rem;
+  left: 50%;
+
+  text-align: center;
+
+  transform: translate(-50%, 0);
+  z-index: 9999;
+  width: fit-content;
+
+  border-radius: 100000px;
+
+  min-width: 250px;
+
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  padding-left: 1.7rem;
+  padding-right: 1.7rem;
+
+  animation: slideIn 1s ease-in-out;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translate(-50%, calc(-2rem - 100%));
+  }
+  50% {
+    transform: translate(-50%, 1rem);
+  }
+  70% {
+    transform: translate(-50%, -0.5rem);
+  }
+  90% {
+    transform: translate(-50%, 0.2rem);
+  }
+  100% {
+    transform: translate(-50%, 0);
+  }
+}

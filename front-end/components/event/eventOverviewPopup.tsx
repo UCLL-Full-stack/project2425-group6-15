@@ -35,8 +35,7 @@ const MarkerNoSSR = dynamic(
   { ssr: false }
 );
 
-const fetchNearestAddress = async (latitude: number, longitude: number) => {
-  const router = useRouter();
+const fetchNearestAddress = async (latitude: number, longitude: number, router: any) => {
   try {
     const response = await fetch(
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
@@ -132,7 +131,8 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
       if (data.location) {
         const nearestAddress = await fetchNearestAddress(
           data.location.latitude,
-          data.location.longitude
+          data.location.longitude,
+          router
         );
         setAddress(nearestAddress);
       }
