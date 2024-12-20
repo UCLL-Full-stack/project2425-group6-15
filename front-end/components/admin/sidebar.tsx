@@ -19,6 +19,7 @@ import activitiesActifImg from "@/images/icons/admin/sidebar/activitiesSelect.sv
 
 import logoutImg from "@/images/icons/admin/sidebar/logout.svg";
 import logoutAcitfImg from "@/images/icons/admin/sidebar/logoutSelect.svg";
+import LanguageSide from "../language/Language_side";
 
 const Sidebar = () => {
   const { t } = useTranslation();
@@ -39,9 +40,8 @@ const Sidebar = () => {
       <div className="flex flex-col px-5 gap-1">
         <Link
           href="/admin"
-          className={`w-full flex items-center justify-between gap-2 rounded-lg hover:bg-gray-200 px-2 py-0.5 ${
-            isSelected("/admin") ? "bg-gray-100" : ""
-          }`}
+          className={`w-full flex items-center justify-between gap-2 rounded-lg hover:bg-gray-200 px-2 py-0.5 ${isSelected("/admin") ? "bg-gray-100" : ""
+            }`}
         >
           <Image
             src={isSelected("/admin") ? dashboardActifImg : dashboardImg}
@@ -49,18 +49,16 @@ const Sidebar = () => {
             className="w-8 h-8"
           />
           <p
-            className={`text-lg ${
-              isSelected("/admin") ? "text-blue-500" : "text-slate-600"
-            }`}
+            className={`text-lg ${isSelected("/admin") ? "text-blue-500" : "text-slate-600"
+              }`}
           >
             Dashboard
           </p>
         </Link>
         <Link
           href="/admin/users"
-          className={`w-full flex items-center justify-between gap-2 rounded-lg hover:bg-gray-200 px-2 py-0.5 ${
-            isSelected("/admin/users") ? "bg-gray-100" : ""
-          }`}
+          className={`w-full flex items-center justify-between gap-2 rounded-lg hover:bg-gray-200 px-2 py-0.5 ${isSelected("/admin/users") ? "bg-gray-100" : ""
+            }`}
         >
           <Image
             src={isSelected("/admin/users") ? usersActifImg : usersImg}
@@ -68,18 +66,16 @@ const Sidebar = () => {
             className="w-8 h-8"
           />
           <p
-            className={`text-lg ${
-              isSelected("/admin/users") ? "text-blue-500" : "text-slate-600"
-            }`}
+            className={`text-lg ${isSelected("/admin/users") ? "text-blue-500" : "text-slate-600"
+              }`}
           >
             {t("events.users")}
           </p>
         </Link>
         <Link
           href="/admin/events"
-          className={`w-full flex items-center justify-between gap-2 rounded-lg hover:bg-gray-200 px-2 py-0.5 ${
-            isSelected("/admin/events") ? "bg-gray-100" : ""
-          }`}
+          className={`w-full flex items-center justify-between gap-2 rounded-lg hover:bg-gray-200 px-2 py-0.5 ${isSelected("/admin/events") ? "bg-gray-100" : ""
+            }`}
         >
           <Image
             src={isSelected("/admin/events") ? eventsActifImg : eventsImg}
@@ -87,18 +83,16 @@ const Sidebar = () => {
             className="w-8 h-8"
           />
           <p
-            className={`text-lg ${
-              isSelected("/admin/events") ? "text-blue-500" : "text-slate-600"
-            }`}
+            className={`text-lg ${isSelected("/admin/events") ? "text-blue-500" : "text-slate-600"
+              }`}
           >
             {t("events.events")}
           </p>
         </Link>
         <Link
           href="/admin/interests"
-          className={`w-full flex items-center justify-between gap-2 rounded-lg hover:bg-gray-200 px-2 py-0.5 ${
-            isSelected("/admin/interests") ? "bg-gray-100" : ""
-          }`}
+          className={`w-full flex items-center justify-between gap-2 rounded-lg hover:bg-gray-200 px-2 py-0.5 ${isSelected("/admin/interests") ? "bg-gray-100" : ""
+            }`}
         >
           <Image
             src={
@@ -108,20 +102,18 @@ const Sidebar = () => {
             className="w-8 h-8"
           />
           <p
-            className={`text-lg ${
-              isSelected("/admin/interests")
+            className={`text-lg ${isSelected("/admin/interests")
                 ? "text-blue-500"
                 : "text-slate-600"
-            }`}
+              }`}
           >
             {t("events.create.interests")}
           </p>
         </Link>
         <Link
           href="/admin/activities"
-          className={`w-full flex items-center justify-between gap-2 rounded-lg hover:bg-gray-200 px-2 py-0.5 ${
-            isSelected("/admin/activities") ? "bg-gray-100" : ""
-          }`}
+          className={`w-full flex items-center justify-between gap-2 rounded-lg hover:bg-gray-200 px-2 py-0.5 ${isSelected("/admin/activities") ? "bg-gray-100" : ""
+            }`}
         >
           <Image
             src={
@@ -133,17 +125,17 @@ const Sidebar = () => {
             className="w-8 h-8"
           />
           <p
-            className={`text-lg ${
-              isSelected("/admin/activities")
+            className={`text-lg ${isSelected("/admin/activities")
                 ? "text-blue-500"
                 : "text-slate-600"
-            }`}
+              }`}
           >
             {t("admin.activities")}
           </p>
         </Link>
       </div>
       <div className="flex flex-col">
+        <LanguageSide />
         <button
           onClick={() => {
             sessionStorage.removeItem("token");
