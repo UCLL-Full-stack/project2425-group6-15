@@ -31,7 +31,7 @@ const MessageHandler: React.FC = () => {
         return null;
     }
     return (
-        <div className={`fixed z-[999999] top-3 w-fit left-1/2 transform -translate-x-1/2 text-white px-2 py-0.5 rounded-lg ${messageType === "error" ? "bg-red-500" : "bg-green-500"}`}>
+        <div className={`messagePopup text-white ${messageType === "error" ? "bg-red-500" : "bg-green-500"}`}>
             {message}
         </div>
     );
