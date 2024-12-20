@@ -41,7 +41,7 @@ const InterestsAdminTable = () => {
     }, []);
 
     const deleteInterest = async (interestId: number) => {
-        const confirmRemoval = confirm("Are you sure you want to delete this interest?");
+        const confirmRemoval = confirm(t("admin.notifications.interests.sure"));
         if (!confirmRemoval) return;
         try {
             const response = await interestService.removeInterest(interestId);
@@ -49,7 +49,7 @@ const InterestsAdminTable = () => {
                 fetchInterests();
                 router.push({
                     pathname: router.pathname,
-                    query: { succesMessage: String("succesfully deleted Interest") }
+                    query: { succesMessage: String(t("admin.notifications.interests.success")) }
                 });
             } else {
                 const data = await response.json();
@@ -71,10 +71,10 @@ const InterestsAdminTable = () => {
             <table className='w-full max-w-3xl border rounded-xl box-border overflow-hidden shadow-md'>
                 <thead className='bg-gray-800'>
                     <tr>
-                        <th className='text-white text-lg font-normal p-2'>{t('interestName')}</th>
-                        <th className='text-white text-lg font-normal p-2'>{t('type')}</th>
-                        <th className='text-white text-lg font-normal p-2'>{t('used in interests')}</th>
-                        <th className='text-white text-lg font-normal p-2'>{t('actions')}</th>
+                        <th className='text-white text-lg font-normal p-2'>{t('admin.interestName')}</th>
+                        <th className='text-white text-lg font-normal p-2'>Type</th>
+                        <th className='text-white text-lg font-normal p-2'>{t('admin.used')}</th>
+                        <th className='text-white text-lg font-normal p-2'>{t('admin.actions')}</th>
                     </tr>
                 </thead>
                 <tbody className='bg-white border border-gray-400'>
@@ -87,7 +87,7 @@ const InterestsAdminTable = () => {
                                 <button
                                     onClick={() => deleteInterest(interest.id as number)}
                                     className=' text-white rounded px-2 py-1 hover:bg-gray-100 transition duration-300'
-                                    title={t('delete')}>
+                                    title={t('events.delete')}>
                                     <Image src={DeleteImg} alt='' className='w-5 h-5' />
                                 </button>
                             </td>
