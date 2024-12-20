@@ -20,12 +20,19 @@ const ActivitiesAdminTable = () => {
         try {
             const response = await activityService.getAllForAdmin();
             if (!response.ok) {
-                throw new Error('Something went wrong');
+                const error = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error.message) }
+                });
             }
             const data = await response.json();
             setEvents(data);
         } catch (error) {
-            console.error(error);
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
     };
 
@@ -40,13 +47,22 @@ const ActivitiesAdminTable = () => {
             const response = await activityService.removeActivity(activityId);
             if (response.ok) {
                 fetchActivities();
-                alert("Successfully deleted activity!");
+                router.push({
+                    pathname: router.pathname,
+                    query: { succesMessage: String("Activity succesfull deleted.") }
+                });
             } else {
                 const data = await response.json();
-                alert("Failed to delete activity: " + data.message);
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(data.message) }
+                });
             }
         } catch (error) {
-            console.error("An error occurred while removing the activity", error);
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
     };
 

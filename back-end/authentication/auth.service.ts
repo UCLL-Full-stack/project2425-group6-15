@@ -9,8 +9,8 @@ import {Role}from '../types';
 const JWT_ACCES_SECRET = process.env.JWT_ACCES_SECRET || 'secretkey'; 
 const JWT_ACCES_EXPIRATION = process.env.JWT_ACCES_EXPIRATION || '10m';
 
-const generateAccesToken = (email: string, fullname : string, accountType:Role) => {
-        return jwt.sign({ email, fullname, accountType }, JWT_ACCES_SECRET, { expiresIn: JWT_ACCES_EXPIRATION });
+const generateAccesToken = (email: string, username : string, accountType:Role) => {
+        return jwt.sign({ email, username, accountType }, JWT_ACCES_SECRET, { expiresIn: JWT_ACCES_EXPIRATION });
 }
 
 const authenticateToken = async (headers: { [key: string]: string | string[] | undefined }): Promise<Account> => {
@@ -68,7 +68,7 @@ const refreshToken = async (headers: { [key: string]: string | string[] | undefi
     if (!account) {
         throw new AuthError('Wrong token.', 404);
     }
-    const newToken = generateAccesToken(account.getEmail(), account.getFullName(),account.getType());
+    const newToken = generateAccesToken(account.getEmail(), account.getUsername(),account.getType());
     return newToken;
 };
 const login = async (data : AccountLogin): Promise<JWTGivenToken> => {
@@ -80,7 +80,7 @@ const login = async (data : AccountLogin): Promise<JWTGivenToken> => {
     if (!isValid) {
         throw new AuthError('Invalid password', 401);
     }
-    const token = generateAccesToken(account.getEmail(), account.getFullName(), account.getType());
+    const token = generateAccesToken(account.getEmail(), account.getUsername(), account.getType());
     return token;
 }
 const register = async (data : AccountRegistraion): Promise<JWTGivenToken> => {
@@ -93,7 +93,7 @@ const register = async (data : AccountRegistraion): Promise<JWTGivenToken> => {
     const newAccount = Account.fromAccountRegistraion(data);
     const savedAccount :Account = await accountdb.create(newAccount);
 
-    const token = generateAccesToken(newAccount.getEmail(), newAccount.getFullName(), newAccount.getType());
+    const token = generateAccesToken(newAccount.getEmail(), newAccount.getUsername(), newAccount.getType());
 
     return token;
 };

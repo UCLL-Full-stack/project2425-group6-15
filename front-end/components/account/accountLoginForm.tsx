@@ -40,18 +40,25 @@ const AccountLoginForm: React.FC = () => {
       password: password,
     };
 
-    const response = await authService.login(AccountLogin);
-    const data = await response.json();
-    if (response.status == 200) {
-      sessionStorage.setItem("token", data.token)
-      const tokenAccountType = jwtDecode<{ accountType: string }>(data.token).accountType;
-      if (tokenAccountType == "admin") {
-        router.push('/admin');
+    try {
+      const response = await authService.login(AccountLogin);
+      const data = await response.json();
+      if (response.status == 200) {
+        sessionStorage.setItem("token", data.token)
+        const tokenAccountType = jwtDecode<{ accountType: string }>(data.token).accountType;
+        if (tokenAccountType == "admin") {
+          router.push('/admin');
+        }
+        router.push('/');
       }
-      router.push('/');
-    }
-    else {
-      setServerError(t("login.errors.invalid_credentials"));
+      else {
+        setServerError(t("login.errors.invalid_credentials"));
+      }
+    } catch (error) {
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
+      });
     }
 
     setEmail("");

@@ -16,6 +16,7 @@ import activityService from "@/services/activityService";
 import { Activity } from "@/types";
 import { set } from "date-fns";
 import eventService from "@/services/eventService";
+import { useRouter } from "next/router";
 
 interface CreateNewPostPopupProps {
   onClose(): void;
@@ -36,6 +37,7 @@ const MarkerNoSSR = dynamic(
 
 const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
   const { t } = useTranslation();
+  const router = useRouter();
   const [dateRange, setDateRange] = useState([
     {
       startDate: new Date(),
@@ -66,11 +68,22 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
   const [activities, setActivities] = useState<Activity[]>([]);
 
   const fetchActivities = async () => {
-    const response = await activityService.getAll();
-    if (!response.ok) {
-      throw new Error("Failed to fetch activities");
+    try {
+      const response = await activityService.getAll();
+      if (!response.ok) {
+        const error = await response.json();
+        router.push({
+          pathname: router.pathname,
+          query: { errorMessage: String(error.message) }
+        });
+      }
+      setActivities(await response.json());
+    } catch (error) {
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
+      });
     }
-    setActivities(await response.json());
   }
 
   const handleSelect = (ranges: any) => {
@@ -109,12 +122,18 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
     setAddress(value);
 
     if (value.length > 3) {
-      // Fetch address suggestions
-      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${value}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setSuggestions(data.map((item: any) => item.display_name));
+      try {
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${value}`)
+          .then((response) => response.json())
+          .then((data) => {
+            setSuggestions(data.map((item: any) => item.display_name));
+          });
+      } catch (error) {
+        router.push({
+          pathname: router.pathname,
+          query: { errorMessage: String(error) }
         });
+      }
     } else {
       setSuggestions([]);
     }
@@ -123,19 +142,25 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
   const handleSuggestionClick = (suggestion: string) => {
     setAddress(suggestion);
     setSuggestions([]);
-
-    fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${suggestion}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        const location = data[0];
-        const newCoords = {
-          latitude: parseFloat(location.lat),
-          longitude: parseFloat(location.lon),
-        };
-        setcordLocation(newCoords);
+    try {
+      fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${suggestion}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const location = data[0];
+          const newCoords = {
+            latitude: parseFloat(location.lat),
+            longitude: parseFloat(location.lon),
+          };
+          setcordLocation(newCoords);
+        });
+    } catch (error) {
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
       });
+    }
   };
 
   const handleActivityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,7 +215,7 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
       stepsCalculateCompleted[1] = true;
     }
     // Step 2: Location
-    if (address.trim() !== "" && cordlocation !== null) {
+    if (address !== undefined && address.trim() !== "" && cordlocation !== null) {
       stepsCalculateCompleted[2] = true;
     }
 
@@ -228,13 +253,29 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
       activityName: activity,
       peopleNeeded: participants,
     };
-    const response = await eventService.createEvent(event);
-    if (!response.ok) {
-      console.error("Failed to create event");
+    try {
+      const response = await eventService.createEvent(event);
+      if (!response.ok) {
+        const error = await response.json();
+        router.push({
+          pathname: router.pathname,
+          query: { errorMessage: String(error.message) }
+        });
+        return;
+      }
+      router.push({
+        pathname: router.pathname,
+        query: { succesMessage: String("event succesfully created") }
+      });
+      onClose();
+      window.location.reload();
+    } catch (error) {
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
+      });
       return;
     }
-    onClose();
-    window.location.reload();
   }
 
   useEffect(() => {

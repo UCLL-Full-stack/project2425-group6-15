@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import { useTranslation } from "next-i18next";
+import { useRouter } from 'next/router';
 import { PublicAccount } from "@/types";
 import accountService from "@/services/accountService";
 import L from "leaflet";
@@ -17,6 +18,7 @@ const PostOverviewPopup = dynamic(() => import("@/components/event/eventOverview
 
 const AccountEventOverview: React.FC = () => {
     const { t } = useTranslation();
+    const router = useRouter();
     const [accountData, setAccountData] = useState<PublicAccount | null>(null);
     const [addresses, setAddresses] = useState<{ [key: string]: string }>({});
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
@@ -32,30 +34,56 @@ const AccountEventOverview: React.FC = () => {
     }, []);
 
     const fetchMe = async () => {
-        const response = await accountService.findCurrentAccount();
-        if (!response.ok) {
-            console.log('error');
+        try {
+            const response = await accountService.findCurrentAccount();
+            if (!response.ok) {
+                const error = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error.message) }
+                });
+                return;
+            }
+            const data = await response.json();
+            setAccountData(data);
+        } catch (error) {
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
-        const data = await response.json();
-        setAccountData(data);
     }
 
     const fetchNearestAddress = async (latitude: number, longitude: number, eventId: string) => {
-        const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-        );
-        if (!response.ok) {
-            console.error("Failed to fetch address");
-            return;
+        try {
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+            );
+            if (!response.ok) {
+                const error = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error) }
+                });
+                return;
+            }
+            const data = await response.json();
+            if (!data.address) {
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String("Failed to fetch address") }
+                });
+                return;
+            }
+            console.log(data);
+            const address = `${data.address.road || ''} ${data.address.house_number || ''}, ${data.address.city || data.address.town || data.address.village || ''}, ${data.address.country || ''}`;
+            setAddresses(prev => ({ ...prev, [eventId]: address }));
+        } catch (error) {
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
-        const data = await response.json();
-        if (!data.address) {
-            console.error("Failed to fetch address");
-            return;
-        }
-        console.log(data);
-        const address = `${data.address.road || ''} ${data.address.house_number || ''}, ${data.address.city || data.address.town || data.address.village || ''}, ${data.address.country || ''}`;
-        setAddresses(prev => ({ ...prev, [eventId]: address }));
     };
 
     const closePopup = () => {

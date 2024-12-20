@@ -20,12 +20,19 @@ const InterestsAdminTable = () => {
         try {
             const response = await interestService.getAllForAdmin();
             if (!response.ok) {
-                throw new Error('Something went wrong');
+                const error = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error.message) }
+                });
             }
             const data = await response.json();
             setEvents(data);
         } catch (error) {
-            console.error(error);
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
     };
 
@@ -40,13 +47,22 @@ const InterestsAdminTable = () => {
             const response = await interestService.removeInterest(interestId);
             if (response.ok) {
                 fetchInterests();
-                alert("Successfully deleted interest!");
+                router.push({
+                    pathname: router.pathname,
+                    query: { succesMessage: String("succesfully deleted Interest") }
+                });
             } else {
                 const data = await response.json();
-                alert("Failed to delete interest: " + data.message);
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(data.message) }
+                });
             }
         } catch (error) {
-            console.error("An error occurred while removing the interest", error);
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
     };
 

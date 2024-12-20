@@ -16,6 +16,7 @@ import activityService from "@/services/activityService";
 import { Activity } from "@/types";
 import { set } from "date-fns";
 import eventService from "@/services/eventService";
+import { useRouter } from "next/router";
 
 interface EditEventPopupProps {
     eventId: number
@@ -38,6 +39,7 @@ const MarkerNoSSR = dynamic(
 const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => {
 
     const { t } = useTranslation();
+    const router = useRouter();
     const [dateRange, setDateRange] = useState([
         {
             startDate: new Date(),
@@ -71,11 +73,25 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
 
     useEffect(() => {
         const fetchEvent = async () => {
-            const response = await eventService.getPostById(eventId);
-            if (!response.ok) {
-                throw new Error("Failed to fetch event");
+
+            try {
+                const response = await eventService.getPostById(eventId);
+                if (!response.ok) {
+                    const error = await response.json();
+                    router.push({
+                        pathname: router.pathname,
+                        query: { errorMessage: String(error.message) }
+                    });
+                    return;
+                }
+                setCurrentEventData(await response.json());
+            } catch (error) {
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error) }
+                });
             }
-            setCurrentEventData(await response.json());
+
         }
         fetchEvent();
     }, [eventId]);
@@ -117,11 +133,24 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
         document.body.style.overflow = "hidden";
     });
     const fetchActivities = async () => {
-        const response = await activityService.getAll();
-        if (!response.ok) {
-            throw new Error("Failed to fetch activities");
+        try {
+            const response = await activityService.getAll();
+            if (!response.ok) {
+                const error = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error.message) }
+                });
+                return;
+            }
+            setActivities(await response.json());
+        } catch (error) {
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
-        setActivities(await response.json());
+
     }
 
     const handleSelect = (ranges: any) => {
@@ -161,11 +190,18 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
 
         if (value.length > 3) {
             // Fetch address suggestions
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${value}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    setSuggestions(data.map((item: any) => item.display_name));
+            try {
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${value}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        setSuggestions(data.map((item: any) => item.display_name));
+                    });
+            } catch (error) {
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error) }
                 });
+            }
         } else {
             setSuggestions([]);
         }
@@ -175,18 +211,25 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
         setAddress(suggestion);
         setSuggestions([]);
 
-        fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${suggestion}`
-        )
-            .then((response) => response.json())
-            .then((data) => {
-                const location = data[0];
-                const newCoords = {
-                    latitude: parseFloat(location.lat),
-                    longitude: parseFloat(location.lon),
-                };
-                setcordLocation(newCoords);
+        try {
+            fetch(
+                `https://nominatim.openstreetmap.org/search?format=json&q=${suggestion}`
+            )
+                .then((response) => response.json())
+                .then((data) => {
+                    const location = data[0];
+                    const newCoords = {
+                        latitude: parseFloat(location.lat),
+                        longitude: parseFloat(location.lon),
+                    };
+                    setcordLocation(newCoords);
+                });
+        } catch (error) {
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
             });
+        }
     };
 
     const handleActivityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -229,21 +272,21 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
     };
 
     const validate = () => {
-        let valid = true
+        let valid = true;
         if (title.trim() === "" || description.trim() === "") {
             valid = false;
         }
 
         // Step 1: Activity & participants
-        if (activity.trim() === "" || activities.some((act) => act.name !== activity)) {
+        if (activity.trim() === "" || !activities.some((act) => act.name === activity)) {
             valid = false;
         }
         // Step 2: Location
-        if (cordlocation === null || address.trim() === "") {
+        if (cordlocation === null || address === undefined || address.trim() === "") {
             valid = false;
         }
 
-        // Step 3: Location
+        // Step 3: Date and Time
         if (startDateTime.trim() === "" || endDateTime.trim() === "") {
             valid = false;
         }
@@ -252,7 +295,10 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
         return valid;
     };
 
-    const handleCreateEvent = async () => {
+    const handleSave = async () => {
+        if (!validate()) {
+            return;
+        }
         if (!cordlocation) {
             // Handle the case where cordlocation is null
             console.error("Location is not set");
@@ -271,9 +317,26 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
             activityName: activity,
             peopleNeeded: participants,
         };
-        const response = await eventService.createEvent(event);
-        if (!response.ok) {
-            console.error("Failed to create event");
+        try {
+            const response = await eventService.editEvent(eventId, event);
+            if (!response.ok) {
+                const error = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error.message) }
+                });
+                return;
+            }
+            router.push({
+                pathname: router.pathname,
+                query: { successMessage: "Event updated successfully" }
+            });
+        }
+        catch (error) {
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
             return;
         }
         onClose();
@@ -476,10 +539,11 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
 
                     <div className="w-full flex items-center justify-end">
                         <button
-                            onClick={handleCreateEvent}
+                            onClick={handleSave}
                             className={`px-4 py-2 bg-blue-500 text-white rounded-lg text-base hover:bg-blue-600 ${!ValidData ? "cursor-not-allowed opacity-35" : ""}`}
+                            disabled={!ValidData}
                         >
-                            {t("events.create.create")}
+                            {t("events.edit")}
                         </button>
                     </div>
                 </div>

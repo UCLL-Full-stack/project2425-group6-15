@@ -50,13 +50,24 @@ const UserDashboard: React.FC = () => {
   }, []);
 
   const loadPosts = async () => {
-    const response = await eventService.getAllEvents();
-    if (!response.ok) {
-      throw new Error("Failed to load events");
+    try {
+      const response = await eventService.getAllEvents();
+      if (!response.ok) {
+        const error = await response.json();
+        router.push({
+          pathname: router.pathname,
+          query: { errorMessage: String(error.message) }
+        });
+      }
+      let events = await response.json();
+      events = events.filter((event: EventPreview) => new Date(event.startDate) > new Date())
+      setEvents(events);
+    } catch (error) {
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
+      });
     }
-    let events = await response.json();
-    events = events.filter((event: EventPreview) => new Date(event.startDate) > new Date())
-    setEvents(events);
   }
 
   useEffect(() => {
@@ -68,13 +79,20 @@ const UserDashboard: React.FC = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const L = require('leaflet');
-      delete L.Icon.Default.prototype._getIconUrl;
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-        iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-        shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-      });
+      try {
+        const L = require('leaflet');
+        delete L.Icon.Default.prototype._getIconUrl;
+        L.Icon.Default.mergeOptions({
+          iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+          iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+          shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+        });
+      } catch (error) {
+        router.push({
+          pathname: router.pathname,
+          query: { errorMessage: String(error) }
+        });
+      }
     }
   }, []);
 
@@ -106,27 +124,42 @@ const UserDashboard: React.FC = () => {
     setFilterAddress(value);
 
     if (value.length > 3) {
-      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${value}`)
-        .then(response => response.json())
-        .then(data => {
-          setFilterSuggestions(data.map((item: any) => item.display_name));
+      try {
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${value}`)
+          .then(response => response.json())
+          .then(data => {
+            setFilterSuggestions(data.map((item: any) => item.display_name));
+          });
+      } catch (error) {
+        router.push({
+          pathname: router.pathname,
+          query: { errorMessage: String(error) }
         });
+      }
     } else {
       setFilterSuggestions([]);
     }
+
   };
 
   const handleFilterSuggestionClick = (suggestion: string) => {
     setFilterAddress(suggestion);
     setFilterSuggestions([]);
-
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${suggestion}`)
-      .then(response => response.json())
-      .then(data => {
-        const location = data[0];
-        const newCoords = { latitude: parseFloat(location.lat), longitude: parseFloat(location.lon) };
-        setFilterLocation([newCoords.latitude, newCoords.longitude]);
+    try {
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${suggestion}`)
+        .then(response => response.json())
+        .then(data => {
+          const location = data[0];
+          const newCoords = { latitude: parseFloat(location.lat), longitude: parseFloat(location.lon) };
+          setFilterLocation([newCoords.latitude, newCoords.longitude]);
+        });
+    } catch (error) {
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
       });
+    }
+
   };
 
   const handleFilterStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,7 +202,7 @@ const UserDashboard: React.FC = () => {
       <div className="container grid grid-cols-[1fr_370px] gap-4 h-screen max-h-screen min-w-full text-gray-800 box-border pt-24 pb-5 px-3">
         <div className="w-full h-full bg-white rounded-lg">
           {position && (
-            <MapContainerNoSSR center={position} zoom={13} className="w-full h-full rounded-lg shadow-lg">
+            <MapContainerNoSSR center={position} zoom={13} className="w-full h-full rounded-lg shadow-lg z-0">
               <TileLayerNoSSR
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />

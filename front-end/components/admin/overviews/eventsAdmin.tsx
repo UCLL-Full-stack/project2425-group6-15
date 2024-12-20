@@ -20,12 +20,19 @@ const EventsAdminTable = () => {
         try {
             const response = await eventService.getAllEvents();
             if (!response.ok) {
-                throw new Error('Something went wrong');
+                const error = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error.message) }
+                });
             }
             const data = await response.json();
             setEvents(data);
         } catch (error) {
-            console.error(error);
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
     };
 
@@ -40,13 +47,22 @@ const EventsAdminTable = () => {
             const response = await eventService.removeEvent(eventId);
             if (response.ok) {
                 fetchEvents();
-                alert("Successfully deleted event!");
+                router.push({
+                    pathname: router.pathname,
+                    query: { succesMessage: String("event Suceesfully Removed") }
+                });
             } else {
                 const data = await response.json();
-                alert("Failed to delete event: " + data.message);
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(data.message) }
+                });
             }
         } catch (error) {
-            console.error("An error occurred while removing the event", error);
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
     };
 

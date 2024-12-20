@@ -116,15 +116,23 @@ const AccountRegisterForm: React.FC = () => {
 
     const response = await authService.register(AccountLogin);
     const data = await response.json();
-    if (response.status == 200) {
-      sessionStorage.setItem("token", data.token)
-      if (accountType === "organization") {
-        router.push('/');
+    try {
+      if (response.status == 200) {
+        sessionStorage.setItem("token", data.token)
+        if (accountType === "organization") {
+          router.push('/');
+        }
+        router.push('/register/interests');
       }
-      router.push('/register/interests');
+      else {
+        setServerError(t("signup.errors.invalid_credentials"));
+      }
     }
-    else {
-      setServerError(t("signup.errors.invalid_credentials"));
+    catch (error) {
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
+      });
     }
 
     // Reset fields

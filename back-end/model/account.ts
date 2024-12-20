@@ -140,14 +140,14 @@ export class Account {
 
 
     setFirstName(firstName: string): void {
-        if (!firstName.trim()) {
+        if (!firstName.trim() && this.type !== "organization") {
             throw new Error('First name is required');
         }
         this.firstName = firstName;
     }
 
     setLastName(lastName: string): void {
-        if (!lastName.trim()) {
+        if (!lastName.trim() && this.type !== "organization") {
             throw new Error('Last name is required');
         }
         this.lastName = lastName;

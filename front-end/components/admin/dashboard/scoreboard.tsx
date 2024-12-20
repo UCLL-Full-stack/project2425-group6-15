@@ -24,12 +24,19 @@ const AdminScoreBoard = () => {
         try {
             const response = await eventService.getAllEvents();
             if (!response.ok) {
-                throw new Error('Something went wrong');
+                const error = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error.message) }
+                });
             }
             const data = await response.json();
             setEvents(data);
         } catch (error) {
-            console.error(error);
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
     };
 
@@ -37,7 +44,12 @@ const AdminScoreBoard = () => {
         try {
             const response = await accountService.getAllAccounts();
             if (!response.ok) {
-                throw new Error('Something went wrong');
+                const error = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error.message) }
+                });
+                return;
             }
             const data: AccountSummary[] = await response.json();
             setUsers(data.filter((user) => user.type === 'user'));

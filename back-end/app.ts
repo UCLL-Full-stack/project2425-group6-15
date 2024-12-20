@@ -4,6 +4,7 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import helmet from 'helmet'; 
 import { accountRouter } from './controller/account.routes';
 import { authRouter } from './authentication/auth.routes';
 import { activityRouter } from './controller/activity.routes';
@@ -14,7 +15,7 @@ const app = express();
 dotenv.config();
 
 app.use(cors());
-
+app.use(helmet());
 
 const port = process.env.APP_PORT || 3000;
 const API_KEY = process.env.API_KEY || 'default_api_key_here';

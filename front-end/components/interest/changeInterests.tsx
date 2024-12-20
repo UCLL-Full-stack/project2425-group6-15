@@ -14,13 +14,24 @@ const ChangeInterests: React.FC<ChangeInterestsProps> = ({ onClose }) => {
     const [selectedInterests, setSelectedInterests] = useState<Interest[]>([]);
 
     const fetchAccount = async (): Promise<void> => {
-        const response = await AccountService.findCurrentAccount();
-        if (!response.ok) {
-            console.error("Failed to fetch Account");
-            return;
+        try {
+            const response = await AccountService.findCurrentAccount();
+            if (!response.ok) {
+                let error = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error.message) }
+                });
+                return;
+            }
+            const Account = await response.json();
+            setSelectedInterests(Account.interests);
+        } catch (error) {
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
-        const Account = await response.json();
-        setSelectedInterests(Account.interests);
     }
 
     useEffect(() => {
@@ -29,27 +40,52 @@ const ChangeInterests: React.FC<ChangeInterestsProps> = ({ onClose }) => {
     }, []);
 
     const loadInterests = async () => {
-        const interests = await interestService.findAll();
-        if (!interests.ok) {
-            console.error("Failed to fetch interests");
-            return;
+        try {
+            const interests = await interestService.findAll();
+            if (!interests.ok) {
+                const error = await interests.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error.message) }
+                });
+                return;
+            }
+            const interestsJson = await interests.json();
+            setInterests(interestsJson);
+        } catch (error) {
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
-        const interestsJson = await interests.json();
-        setInterests(interestsJson);
     };
 
     const saveInterests = async () => {
         if (selectedInterests.length < 5) {
-            alert("Please select at least 5 interests");
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String("Select at least 5 Interests") }
+            });
             return;
         }
-        let interestnames = selectedInterests.map((interest) => { return interest.name });
-        const response = await AccountService.addInterestToAccount(interestnames);
-        if (!response.ok) {
-            console.error("Failed to update interests");
-            return;
+        try {
+            let interestnames = selectedInterests.map((interest) => { return interest.name });
+            const response = await AccountService.addInterestToAccount(interestnames);
+            if (!response.ok) {
+                const error = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error.message) }
+                });
+                return;
+            }
+            onClose();
+        } catch (error) {
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
-        onClose();
     }
 
     return (

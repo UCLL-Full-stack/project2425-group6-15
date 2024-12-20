@@ -410,4 +410,14 @@ eventRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>
         next(error);
     }
 });
+
+eventRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const eventId = parseInt(req.params.id);
+        const event = await eventService.updateEvent(eventId, req.body, await authService.authenticateToken(req.headers));
+        res.status(200).json(event);
+    } catch (error) {
+        next(error);
+    }
+});
 export { eventRouter };

@@ -1,4 +1,5 @@
 import AccountService from "@/services/accountService";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 
@@ -7,6 +8,7 @@ interface AccountChangePasswordProps {
 }
 
 const AccountChangePassword: React.FC<AccountChangePasswordProps> = ({ onClose }) => {
+    const router = useRouter();
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -55,7 +57,10 @@ const AccountChangePassword: React.FC<AccountChangePasswordProps> = ({ onClose }
             onClose();
         }
         catch (error) {
-            setServerError("Oops.. Somthing went wrong. \n Try again later.")
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
     }
 

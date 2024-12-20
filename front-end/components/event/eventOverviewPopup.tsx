@@ -15,6 +15,7 @@ import { Use } from "@svgdotjs/svg.js";
 import accountService from "@/services/accountService";
 import EditEventPopup from "./editEventPopup";
 import { set } from "date-fns";
+import { useRouter } from "next/router";
 
 interface CreateNewPostPopupProps {
   eventId: number;
@@ -35,15 +36,27 @@ const MarkerNoSSR = dynamic(
 );
 
 const fetchNearestAddress = async (latitude: number, longitude: number) => {
-  const response = await fetch(
-    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-  );
-  if (!response.ok) {
-    console.error("Failed to fetch address");
-    return null;
+  const router = useRouter();
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
+      });
+      return null;
+    }
+    const data = await response.json();
+    return data.display_name;
+  } catch (error) {
+    router.push({
+      pathname: router.pathname,
+      query: { errorMessage: String(error) }
+    });
   }
-  const data = await response.json();
-  return data.display_name;
 };
 
 const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
@@ -56,14 +69,27 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
   const [address, setAddress] = useState<string | null>(null);
   const [currentAccount, setcurrentAccount] = useState<PublicAccount | null>(null);
   const [showedit, setShowedit] = useState<boolean>(false);
+  const router = useRouter();
 
   const fetchAccount = async () => {
-    const response = await accountService.findCurrentAccount();
-    if (!response.ok) {
-      console.error("Failed to fetch account");
+    try {
+      const response = await accountService.findCurrentAccount();
+      if (!response.ok) {
+        const error = await response.json();
+        router.push({
+          pathname: router.pathname,
+          query: { errorMessage: String(error.message) }
+        });
+        return;
+      }
+      const data = await response.json();
+      setcurrentAccount(data);
+    } catch (error) {
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
+      });
     }
-    const data = await response.json();
-    setcurrentAccount(data);
   }
 
   const removeEvent = async (eventId: number) => {
@@ -72,28 +98,49 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
     try {
       const response = await eventService.removeEvent(eventId);
       if (response.ok) {
-        alert("Successfully removed the event!");
+        router.push({
+          pathname: router.pathname,
+          query: { succesMessage: String("succesfully removed Event!") }
+        });
         onClose();
       } else {
-        console.error("Failed to remove the event");
+        const error = await response.json();
+        router.push({
+          pathname: router.pathname,
+          query: { errorMessage: String(error.message) }
+        });
       }
     } catch (error) {
-      console.error("An error occurred while removing the event", error);
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
+      });
     }
   };
   const fetchPost = async () => {
-    const response = await eventService.getPostById(eventId);
-    if (!response.ok) {
-      console.error("Failed to fetch event");
-    }
-    const data = await response.json();
-    setEvent(data);
-    if (data.location) {
-      const nearestAddress = await fetchNearestAddress(
-        data.location.latitude,
-        data.location.longitude
-      );
-      setAddress(nearestAddress);
+    try {
+      const response = await eventService.getPostById(eventId);
+      if (!response.ok) {
+        const error = await response.json();
+        router.push({
+          pathname: router.pathname,
+          query: { errorMessage: String(error.message) }
+        });
+      }
+      const data = await response.json();
+      setEvent(data);
+      if (data.location) {
+        const nearestAddress = await fetchNearestAddress(
+          data.location.latitude,
+          data.location.longitude
+        );
+        setAddress(nearestAddress);
+      }
+    } catch (error) {
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
+      });
     }
   };
 
@@ -107,12 +154,22 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
       const response = await eventService.joinPost(eventId);
       if (response.ok) {
         fetchPost();
-        alert("Successfully joined the event!");
+        router.push({
+          pathname: router.pathname,
+          query: { succesMessage: String("succesfully joint event") }
+        });
       } else {
-        console.error("Failed to join the event");
+        const error = await response.json();
+        router.push({
+          pathname: router.pathname,
+          query: { errorMessage: String(error.message) }
+        });
       }
     } catch (error) {
-      console.error("An error occurred while joining the event", error);
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
+      });
     }
   };
   const exitEvent = async (eventId: number) => {
@@ -120,12 +177,22 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
       const response = await eventService.exitPost(eventId);
       if (response.ok) {
         fetchPost();
-        alert("Successfully exited the event!");
+        router.push({
+          pathname: router.pathname,
+          query: { succesMessage: String("succesfully exited event") }
+        });
       } else {
-        console.error("Failed to exit the event");
+        const error = await response.json();
+        router.push({
+          pathname: router.pathname,
+          query: { errorMessage: String(error.message) }
+        });
       }
     } catch (error) {
-      console.error("An error occurred while exiting the event", error);
+      router.push({
+        pathname: router.pathname,
+        query: { errorMessage: String(error) }
+      });
     }
   }
 

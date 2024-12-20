@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic';
 const AccountEventOverview = dynamic(() => import("@/components/account/accountEventOverview"), { ssr: false });
 
 
-const Posts: React.FC = () => {
+const Events: React.FC = () => {
     return (
         <>
             <Header />
@@ -25,4 +25,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     },
 });
 
-export default Posts;
+export default Events;

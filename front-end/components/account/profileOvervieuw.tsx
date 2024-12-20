@@ -1,5 +1,6 @@
 import AccountService from "@/services/accountService";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { PublicAccount } from "@/types";
 
 
@@ -12,6 +13,8 @@ import AccountChangePassword from "@/components/account/accountChangePassword";
 
 const AccountProfileOverview: React.FC = () => {
     const { t } = useTranslation();
+    const router = useRouter();
+
     const [Account, setAccount] = useState<PublicAccount | null>(null);
 
     const [editProfileIsOpen, setEditProfileIsOpen] = useState<Boolean>(false);
@@ -22,9 +25,25 @@ const AccountProfileOverview: React.FC = () => {
         document.body.style.overflow = "hidden"
     }
     const fetchAccount = async () => {
-        const response = await AccountService.findCurrentAccount();
-        const data = await response.json();
-        setAccount(data);
+        try {
+            const response = await AccountService.findCurrentAccount();
+            if (!response.ok) {
+                let data = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(data.message) }
+                });
+                return;
+            }
+            const data = await response.json();
+            setAccount(data);
+        } catch (error) {
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
+        }
+
     };
 
     useEffect(() => {
@@ -53,10 +72,16 @@ const AccountProfileOverview: React.FC = () => {
                     {t("profile.edit")}
                 </button>
                 <div className="flex flex-col">
-                    <p className="text-base text-gray-300">{t("profile.full_name")}</p>
-                    <p className="text-xl font-semibold">{Account?.firstName} {Account?.lastName} </p>
+                    <p className="text-base text-gray-300">{t("profile.username")}</p>
+                    <p className="text-xl font-semibold">{Account?.username}</p>
                 </div>
-                
+                {Account.type === "user" && (
+                    <div className="flex flex-col">
+                        <p className="text-base text-gray-300">{t("profile.full_name")}</p>
+                        <p className="text-xl font-semibold">{Account?.firstName} {Account?.lastName} </p>
+                    </div>
+                )}
+
                 <div className="flex flex-col">
                     <p className="text-base text-gray-300">{t("profile.email")}</p>
                     <p className="text-xl font-semibold">{Account?.email}</p>
@@ -100,7 +125,6 @@ const AccountProfileOverview: React.FC = () => {
             {editProfileIsOpen && (
                 <div className="fixed top-0 left-0 z-50 w-screen h-screen bg-black bg-opacity-45 flex items-center justify-center">
                     <div className="w-3/4 bg-white border border-gray-300 shadow-lg rounded-lg">
-
                         <AccountEditProfile Account={Account} onclose={() => setEditProfileIsOpen(false)} />
                     </div>
                 </div>

@@ -10,6 +10,7 @@ import { useTranslation } from "next-i18next";
 import { AccountInput, AccountSummary, PublicAccount } from "@/types";
 import { set } from "date-fns";
 import { tr } from "date-fns/locale";
+import router from "next/router";
 
 interface AccountProfileProps {
     Account: PublicAccount;
@@ -18,6 +19,8 @@ interface AccountProfileProps {
 
 const AccountEditProfile: React.FC<AccountProfileProps> = ({ Account, onclose }) => {
     const { t } = useTranslation();
+    const accountType = (Account.type);
+
     const [username, setUsername] = useState(Account.username);
     const [usernameError, setUsernameError] = useState("");
     const [firstName, setFirstName] = useState(Account.firstName);
@@ -59,24 +62,25 @@ const AccountEditProfile: React.FC<AccountProfileProps> = ({ Account, onclose })
         }
 
 
+        if (accountType === "user") {
+            if (!nameRegex.test(firstName)) {
+                setFirstNameError(t("signup.form.first_name") + " " + t("signup.form.only_letters"));
+                valid = false;
+            }
+            if (firstName.trim() === "") {
+                setFirstNameError(t("signup.form.first_name") + " " + t("signup.form.required"));
+                valid = false;
+            }
 
-        if (!nameRegex.test(firstName)) {
-            setFirstNameError(t("signup.form.first_name") + " " + t("signup.form.only_letters"));
-            valid = false;
-        }
-        if (firstName.trim() === "") {
-            setFirstNameError(t("signup.form.first_name") + " " + t("signup.form.required"));
-            valid = false;
-        }
 
-
-        if (!nameRegex.test(lastName)) {
-            setLastNameError(t("signup.form.last_name") + " " + t("signup.form.only_letters"));
-            valid = false;
-        }
-        if (lastName.trim() === "") {
-            setLastNameError(t("signup.form.last_name") + " " + t("signup.form.required"));
-            valid = false;
+            if (!nameRegex.test(lastName)) {
+                setLastNameError(t("signup.form.last_name") + " " + t("signup.form.only_letters"));
+                valid = false;
+            }
+            if (lastName.trim() === "") {
+                setLastNameError(t("signup.form.last_name") + " " + t("signup.form.required"));
+                valid = false;
+            }
         }
 
         if (!emailRegex.test(email)) {
@@ -116,11 +120,10 @@ const AccountEditProfile: React.FC<AccountProfileProps> = ({ Account, onclose })
                 setServerError(data.message);
             }
         } catch (error) {
-            if (error instanceof Error) {
-                setServerError(error.message);
-            } else {
-                setServerError(String(error));
-            }
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
     };
     return (
@@ -135,21 +138,26 @@ const AccountEditProfile: React.FC<AccountProfileProps> = ({ Account, onclose })
                     <input id="userName" type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder={t("signup.form.username")} className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
                     <p className="text-red-500 text-lg">{usernameError}</p>
                 </div>
-                <div className="flex flex-col">
-                    <label htmlFor="firstName" className="text-base text-slate-600">{t("signup.form.first_name")}</label>
-                    <input id="firstName" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder={t("signup.form.first_name")} className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
-                    <p className="text-red-500 text-lg">{firstNameError}</p>
-                </div>
-                <div className="flex flex-col">
-                    <label htmlFor="lastName" className="text-base text-slate-600">{t("signup.form.last_name")}</label>
-                    <input id="lastName" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder={t("signup.form.last_name")} className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
-                    <p className="text-red-500 text-lg">{lastNameError}</p>
-                </div>
+                {accountType === "user" && (
+                    <div className="flex flex-col">
+                        <label htmlFor="firstName" className="text-base text-slate-600">{t("signup.form.first_name")}</label>
+                        <input id="firstName" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder={t("signup.form.first_name")} className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
+                        <p className="text-red-500 text-lg">{firstNameError}</p>
+                    </div>
+                )}
+                {accountType === "user" && (
+                    <div className="flex flex-col">
+                        <label htmlFor="lastName" className="text-base text-slate-600">{t("signup.form.last_name")}</label>
+                        <input id="lastName" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder={t("signup.form.last_name")} className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
+                        <p className="text-red-500 text-lg">{lastNameError}</p>
+                    </div>
+                )}
                 <div className="flex flex-col col-span-2">
                     <label htmlFor="email" className="text-base text-slate-600">{t("signup.form.email")}</label>
                     <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("signup.form.email")} className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none text-base" />
                     <p className="text-red-500 text-lg">{emailError}</p>
                 </div>
+
                 <div className="flex flex-col col-span-2">
                     <label htmlFor="phone" className="text-base text-slate-600">{t("signup.form.phone")}</label>
                     <div className="flex">

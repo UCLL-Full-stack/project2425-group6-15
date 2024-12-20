@@ -21,12 +21,19 @@ const UsersAdminTable = () => {
         try {
             const response = await accountService.getAllAccounts();
             if (!response.ok) {
-                throw new Error('Something went wrong');
+                const error = await response.json();
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String(error.message) }
+                });
             }
             const data = await response.json();
             setUsers(data);
         } catch (error) {
-            console.error(error);
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
     };
 
@@ -43,12 +50,21 @@ const UsersAdminTable = () => {
             const response = await accountService.deleteUser(eventId);
             if (response.ok) {
                 fetchUsers();
-                alert("Successfully deleted user!");
+                router.push({
+                    pathname: router.pathname,
+                    query: { succesMessage: String("succesfully deleted user") }
+                });
             } else {
-                console.error("Failed to delete user");
+                router.push({
+                    pathname: router.pathname,
+                    query: { errorMessage: String("failed to delete user") }
+                });
             }
         } catch (error) {
-            console.error("An error occurred while removing the event", error);
+            router.push({
+                pathname: router.pathname,
+                query: { errorMessage: String(error) }
+            });
         }
     };
 
