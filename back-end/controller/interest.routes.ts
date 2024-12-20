@@ -2,85 +2,193 @@
  * @swagger
  *   components:
  *    schemas:
- *      Account:
+ *      PhoneNumber:
+ *          type: object
+ *          properties:
+ *            countryCode:
+ *              type: string
+ *            number:
+ *              type: string
+ *      JWTTOKEN:
+ *          type: string
+ *      JWTGivenToken:
+ *          oneOf:
+ *            - type: string
+ *            - type: array
+ *              items:
+ *                type: string
+ *            - type: "null"
+ *      Role:
+ *          type: string
+ *          enum: [admin, user, organization]
+ *      Location:
+ *          type: object
+ *          properties:
+ *            longitude:
+ *              type: string
+ *            latitude:
+ *              type: string
+ *      Activity:
  *          type: object
  *          properties:
  *            id:
  *              type: number
- *              format: int64
- *            firstName:
+ *            name:
  *              type: string
- *            lastName:
+ *            type:
  *              type: string
- *            phoneNumber:
- *              type: object
- *              properties:
- *                countryCode:
- *                  type: string
- *                number:
- *                  type: string
- *            email:
+ *      ActivitySummary:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *            name:
  *              type: string
- *            interests:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/Interest'
+ *            type:
+ *              type: string
  *            events:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/Event'
- *            joinedEvents:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/Event'
- *      AccountInput:
- *          type: object
- *          properties:
- *            firstName:
- *              type: string
- *            lastName:
- *              type: string
- *            phoneNumber:
- *              type: object
- *              properties:
- *                countryCode:
- *                  type: string
- *                number:
- *                  type: string
- *            email:
- *              type: string
- *      AccountSummary:
- *          type: object
- *          properties:
- *            firstName:
- *              type: string
- *              example: "Jane"
- *            lastName:
- *              type: string
- *              example: "Doe"
- *            email:
- *              type: string
- *              example: "jane.doe@example.com"
- *            interests:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/Interest'
+ *              type: number
  *      Interest:
  *          type: object
  *          properties:
  *            id:
  *              type: number
- *              format: int64
  *            name:
  *              type: string
  *            description:
  *              type: string
- *      Event:
+ *      InterestSummary:
  *          type: object
  *          properties:
  *            id:
  *              type: number
- *              format: int64
+ *            name:
+ *              type: string
+ *            description:
+ *              type: string
+ *            accounts:
+ *              type: number
+ *      AccountLogin:
+ *          type: object
+ *          properties:
+ *            email:
+ *              type: string
+ *            password:
+ *              type: string
+ *      AccountRegistraion:
+ *          type: object
+ *          properties:
+ *            type:
+ *              type: string
+ *              enum: [user, organization]
+ *            username:
+ *              type: string
+ *            firstName:
+ *              type: string
+ *              nullable: true
+ *            lastName:
+ *              type: string
+ *              nullable: true
+ *            phoneNumber:
+ *              $ref: '#/components/schemas/PhoneNumber'
+ *            email:
+ *              type: string
+ *            password:
+ *              type: string
+ *      AccountInput:
+ *          type: object
+ *          properties:
+ *            username:
+ *              type: string
+ *            firstName:
+ *              type: string
+ *            lastName:
+ *              type: string
+ *            phoneNumber:
+ *              $ref: '#/components/schemas/PhoneNumber'
+ *            email:
+ *              type: string
+ *      EventInput:
+ *          type: object
+ *          properties:
+ *            title:
+ *              type: string
+ *            description:
+ *              type: string
+ *            startDate:
+ *              type: string
+ *              format: date-time
+ *            endDate:
+ *              type: string
+ *              format: date-time
+ *            location:
+ *              $ref: '#/components/schemas/Location'
+ *            activityName:
+ *              type: string
+ *            peopleNeeded:
+ *              type: number
+ *      EventPreview:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *            title:
+ *              type: string
+ *            description:
+ *              type: string
+ *            startDate:
+ *              type: string
+ *              format: date-time
+ *            endDate:
+ *              type: string
+ *              format: date-time
+ *            location:
+ *              $ref: '#/components/schemas/Location'
+ *            activity:
+ *              $ref: '#/components/schemas/Activity'
+ *            creator:
+ *              $ref: '#/components/schemas/AccountPreview'
+ *            peopleNeeded:
+ *              type: number
+ *            peopleJoined:
+ *              type: number
+ *            hasJoined:
+ *              type: boolean
+ *      AccountPreview:
+ *          type: object
+ *          properties:
+ *            username:
+ *              type: string
+ *            email:
+ *              type: string
+ *            fullname:
+ *              type: string
+ *            type:
+ *              $ref: '#/components/schemas/Role'
+ *      AccountSummary:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *            type:
+ *              $ref: '#/components/schemas/Role'
+ *            username:
+ *              type: string
+ *            firstName:
+ *              type: string
+ *            lastName:
+ *              type: string
+ *            email:
+ *              type: string
+ *            interests:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Interest'
+ *      EventSummary:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
  *            title:
  *              type: string
  *            description:
@@ -104,27 +212,67 @@
  *              items:
  *                $ref: '#/components/schemas/AccountSummary'
  *            peopleNeeded:
- *              type: integer
- *            preferredGender:
+ *              type: number
+ *            hasJoined:
+ *              type: boolean
+ *      PublicAccount:
+ *          type: object
+ *          properties:
+ *            type:
+ *              $ref: '#/components/schemas/Role'
+ *            id:
+ *              type: number
+ *            username:
  *              type: string
- *              enum: [male, female, any]
- *      Activity:
+ *            firstName:
+ *              type: string
+ *            lastName:
+ *              type: string
+ *            phoneNumber:
+ *              $ref: '#/components/schemas/PhoneNumber'
+ *            email:
+ *              type: string
+ *            interests:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Interest'
+ *            events:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/PublicEvent'
+ *            joinedEvents:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/PublicEvent'
+ *      PublicEvent:
  *          type: object
  *          properties:
  *            id:
  *              type: number
- *              format: int64
- *            name:
+ *            title:
  *              type: string
- *            type:
+ *            description:
  *              type: string
- *      Location:
- *          type: object
- *          properties:
- *            longitude:
+ *            startDate:
  *              type: string
- *            latitude:
+ *              format: date-time
+ *            endDate:
  *              type: string
+ *              format: date-time
+ *            location:
+ *              $ref: '#/components/schemas/Location'
+ *            activity:
+ *              $ref: '#/components/schemas/Activity'
+ *            creator:
+ *              $ref: '#/components/schemas/AccountSummary'
+ *            participants:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/AccountPreview'
+ *            peopleNeeded:
+ *              type: number
+ *            hasJoined:
+ *              type: boolean
  */
 
 import express, { NextFunction, Request, Response } from 'express';
@@ -202,7 +350,29 @@ interestRouter.post('/create', async (req: Request, res: Response, next: NextFun
         next(error);
     }
 });
-    
+
+
+/**
+ * @swagger
+ * /interest/admin:
+ *   get:
+ *     summary: Retrieve a list of interests for admin
+ *     tags: [Interest]
+ *     security:                    
+ *       - ApiKeyAuth: []   
+ *       - BearerAuth: []        
+ *     responses:
+ *       200:
+ *         description: A list of interests for admin
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Interest'
+ *       500:
+ *         description: Internal server error
+ */
 interestRouter.get('/admin', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const activities = await interestService.getAllInterestsForAdmin(await authService.authenticateToken(req.headers));  
@@ -212,6 +382,30 @@ interestRouter.get('/admin', async (req: Request, res: Response, next: NextFunct
     }
 });
 
+/**
+ * @swagger
+ * /interest/{id}:
+ *   delete:
+ *     summary: Delete an interest by ID
+ *     tags: [Interest]
+ *     security:                    
+ *       - ApiKeyAuth: []   
+ *       - BearerAuth: []        
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The interest ID
+ *     responses:
+ *       200:
+ *         description: Interest deleted successfully
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
 interestRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         await interestService.deleteInterest(parseInt(req.params.id), await authService.authenticateToken(req.headers));  
