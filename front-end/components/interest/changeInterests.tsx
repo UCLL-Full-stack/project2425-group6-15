@@ -3,12 +3,13 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import AccountService from "@/services/accountService";
 import interestService from "@/services/interestService";
-
+import { useTranslation } from "next-i18next";
 interface ChangeInterestsProps {
     onClose(): void;
 }
 
 const ChangeInterests: React.FC<ChangeInterestsProps> = ({ onClose }) => {
+    const { t } = useTranslation();
     const router = useRouter();
     const [interests, setInterests] = useState<Interest[]>([]);
     const [selectedInterests, setSelectedInterests] = useState<Interest[]>([]);
@@ -64,7 +65,7 @@ const ChangeInterests: React.FC<ChangeInterestsProps> = ({ onClose }) => {
         if (selectedInterests.length < 5) {
             router.push({
                 pathname: router.pathname,
-                query: { errorMessage: String("Select at least 5 Interests") }
+                query: { errorMessage: String(t("interests.select_minimum")) }
             });
             return;
         }
