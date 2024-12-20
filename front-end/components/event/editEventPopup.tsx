@@ -329,7 +329,7 @@ const EditEventPopup: React.FC<EditEventPopupProps> = ({ eventId, onClose }) => 
             }
             router.push({
                 pathname: router.pathname,
-                query: { successMessage: "Event updated successfully" }
+                query: { successMessage: t("admin.notifications.events.update") }
             });
         }
         catch (error) {

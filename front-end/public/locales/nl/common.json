@@ -183,7 +183,11 @@
             "events": {
                 "sure": "Weet je zeker dat je dit evenement wilt verwijderen?",
                 "success": "Evenement succesvol verwijderd",
-                "fail": "Verwijderen van evenement mislukt"
+                "fail": "Verwijderen van evenement mislukt",
+                "create": "Evenement succesvol aangemaakt",
+                "join": "Succesvol ingeschreven voor evenement",
+                "exit": "Succesvol uitgeschreven voor evenement",
+                "update":"Event updated Succesfully"
             },
             "interests":{
                 "sure": "Weet je zeker dat je deze interesse wilt verwijderen?",
@@ -195,7 +199,11 @@
                 "success": "Activiteit succesvol verwijderd",
                 "fail": "Verwijderen van activiteit mislukt"
 
+        },
+        "errors":{
+            "fetch": "Adres ophalen mislukt"
         }
+        
             }
         
         

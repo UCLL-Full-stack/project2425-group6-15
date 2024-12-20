@@ -71,7 +71,7 @@ const AccountEventOverview: React.FC = () => {
             if (!data.address) {
                 router.push({
                     pathname: router.pathname,
-                    query: { errorMessage: String("Failed to fetch address") }
+                    query: { errorMessage: String(t("admin.notifications.errors.fetch")) }
                 });
                 return;
             }

@@ -92,14 +92,14 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
   }
 
   const removeEvent = async (eventId: number) => {
-    const confirmRemoval = confirm("Are you sure you want to remove this event?");
+    const confirmRemoval = confirm(t("admin.notifications.events.sure"));
     if (!confirmRemoval) return;
     try {
       const response = await eventService.removeEvent(eventId);
       if (response.ok) {
         router.push({
           pathname: router.pathname,
-          query: { succesMessage: String("succesfully removed Event!") }
+          query: { succesMessage: String(t("admin.notifications.events.success")) }
         });
         onClose();
       } else {
@@ -156,7 +156,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
         fetchPost();
         router.push({
           pathname: router.pathname,
-          query: { succesMessage: String("succesfully joint event") }
+          query: { succesMessage: String(t("admin.notifications.events.join")) }
         });
       } else {
         const error = await response.json();
@@ -179,7 +179,7 @@ const PostOverviewPopup: React.FC<CreateNewPostPopupProps> = ({
         fetchPost();
         router.push({
           pathname: router.pathname,
-          query: { succesMessage: String("succesfully exited event") }
+          query: { succesMessage: String(t("admin.notifications.events.exit")) }
         });
       } else {
         const error = await response.json();

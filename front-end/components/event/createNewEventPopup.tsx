@@ -265,7 +265,7 @@ const CreateNewPostPopup: React.FC<CreateNewPostPopupProps> = ({ onClose }) => {
       }
       router.push({
         pathname: router.pathname,
-        query: { succesMessage: String("event succesfully created") }
+        query: { succesMessage: String(t("admin.notifications.events.create")) }
       });
       onClose();
       window.location.reload();
