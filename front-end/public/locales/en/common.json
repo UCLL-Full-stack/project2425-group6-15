@@ -84,6 +84,7 @@
         "save": "Save"
     },
     "events": {
+        "users":"Users",
         "view": "View event",
         "events": "Events",
         "title": "Your Events",
@@ -141,7 +142,8 @@
         "edit_account_details": "Edit Account Details",
         "manage_profile": "Manage Profile",
         "save": "Save",
-        "cancel":"Cancel"
+        "cancel":"Cancel",
+        "role":"Role"
     },
     "filter": {
         "between": "Between:",
@@ -151,5 +153,68 @@
         "date2": "Date 2",
         "pinned": "Pinned Location"
         
+    },
+    "admin":{
+        "users":"Active Users",
+        "organizations":"Organizations",
+        "events":"Events",
+        "actions":"Actions",
+        "Eventname":"Name",
+        "creator":"Creator",
+        "time":"Time",
+         "used":"used in interests",
+         "usedActivities":"used in activities",
+         "interestName":"Name",
+         "activities":"Activities",
+         "panel":"Admin Panel",
+         
+
+
+        "graph":{
+        "title":"Monthly Events",
+        "legend":"Number of Events"
+       
+        
+    },
+    "notifications":{
+        "user":{
+        "sure":"Are you sure you want to delete this user?",
+        "success":"Succesfully deleted user",
+        "fail":"Failed to delete user"},
+
+        "events":{
+            "sure":"Are you sure you want to delete this event?",
+        "success":"Succesfully deleted event",
+        "fail":"Failed to delete event"
+
+        },
+        "interests":{
+            "sure":"Are you sure you want to delete this interest?",
+        "success":"Succesfully deleted interest",
+        "fail":"Failed to delete interest"
+
+        },
+        "activities":{
+            "sure":"Are you sure you want to delete this activity?",
+        "success":"Succesfully deleted activity",
+        "fail":"Failed to delete activity"
+
+        }
+    },
+
+        "month": {
+            "january": "January",
+            "february": "February",
+            "march": "March",
+            "april": "April",
+            "may": "May",
+            "june": "June",
+            "july": "July",
+            "august": "August",
+            "september": "September",
+            "october": "October",
+            "november": "November",
+            "december": "December"
+        }
     }
 }

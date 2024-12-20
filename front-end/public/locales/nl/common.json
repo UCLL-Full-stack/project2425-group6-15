@@ -84,6 +84,7 @@
         "save": "Opslaan"
     },
     "events": {
+        "users":"Gebruikers",
         "view": "Bekijk evenement",
         "events": "Evenementen",
         "title": "Jouw Evenementen",
@@ -142,7 +143,8 @@
         "edit_account_details": "Accountgegevens bewerken",
         "manage_profile": "Profiel beheren",
         "save": "opslaan",
-        "cancel":"annuleren"
+        "cancel":"annuleren",
+        "role":"rol"
     },
     "filter": {
         "between": "Tussen:",
@@ -152,6 +154,65 @@
         "date2": "Datum 2",
         "pinned": "Vastgezette Locatie"
         
-    }
+    },
+        "admin": {
+            "users": "Actieve gebruikers",
+            "organizations": "Organisaties",
+            "events": "Evenementen",
+            "actions": "Acties",
+            "Eventname": "Naam",
+            "creator": "Maker",
+            "time": "Tijd",
+            "used":"gebruikt in interesses",
+            "interestName":"Naam",
+            "usedActivities":"gebruikt in activiteiten",
+            "activities":"Activiteiten",
+            "panel":"Admin Paneel",
 
-}
+            "graph": {
+            "title": "Maandelijkse evenementen",
+            "legend": "Hoeveelheid evenementen"
+            },
+
+            "notifications": {
+            "user": {
+                "sure": "Weet je zeker dat je deze gebruiker wilt verwijderen?",
+                "success": "Gebruiker succesvol verwijderd",
+                "fail": "Verwijderen van gebruiker mislukt"
+            },
+            "events": {
+                "sure": "Weet je zeker dat je dit evenement wilt verwijderen?",
+                "success": "Evenement succesvol verwijderd",
+                "fail": "Verwijderen van evenement mislukt"
+            },
+            "interests":{
+                "sure": "Weet je zeker dat je deze interesse wilt verwijderen?",
+                "success": "Interesse succesvol verwijderd",
+                "fail": "Verwijderen van interesse mislukt"
+            },
+            "activities":{
+            "sure": "Weet je zeker dat je deze activiteit wilt verwijderen?",
+                "success": "Activiteit succesvol verwijderd",
+                "fail": "Verwijderen van activiteit mislukt"
+
+        }
+            }
+        
+        
+    },
+        "month": {
+            "january": "Januari",
+            "february": "Februari",
+            "march": "Maart",
+            "april": "April",
+            "may": "Mei",
+            "june": "Juni",
+            "july": "Juli",
+            "august": "Augustus",
+            "september": "September",
+            "october": "Oktober",
+            "november": "November",
+            "december": "December"
+        }}
+
+        

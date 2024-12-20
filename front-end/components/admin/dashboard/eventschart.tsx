@@ -23,18 +23,18 @@ const AdminEventsChart = () => {
     const [year, setYear] = useState<number>(new Date().getFullYear());
 
     const months = [
-        (t('month.january')),
-        (t('month.february')),
-        (t('month.march')),
-        (t('month.april')),
-        (t('month.may')),
-        (t('month.june')),
-        (t('month.july')),
-        (t('month.august')),
-        (t('month.september')),
-        (t('month.october')),
-        (t('month.november')),
-        (t('month.december')),
+        (t('admin.month.january')),
+        (t('admin.month.february')),
+        (t('admin.month.march')),
+        (t('admin.month.april')),
+        (t('admin.month.may')),
+        (t('admin.month.june')),
+        (t('admin.month.july')),
+        (t('admin.month.august')),
+        (t('admin.month.september')),
+        (t('admin.month.october')),
+        (t('admin.month.november')),
+        (t('admin.month.december')),
     ];
 
     const fetchEvents = async () => {
@@ -69,7 +69,7 @@ const AdminEventsChart = () => {
         labels: months,
         datasets: [
             {
-                label: t('Number of Events'),
+                label: t("admin.graph.legend"),
                 data: eventsPerMonth,
                 fill: false,
                 borderColor: 'rgba(75,192,192,1)',
@@ -100,7 +100,7 @@ const AdminEventsChart = () => {
 
     return (
         <div className='w-full max-w-2xl px-6 py-5 bg-white border border-gray-200 rounded-xl flex-row items-center gap-5 justify-center'>
-            <h1 className='text-2xl font-semibold text-center text-slate-600'>Monthly Events</h1>
+            <h1 className='text-2xl font-semibold text-center text-slate-600'>{t("admin.graph.title")}</h1>
             <div className='flex items-center gap-5 justify-center'>
                 <button
                     className='text-2xl font-thin text-slate-500'

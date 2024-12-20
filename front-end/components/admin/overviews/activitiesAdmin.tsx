@@ -41,7 +41,7 @@ const ActivitiesAdminTable = () => {
     }, []);
 
     const deleteActivitie = async (activityId: number) => {
-        const confirmRemoval = confirm("Are you sure you want to delete this activity?");
+        const confirmRemoval = confirm(t("admin.notifications.activities.sure"));
         if (!confirmRemoval) return;
         try {
             const response = await activityService.removeActivity(activityId);
@@ -49,7 +49,7 @@ const ActivitiesAdminTable = () => {
                 fetchActivities();
                 router.push({
                     pathname: router.pathname,
-                    query: { succesMessage: String("Activity succesfull deleted.") }
+                    query: { succesMessage: String(t("admin.notifications.activities.success")) }
                 });
             } else {
                 const data = await response.json();
@@ -71,10 +71,10 @@ const ActivitiesAdminTable = () => {
             <table className='w-full max-w-3xl border rounded-xl box-border overflow-hidden shadow-md'>
                 <thead className='bg-gray-800'>
                     <tr>
-                        <th className='text-white text-lg font-normal p-2'>{t('activityName')}</th>
-                        <th className='text-white text-lg font-normal p-2'>{t('type')}</th>
-                        <th className='text-white text-lg font-normal p-2'>{t('used in activitys')}</th>
-                        <th className='text-white text-lg font-normal p-2'>{t('actions')}</th>
+                        <th className='text-white text-lg font-normal p-2'>{t('admin.interestName')}</th>
+                        <th className='text-white text-lg font-normal p-2'>Type</th>
+                        <th className='text-white text-lg font-normal p-2'>{t('admin.usedActivities')}</th>
+                        <th className='text-white text-lg font-normal p-2'>{t('admin.actions')}</th>
                     </tr>
                 </thead>
                 <tbody className='bg-white border border-gray-400'>
@@ -87,7 +87,7 @@ const ActivitiesAdminTable = () => {
                                 <button
                                     onClick={() => deleteActivitie(activity.id as number)}
                                     className=' text-white rounded px-2 py-1 hover:bg-gray-100 transition duration-300'
-                                    title={t('delete')}>
+                                    title={t('events.delete')}>
                                     <Image src={DeleteImg} alt='' className='w-5 h-5' />
                                 </button>
                             </td>
