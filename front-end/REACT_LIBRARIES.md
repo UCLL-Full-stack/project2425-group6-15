@@ -54,6 +54,9 @@ This document provides a summary of all React libraries used in the project and 
 - **Library:** `date-fns`
 - **Purpose:** Utility library for date manipulation.
 
-## Usage
+### 11. Leaflet
 
-These libraries are used throughout the project to build and manage the user interface, handle routing, manage state, perform internationalization, create charts, and handle authentication.
+- **Library:** `leaflet`
+- **Purpose:** Library for interactive maps.
+
+## Usage
